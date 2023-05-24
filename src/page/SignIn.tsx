@@ -31,7 +31,9 @@ export default function SignIn() {
             user_pw: userPw
         };
 
-        axios.post("http://localhost:9999/api/users/login", form)
+        axios.post("http://localhost:9999/api/users/login", form, {
+            withCredentials: true
+        })
             .then(res => {
                 console.log(res.data)
 
