@@ -11,16 +11,14 @@ const config = require('./config/key');
 
 const { auth } = require('./middleware/auth');
 
-const corsOptions = {
+app.use(cors({
     origin: "http://localhost:3000",
-    credentials: true,
-    optionsSuccessStatus: 200
-};
-
-app.use(cors());
+    credentials: true
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
 
 
 
@@ -96,10 +94,9 @@ app.post('/api/users/check_duplicate_id', async (req, res) => {
 
 //로그인
 app.post('/api/users/login', (req, res) => {
-    const data = req.body; // {userId : '', userPw : ''}
+    const data = req.body;
     User.findOne({ user_id: data.user_id })
         .then((user, err) => {
-            // console.log(user, data.user_id)
             if (!user) {
                 return res.json({
                     success: false,
@@ -116,16 +113,21 @@ app.post('/api/users/login', (req, res) => {
                 }
 
                 user.generateToken((_user, err) => {
-                    if (err) return res.status(400).send(err)
+                    if (err) return res.status(400).send(err);
 
-                    console.log('---->', _user)
-                    // res.cookie("x_auth", user.token)
-                    res.cookie("x_auth", "쿠키쿠키쿠키")
-                        .status(200)
-                        .json({
-                            success: true,
-                            token: user._id
-                        })
+                    // "Remember Me" for 15 minutes 
+                    // res.cookie('rememberme', '1', { httpOnly: true }).status(200).json({
+                    //     success: true
+                    // });
+
+                    res.cookie("x_auth", _user.token, {
+                        secure: false,
+                        httpOnly: true,
+                    }).status(200).json({
+                        success: true,
+                        token: _user.token,
+                        token_name: "x_auth"
+                    })
                 })
             })
 
@@ -139,7 +141,6 @@ app.post('/api/users/login', (req, res) => {
 
 //로그아웃
 app.get('/api/users/logout', auth, (req, res) => {
-    // console.log(req.user, req.token)
     User.findOneAndUpdate({ _id: req.user._id }, { token: "" }).then((user, err) => {
         if (err) return res.json({ success: false, err })
         return res.status(200).send({

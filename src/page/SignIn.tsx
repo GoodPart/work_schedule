@@ -6,6 +6,15 @@ export default function SignIn() {
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
 
+    function setCookie({ cookie_name, value, days }: any) {
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() + days);
+        // 설정 일수만큼 현재시간에 만료값으로 지정
+
+        var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+        document.cookie = cookie_name + '=' + cookie_value;
+    }
+
     const handleChangeId = (e: any) => {
         let value = e.target.value;
         setUserId(value)
@@ -25,12 +34,21 @@ export default function SignIn() {
         axios.post("http://localhost:9999/api/users/login", form)
             .then(res => {
                 console.log(res.data)
+
+                setCookie({
+                    cookie_name: res.data.token_name,
+                    value: res.data.token,
+                    days: 5
+                })
+                // const getCookie = res.data.token;
             })
         setUserId("")
         setUserPw("")
     };
     const logout = () => {
-        axios.get("http://localhost:9999/api/users/logout")
+        axios.get("http://localhost:9999/api/users/logout", {
+            withCredentials: true
+        })
             .then(res => {
                 console.log(res.data)
             })

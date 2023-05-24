@@ -80,6 +80,8 @@ userSchema.methods.generateToken = function (cb) {
     user.save().then((user, err) => {
         if (err) return cb(err)
         cb(user, null)
+    }).catch(err => {
+        console.log(err)
     })
 };
 //jwt 복호화
