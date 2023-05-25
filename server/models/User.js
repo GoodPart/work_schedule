@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken')
 
 /*
     user_name : 이름
+    user_id : 아이디
+    user_pw : 패스워드
     user_email : 이메일
     user_phn : 전화번호
     user_team : 팀 이름

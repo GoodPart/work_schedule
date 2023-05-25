@@ -6,14 +6,14 @@ export default function SignIn() {
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
 
-    function setCookie({ cookie_name, value, days }: any) {
-        var exdate = new Date();
-        exdate.setDate(exdate.getDate() + days);
-        // 설정 일수만큼 현재시간에 만료값으로 지정
+    // function setCookie({ cookie_name, value, days }: any) {
+    //     var exdate = new Date();
+    //     exdate.setDate(exdate.getDate() + days);
+    //     // 설정 일수만큼 현재시간에 만료값으로 지정
 
-        var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
-        document.cookie = cookie_name + '=' + cookie_value;
-    }
+    //     var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+    //     document.cookie = cookie_name + '=' + cookie_value;
+    // }
 
     const handleChangeId = (e: any) => {
         let value = e.target.value;
@@ -36,13 +36,6 @@ export default function SignIn() {
         })
             .then(res => {
                 console.log(res.data)
-
-                setCookie({
-                    cookie_name: res.data.token_name,
-                    value: res.data.token,
-                    days: 5
-                })
-                // const getCookie = res.data.token;
             })
         setUserId("")
         setUserPw("")

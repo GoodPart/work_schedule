@@ -27,19 +27,7 @@ const mongoose = require('mongoose');
 // //유저 스키마
 const { User } = require('./models/User');
 // //dbid 스키마
-// const { DbId } = require('./models/Db_Id');
-// // 게시판 스키마
-// const { Chat } = require('./models/Chat');
-// // 게시판 코멘트(댓글) 스키마 
-// const { ChatComment, ChatRecoment } = require('./models/Chat_comment');
-// // 코멘트(댓글)의 답글 스키마 
-// // const {ChatRecoment}  = require('./models/Chat_comment');
-// // 게시판 카테고리 스키마
-// const { ChatCategory } = require('./models/Chat_category');
-// // 알림 스키마
-// const { Notification } = require('./models/Notification');
-
-// const { Favorit } = require('./models/Favorit');
+const { Calendar } = require('./models/Calendar');
 
 
 
@@ -148,7 +136,37 @@ app.get('/api/users/logout', auth, (req, res) => {
         })
     })
 })
-// ---------------------
+
+
+//캘린더 일정 추가
+app.post('/api/calendar/create', async (req, res) => {
+    const getData = req.body;
+
+    const calendar = new Calendar(getData);
+    await calendar.save()
+        .then((ele, err) => {
+            if (err) return res.json({
+                success: false,
+                err
+            })
+            return res.status(200).json({
+                success: true,
+                message: "정상적으로 등록 되었습니다."
+            })
+        })
+});
+
+app.post('/api/calendar/read', async (req, res) => {
+    const getData = req.body;
+    await Calendar.find({
+        data_month: getData.month
+    }).then((ele, err) => {
+        console.log(ele)
+    })
+
+})
+
+
 app.listen(port, () => {
     console.log(`backend server listening on port ${port}`)
 })
