@@ -52,8 +52,13 @@ const tempMember = [
     },
 ]
 
-export default function CalendarItem() {
-    const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+export default function CalendarItem({ dateProps, memberProps }: any) {
+    // console.log(dateProps)
+
+    let members = memberProps;
+    let dateY = dateProps.y;
+    let dateM = dateProps.m;
+
 
     const now = new Date();
 
@@ -62,9 +67,10 @@ export default function CalendarItem() {
     const nowMonth = now.getMonth() + 1;
     const nowDate = now.getDate();
 
-    const firstDate = new Date(nowYear, nowMonth, 1).getDate();
-    const lastDate = new Date(nowYear, nowMonth, 0).getDate();
+    const firstDate = new Date(dateY, dateM, 1).getDate();
+    const lastDate = new Date(dateY, dateM, 0).getDate();
 
+    const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
     const getDayFunc = (day: number) => {
         return `${WEEKDAY[day]}요일`
     }
@@ -72,12 +78,13 @@ export default function CalendarItem() {
     let form = {
         first_date: firstDate,
         now_year: nowYear,
+        now_month: nowMonth,
         now_date: nowDate,
         now_day: getDayFunc(now.getDay()),
         last_date: lastDate
     }
 
     return (
-        <Index calendarProps={form} memberProps={tempMember} />
+        <Index calendarProps={form} memberProps={members} />
     )
 }

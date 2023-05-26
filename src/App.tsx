@@ -2,6 +2,8 @@ import React from 'react';
 import Main from './page/Main';
 import SignIn from './page/SignIn';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+
+import RouterArea from './routers/RouterArea';
 function App() {
   return (
     <BrowserRouter>
@@ -12,12 +14,11 @@ function App() {
         <li>
           <Link to='/signin'>signin</Link>
         </li>
-
+        <li>
+          <Link to='/calendar'>calendar</Link>
+        </li>
       </ul>
-      <Routes>
-        <Route path='/' element={<Main />} />
-        <Route path='/signin' element={<SignIn />} />
-      </Routes>
+      <RouterArea />
     </BrowserRouter>
   );
 };

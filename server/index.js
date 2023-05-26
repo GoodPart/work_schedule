@@ -155,16 +155,26 @@ app.post('/api/calendar/create', async (req, res) => {
             })
         })
 });
-
+// 캘린더 월별 일정 조회
 app.post('/api/calendar/read', async (req, res) => {
     const getData = req.body;
     await Calendar.find({
         data_month: getData.month
-    }).then((ele, err) => {
-        console.log(ele)
+    }).then((result, err) => {
+
+        if (err) return res.json({
+            success: false,
+            message: err
+        })
+        return res.status(200).json({
+            success: true,
+            message: "검색 완료.",
+            result
+        })
     })
 
 })
+
 
 
 app.listen(port, () => {
