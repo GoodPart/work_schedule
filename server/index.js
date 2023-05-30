@@ -44,6 +44,13 @@ app.get('/', (req, res) => {
     res.send('hi too')
 })
 
+// auth 체크
+app.get('/api/users/auth', auth, (req, res) => {
+    res.status(200).json({
+        user: req.user
+    })
+})
+
 //회원가입
 app.post('/api/users/signup', async (req, res) => {
     const getUserData = req.body;

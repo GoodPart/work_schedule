@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerSignIn } from '../modules/register';
+import { authCheckToServer } from '../modules/auth';
 import axios from 'axios';
 
 export default function SignIn() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
 
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
-
-    // function setCookie({ cookie_name, value, days }: any) {
-    //     var exdate = new Date();
-    //     exdate.setDate(exdate.getDate() + days);
-    //     // 설정 일수만큼 현재시간에 만료값으로 지정
-
-    //     var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
-    //     document.cookie = cookie_name + '=' + cookie_value;
-    // }
 
     const handleChangeId = (e: any) => {
         let value = e.target.value;
@@ -25,29 +22,20 @@ export default function SignIn() {
     }
 
     const submit = () => {
-        // console.log(userId, userPw)
         let form = {
             user_id: userId,
             user_pw: userPw
         };
+        dispatch(registerSignIn(form))
+            .then((res: any) => {
+                // res.data.success && navigate('/')
+                console.log(res)
+                res.payload.success && navigate('/');
+            });
 
-        axios.post("http://localhost:9999/api/users/login", form, {
-            withCredentials: true
-        })
-            .then(res => {
-                console.log(res.data)
-            })
         setUserId("")
         setUserPw("")
     };
-    const logout = () => {
-        axios.get("http://localhost:9999/api/users/logout", {
-            withCredentials: true
-        })
-            .then(res => {
-                console.log(res.data)
-            })
-    }
 
     return (
         <>
@@ -58,7 +46,6 @@ export default function SignIn() {
             <label>비밀번호</label>
 
             <input type="button" onClick={() => submit()} value="로그인" />
-            <input type="button" onClick={() => logout()} value="로그아웃" />
 
         </>
     )
