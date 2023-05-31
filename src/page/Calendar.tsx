@@ -3,12 +3,18 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale'; //한국어 설정
-import { redirect } from "react-router-dom";
 
+
+import { useDispatch, useSelector } from "react-redux";
 import CalendarItem from "../components/calendar_item/container_component/CalendarItem";
+import { RootState } from "../modules";
 
 export default function Calendar() {
 
+    const dispatch = useDispatch();
+    const calendarData = useSelector((state: RootState) => state.calendarReducer)
+
+    console.log(calendarData.month_count)
     const [inputDate, setInputDate] = useState(new Date());
     const [nameValue, setNameValue] = useState('');
 
@@ -34,6 +40,7 @@ export default function Calendar() {
     const inCrease = () => {
 
         monthCount.current = monthCount.current + 1
+        console.log(monthCount.current)
 
         let result = new Date(new Date().setMonth(new Date().getMonth() + monthCount.current));
         const y = result.getFullYear();
@@ -102,7 +109,7 @@ export default function Calendar() {
 
     useEffect(() => {
         getSchedule(stdDate.m);
-    }, [stdDate])
+    }, [stdDate, monthCount])
 
     return (
         <>

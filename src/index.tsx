@@ -10,9 +10,10 @@ import rootReducer from './modules';
 //middleware
 import { composeWithDevTools } from 'redux-devtools-extension';
 import promiseMiddleware from 'redux-promise';
+import ReduxThunk from 'redux-thunk';
 
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(promiseMiddleware)));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(promiseMiddleware, ReduxThunk)));
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
