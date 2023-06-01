@@ -20,6 +20,18 @@ export function increaseMonth() {
 
 }
 
+export function insertData({ form }: any) {
+    return async (dispatch: any, getState: any) => {
+        dispatch({
+            type: CALENDAR_STATE_LOADING
+        });
+
+
+
+
+    }
+}
+
 export function calendarReducer(state = initState, action: any): any {
     switch (action.type) {
         case INCREASE_COUNT:
@@ -31,6 +43,16 @@ export function calendarReducer(state = initState, action: any): any {
             return {
                 ...state,
                 month_count: state.month_count - 1
+            }
+        case CALENDAR_STATE_LOADING:
+            return {
+                ...state,
+                loading: true,
+            }
+        case CALENDAR_STATE_SUCCESS:
+            return {
+                ...state,
+                loading: false,
             }
 
         default:

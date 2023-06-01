@@ -8,15 +8,16 @@ import { ko } from 'date-fns/esm/locale'; //한국어 설정
 import { useDispatch, useSelector } from "react-redux";
 import CalendarItem from "../components/calendar_item/container_component/CalendarItem";
 import { RootState } from "../modules";
+import { styled } from "styled-components";
 
 export default function Calendar() {
 
     const dispatch = useDispatch();
+    let authData = useSelector((state: RootState) => state.authCheckReducer);
     const calendarData = useSelector((state: RootState) => state.calendarReducer)
 
-    console.log(calendarData.month_count)
     const [inputDate, setInputDate] = useState(new Date());
-    const [nameValue, setNameValue] = useState('');
+    let [nameValue, setNameValue] = useState(authData.auth.user_name);
 
     let today = new Date();
     let todayY = new Date().getFullYear();
@@ -27,7 +28,10 @@ export default function Calendar() {
         y: todayY,
         m: todayM + 1,
     });
-    let monthCount = useRef(0)
+    let [workState, setWorkState] = useState("");
+
+    let monthCount = useRef(0);
+
 
     const getSchedule = (month: any) => axios.post("http://localhost:9999/api/calendar/read", {
         month: month
@@ -82,17 +86,16 @@ export default function Calendar() {
         let pushHH = new Date(inputDate).getHours();
         let pushMM = new Date(inputDate).getMinutes();
 
-        console.log(pushY, pushM, pushD, pushHH, pushMM, nameValue)
-
         let form = {
             user_name: nameValue,
             date_at: [pushY, pushM, pushD],
             data: {
-                state: "출근",
+                state: workState,
                 work_time: [pushHH, pushMM]
             },
             data_month: pushM
         }
+
 
         axios.post("http://localhost:9999/api/calendar/create", form, {
             withCredentials: true
@@ -100,7 +103,7 @@ export default function Calendar() {
             console.log(result.data)
 
         })
-        window.location.replace("/calendar")
+        // window.location.replace("/calendar")
 
 
 
@@ -109,24 +112,40 @@ export default function Calendar() {
 
     useEffect(() => {
         getSchedule(stdDate.m);
-    }, [stdDate, monthCount])
+        setNameValue(authData.auth.user_name)
+        // console.log('authData ->', authData.auth.user_name)
+
+    }, [stdDate, monthCount, authData])
 
     return (
-        <>
-            <div style={{ position: "fixed", top: 10, right: 10, backgroundColor: "#fff", borderRadius: "12px", border: "1px solid #ccc", padding: 12 }}>
-                <h2>{stdDate.y}년 {stdDate.m}월</h2>
-                <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
-                <input type="text" value={nameValue} onChange={(e: any) => setNameValue(e.target.value)} />
-                <DatePicker
-                    selected={inputDate}
-                    onChange={(date: any) => setInputDate(date)}
-                    showTimeSelect
-                    timeIntervals={30}
-                    timeCaption="time"
-                    dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
-                    locale={ko}
-                />
-                <button onClick={() => onSubmit()}>등록</button>
+        <SettingWrap>
+            <div style={{ position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: 32, width: "calc(100% - 64px)" }}>
+                <div>
+                    <h2 style={{ padding: 0, margin: 0 }}>{stdDate.y}년 {stdDate.m}월</h2>
+                    <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
+                </div>
+                <div>
+                    <input type="text" style={{ width: '100%' }} value={nameValue} disabled onChange={(e: any) => setNameValue(e.target.value)} />
+                    <InputGroup>
+                        <input type="radio" id="test1" name="test" value="출근" defaultChecked onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test1">출근</label>
+                        <input type="radio" id="test2" name="test" value="오전 반차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test2">반차(오전)</label>
+                        <input type="radio" id="test3" name="test" value="오후 반차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test3">반차(오후)</label>
+                        <input type="radio" id="test4" name="test" value="월차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test4">월차</label>
+                        <input type="radio" id="test5" name="test" value="외근" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test5">외근</label>
+                    </InputGroup>
+
+                    <DatePicker
+                        selected={inputDate}
+                        onChange={(date: any) => setInputDate(date)}
+                        showTimeSelect
+                        timeIntervals={30}
+                        timeCaption="time"
+                        dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
+                        locale={ko}
+                    />
+                    <button onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</button>
+
+                </div>
             </div>
             {
                 member ? (
@@ -137,6 +156,34 @@ export default function Calendar() {
                 ) : "loading..."
             }
 
-        </>
+        </SettingWrap>
     )
 }
+
+
+const SettingWrap = styled.div`
+    width: 100%;
+
+    .react-datepicker-wrapper input {
+        width: 100%;
+    }
+`
+
+const InputGroup = styled.div`
+    display:  flex;
+    flex-wrap: wrap;
+
+    input {
+        display: none;
+    }
+    input + label {
+        padding: 4px 8px;
+        background-color: #ccc;
+        box-sizing: border-box;
+        border: 1px solid #aaa;
+    }
+    input:checked + label {
+        background-color: #444;
+        color: #fff;
+    }
+`

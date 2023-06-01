@@ -5,6 +5,7 @@ import styled from "styled-components";
 const ItemWrap = styled.div`
     width : 100%;
     background-color : #ddd;
+    padding-bottom: 120px;
 
 
     .now {
@@ -28,7 +29,7 @@ export default function Index({ calendarProps, memberProps }: any) {
         const harf = 4;
 
 
-        if (state === '월차') {
+        if (state === '월차' || state === '외근') {
             return state
         } else {
             const h = work_time[0];
@@ -42,7 +43,7 @@ export default function Index({ calendarProps, memberProps }: any) {
 
                 return `${state} | ${newH}:${m}`
             }
-            return `${h}:${m}`
+            return `${state} | ${h}:${m}`
         }
 
     };

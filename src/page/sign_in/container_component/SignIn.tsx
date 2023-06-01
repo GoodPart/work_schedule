@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Index from "../present_component/Index";
+
+
+//redux
 import { useDispatch, useSelector } from 'react-redux';
-import { registerSignIn } from '../modules/register';
-import { authCheckToServer } from '../modules/auth';
-import axios from 'axios';
+import { registerSignIn } from "../../../modules/register";
 
 export default function SignIn() {
+
+
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
@@ -28,7 +32,7 @@ export default function SignIn() {
         };
         dispatch(registerSignIn(form))
             .then((res: any) => {
-                // res.data.success && navigate('/')
+                //     // res.data.success && navigate('/')
                 console.log(res)
                 res.payload.success && navigate('/');
             });
@@ -38,15 +42,14 @@ export default function SignIn() {
     };
 
     return (
-        <>
-            <input onChange={(e) => handleChangeId(e)} value={userId} />
-            <label>아이디</label>
-
-            <input onChange={(e) => handleChangePw(e)} value={userPw} />
-            <label>비밀번호</label>
-
-            <input type="button" onClick={() => submit()} value="로그인" />
-
-        </>
+        <Index
+            handleChangeId={handleChangeId}
+            handleChangePw={handleChangePw}
+            submit={submit}
+            dataProps={{
+                userId: userId,
+                userPw: userPw
+            }}
+        />
     )
 }
