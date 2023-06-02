@@ -146,8 +146,9 @@ app.get('/api/users/logout', auth, (req, res) => {
 
 
 //캘린더 일정 추가
-app.post('/api/calendar/create', async (req, res) => {
-    const getData = req.body;
+app.post('/api/calendar/create', auth, async (req, res) => {
+    const getData = req.body.form;
+    // console.log('get Data ->', getData)
 
     const calendar = new Calendar(getData);
     await calendar.save()
@@ -179,7 +180,47 @@ app.post('/api/calendar/read', async (req, res) => {
             result
         })
     })
+})
 
+app.post('/api/calendar/readbyme', auth, async (req, res) => {
+    const getData = req.body.form; // body = {_id, user_name}
+
+    // console.log('readbyme->', getData)
+    await Calendar.findById({
+        _id: getData._id
+    }).then((match, err) => {
+        console.log(match)
+        if (match.user_name === getData.user_name) {
+            return res.status(200).json({
+                success: true,
+            })
+        } else {
+            return res.status(200).json({
+                success: false,
+            })
+        }
+        // return res.send(err)
+    })
+
+})
+
+app.post('/api/calendar/deletebyid', auth, async (req, res) => {
+    const getData = req.body;
+
+    Calendar.findByIdAndDelete({
+        _id: getData._id
+    }).then((match, err) => {
+
+        if (!match) return res.json({
+            success: false,
+            message: "해당 데이터는 없습니다."
+        })
+        return res.status(200).json({
+            success: true,
+            message: "정상적으로 제거 되었습니다.",
+        })
+
+    })
 })
 
 

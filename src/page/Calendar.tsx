@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
@@ -10,16 +10,20 @@ import CalendarItem from "../components/calendar_item/container_component/Calend
 import { RootState } from "../modules";
 import { styled } from "styled-components";
 
+import { deleteData, insertData } from "../modules/calendar";
+
 export default function Calendar() {
 
     const dispatch = useDispatch();
+
+    //redux store
     let authData = useSelector((state: RootState) => state.authCheckReducer);
     const calendarData = useSelector((state: RootState) => state.calendarReducer)
 
+    let [mySch, setMySch] = useState(false);
     const [inputDate, setInputDate] = useState(new Date());
     let [nameValue, setNameValue] = useState(authData.auth.user_name);
 
-    let today = new Date();
     let todayY = new Date().getFullYear();
     let todayM = new Date().getMonth();
 
@@ -96,54 +100,65 @@ export default function Calendar() {
             data_month: pushM
         }
 
-
-        axios.post("http://localhost:9999/api/calendar/create", form, {
-            withCredentials: true
-        }).then(result => {
-            console.log(result.data)
-
-        })
-        // window.location.replace("/calendar")
-
-
-
-
+        createSchedule(form)
     }
+    const createSchedule = useCallback(async (form: any) => {
+        await dispatch(insertData(form))
+    }, [dispatch])
+
+    const deleteSchedule = useCallback(async (_id: any) => {
+        await dispatch(deleteData(_id))
+    }, [dispatch]);
+
+    const mySchFunc = useCallback(async (_id: any) => {
+        let form = {
+            _id: _id,
+            user_name: authData.auth.user_name
+        }
+        let result = await axios.post("http://localhost:9999/api/calendar/readbyme", { form }, { withCredentials: true })
+        console.log(result.data.success)
+        // setMySch(result.data.success)
+        return result.data.success
+    }, [])
+
 
     useEffect(() => {
         getSchedule(stdDate.m);
         setNameValue(authData.auth.user_name)
-        // console.log('authData ->', authData.auth.user_name)
 
-    }, [stdDate, monthCount, authData])
+    }, [stdDate, monthCount, authData, calendarData.loading, mySch])
 
     return (
         <SettingWrap>
-            <div style={{ position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: 32, width: "calc(100% - 64px)" }}>
-                <div>
+            <div style={{ position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "16px 24px", width: "calc(100% - 24px)" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
                     <h2 style={{ padding: 0, margin: 0 }}>{stdDate.y}년 {stdDate.m}월</h2>
-                    <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
+                    <div>
+                        <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
+                    </div>
                 </div>
                 <div>
-                    <input type="text" style={{ width: '100%' }} value={nameValue} disabled onChange={(e: any) => setNameValue(e.target.value)} />
+                    <div style={{ display: "flex", fontWeight: "bold" }}><span style={{ marginRight: "6px" }}>작성자: </span><input style={{ border: "none", fontWeight: "bold" }} type="text" value={nameValue} disabled onChange={(e: any) => setNameValue(e.target.value)} /></div>
                     <InputGroup>
-                        <input type="radio" id="test1" name="test" value="출근" defaultChecked onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test1">출근</label>
+                        <input type="radio" id="test1" name="test" value="출근" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test1">출근</label>
                         <input type="radio" id="test2" name="test" value="오전 반차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test2">반차(오전)</label>
                         <input type="radio" id="test3" name="test" value="오후 반차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test3">반차(오후)</label>
                         <input type="radio" id="test4" name="test" value="월차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test4">월차</label>
                         <input type="radio" id="test5" name="test" value="외근" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test5">외근</label>
                     </InputGroup>
 
-                    <DatePicker
-                        selected={inputDate}
-                        onChange={(date: any) => setInputDate(date)}
-                        showTimeSelect
-                        timeIntervals={30}
-                        timeCaption="time"
-                        dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
-                        locale={ko}
-                    />
-                    <button onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</button>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <DatePicker
+                            selected={inputDate}
+                            onChange={(date: any) => setInputDate(date)}
+                            showTimeSelect
+                            timeIntervals={30}
+                            timeCaption="time"
+                            dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
+                            locale={ko}
+                        />
+                        <button onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</button>
+                    </div>
 
                 </div>
             </div>
@@ -152,6 +167,9 @@ export default function Calendar() {
                     <CalendarItem
                         dateProps={{ y: stdDate.y, m: stdDate.m }}
                         memberProps={member}
+                        deleteSchedule={deleteSchedule}
+                        loading={!calendarData.loading}
+                        mySchFunc={mySchFunc}
                     />
                 ) : "loading..."
             }
@@ -164,14 +182,22 @@ export default function Calendar() {
 const SettingWrap = styled.div`
     width: 100%;
 
+    .react-datepicker-wrapper {
+        width: 50%;
+    }
     .react-datepicker-wrapper input {
         width: 100%;
+    }
+    .react-datepicker-wrapper + button {
+        width: 20%;
     }
 `
 
 const InputGroup = styled.div`
     display:  flex;
     flex-wrap: wrap;
+    justify-content: center;
+    padding: 12px 0;
 
     input {
         display: none;

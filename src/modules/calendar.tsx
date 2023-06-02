@@ -1,3 +1,4 @@
+import axios from "axios";
 
 const INCREASE_COUNT = 'calendar/INCREASE_COUNT' as const;
 const DECREASE_COUNT = 'calendar/DECREASE_COUNT' as const;
@@ -20,15 +21,49 @@ export function increaseMonth() {
 
 }
 
-export function insertData({ form }: any) {
+export function insertData(form: any): any {
     return async (dispatch: any, getState: any) => {
         dispatch({
             type: CALENDAR_STATE_LOADING
         });
 
+        try {
+            console.log('action ->', form)
+            const createData = await axios.post("http://localhost:9999/api/calendar/create", { form }, { withCredentials: true })
+
+            if (createData.data.success) {
+                dispatch({
+                    type: CALENDAR_STATE_SUCCESS
+                })
+
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
+
+export function deleteData(_id: any): any {
+    return async (dispatch: any, getState: any) => {
+
+        // console.log(_id)
+        dispatch({
+            type: CALENDAR_STATE_LOADING
+        })
 
 
+        try {
+            const deleteData = await axios.post("http://localhost:9999/api/calendar/deletebyid", { _id: _id }, { withCredentials: true })
 
+            if (deleteData.data.success) {
+                dispatch({
+                    type: CALENDAR_STATE_SUCCESS
+                })
+            }
+
+        } catch (err) {
+            console.log(err)
+        }
     }
 }
 

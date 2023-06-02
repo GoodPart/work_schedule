@@ -97,7 +97,7 @@ userSchema.statics.findByToken = function (token, cb) {
         user.findOne({
             _id: decoded, token: token
         }).then((user, err) => {
-            console.log('find One ->', user, token)
+            // console.log('find One ->', user, token)
             if (err) return cb(err)
             cb(null, user)
         }).catch(err => {
