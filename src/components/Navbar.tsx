@@ -142,7 +142,7 @@ export default function NavBar({ onBodyChange, scrollV }: any) {
         onBodyChange(false)
     }
     return (
-        <Nav scroll={scrollV}>
+        <Nav scroll={scrollV.toString()}>
             <div className="inner-wrap">
                 <DefaultNav>
                     <NavItem>

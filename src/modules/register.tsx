@@ -28,37 +28,33 @@ export function registerSignIn(form: any): any {
     let data = axios.post(`http://localhost:9999${SIGN_IN_URL}`, form, { withCredentials: true });
     let result = data.then(res => res.data);
 
-
     return {
         type: SIGN_IN,
         payload: result
     }
 
-    // return async (dispatch: any, getState: any) => {
-    //     dispatch({
-    //         type: LOADING
-    //     })
-
-    //     try {
-    //         let request = await axios.post(`http://localhost:9999${SIGN_IN_URL}`, form, { withCredentials: true });
-    //         console.log(request.data)
-    //         dispatch({
-    //             type: SIGN_IN,
-    //             payload: request.data
-    //         })
-    //         dispatch({
-    //             type: SUCCESS
-    //         })
-    //         // const _getRegisteState = getState().registerReducer;
-    //         // const _getAuthState = getState().authCheckReducer;
-    //         // console.log(_getAuthState)
-
-    //     } catch (err) {
-
-    //     }
-    // }
 }
 
+
+export function signInAction(form: any): any {
+    return async (dispatch: any, getState: any) => {
+        let request = await axios.post(`http://localhost:9999${SIGN_IN_URL}`, form, { withCredentials: true });
+
+        dispatch({
+            type: LOADING
+        })
+        try {
+
+            if (request.data.success) {
+                dispatch({
+                    type: SIGN_IN
+                })
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
 
 
 export function registerReducer(state = initState, action: any): any {
@@ -88,6 +84,7 @@ export function registerReducer(state = initState, action: any): any {
             return {
                 ...state,
                 login: action.payload.success,
+                loading: false
             }
         case SIGN_UP:
             return {

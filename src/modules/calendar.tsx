@@ -28,7 +28,6 @@ export function insertData(form: any): any {
         });
 
         try {
-            console.log('action ->', form)
             const createData = await axios.post("http://localhost:9999/api/calendar/create", { form }, { withCredentials: true })
 
             if (createData.data.success) {
@@ -51,16 +50,79 @@ export function deleteData(_id: any): any {
             type: CALENDAR_STATE_LOADING
         })
 
-
         try {
-            const deleteData = await axios.post("http://localhost:9999/api/calendar/deletebyid", { _id: _id }, { withCredentials: true })
+            let getAuthData = await getState().authCheckReducer.auth;
 
-            if (deleteData.data.success) {
-                dispatch({
-                    type: CALENDAR_STATE_SUCCESS
-                })
+            if (getAuthData) {
+                let form = {
+                    _id: _id,
+                    user_name: getAuthData.user_name
+                }
+                let result = await axios.post("http://localhost:9999/api/calendar/readbyme", { form }, { withCredentials: true })
+
+                if (result.data.success) {
+                    // 내꺼
+                    console.log("내꺼")
+                    const deleteData = await axios.post("http://localhost:9999/api/calendar/deletebyid", { _id: _id }, { withCredentials: true })
+
+                    if (deleteData.data.success) {
+                        dispatch({
+                            type: CALENDAR_STATE_SUCCESS
+                        })
+                    }
+                    return result.data.success
+                } else {
+                    //넘에 꺼
+                    console.log("넘에꺼")
+                    dispatch({
+                        type: CALENDAR_STATE_SUCCESS
+                    })
+                    return result.data.success
+                }
             }
 
+
+
+
+
+
+            // if (deleteData.data.success) {
+            // dispatch({
+            //     type: CALENDAR_STATE_SUCCESS
+            // })
+            // }
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
+
+export function selfCheck(_id: any, option: boolean): any {
+    return async (dispatch: any, getState: any) => {
+        dispatch({
+            type: CALENDAR_STATE_LOADING
+        })
+
+        try {
+            let getAuthData = await getState().authCheckReducer.auth;
+            if (getAuthData) {
+                let form = {
+                    _id: _id,
+                    user_name: getAuthData.user_name
+                }
+
+                let result = await axios.post("http://localhost:9999/api/calendar/readbyme", { form }, { withCredentials: true })
+                console.log('reducer', _id, option)
+
+
+                if (option) {
+                    dispatch({
+                        type: CALENDAR_STATE_SUCCESS
+                    })
+                    return result.data.success
+                }
+            }
         } catch (err) {
             console.log(err)
         }
@@ -88,6 +150,13 @@ export function calendarReducer(state = initState, action: any): any {
             return {
                 ...state,
                 loading: false,
+                success: true
+            }
+        case CALENDAR_STATE_ERROR:
+            return {
+                ...state,
+                loading: false,
+                success: false
             }
 
         default:

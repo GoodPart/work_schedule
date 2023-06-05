@@ -10,7 +10,7 @@ import CalendarItem from "../components/calendar_item/container_component/Calend
 import { RootState } from "../modules";
 import { styled } from "styled-components";
 
-import { deleteData, insertData } from "../modules/calendar";
+import { deleteData, insertData, selfCheck } from "../modules/calendar";
 
 export default function Calendar() {
 
@@ -107,19 +107,28 @@ export default function Calendar() {
     }, [dispatch])
 
     const deleteSchedule = useCallback(async (_id: any) => {
-        await dispatch(deleteData(_id))
+        await dispatch(deleteData(_id)).then((res: any) => {
+            console.log(res)
+
+            if (!res) {
+                console.log('넘에 것 입니다.')
+            } else {
+                console.log("정상적으로 삭제 되었습니다.")
+            }
+
+        })
     }, [dispatch]);
 
-    const mySchFunc = useCallback(async (_id: any) => {
-        let form = {
-            _id: _id,
-            user_name: authData.auth.user_name
-        }
-        let result = await axios.post("http://localhost:9999/api/calendar/readbyme", { form }, { withCredentials: true })
-        console.log(result.data.success)
-        // setMySch(result.data.success)
-        return result.data.success
-    }, [])
+    const mySchFunc = useCallback(async (_id: any, option: boolean) => {
+        // await dispatch(selfCheck(_id, option))
+        // let form = {
+        //     _id: _id,
+        //     user_name: authData.auth.user_name
+        // }
+        // console.log(authData.auth)
+        // let result = await axios.post("http://localhost:9999/api/calendar/readbyme", { form }, { withCredentials: true })
+        // return result.data.success;
+    }, [dispatch])
 
 
     useEffect(() => {
@@ -170,6 +179,7 @@ export default function Calendar() {
                         deleteSchedule={deleteSchedule}
                         loading={!calendarData.loading}
                         mySchFunc={mySchFunc}
+                        nameValue={nameValue}
                     />
                 ) : "loading..."
             }
