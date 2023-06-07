@@ -200,6 +200,24 @@ app.post('/api/calendar/readbyme', auth, async (req, res) => {
     })
 
 })
+app.post('/api/calendar/findbyid', async (req, res) => {
+    const getData = req.body; // body = {_id}
+
+    await Calendar.findById({
+        _id: getData._id
+    }).then((match, err) => {
+        console.log(match)
+        if (err) return res.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            match
+        })
+    })
+
+})
 
 app.post('/api/calendar/deletebyid', auth, async (req, res) => {
     const getData = req.body;
@@ -217,6 +235,32 @@ app.post('/api/calendar/deletebyid', auth, async (req, res) => {
             message: "정상적으로 제거 되었습니다.",
         })
 
+    })
+})
+
+app.post('/api/calendar/updatebyid', auth, async (req, res) => {
+    const getData = req.body;
+    console.log(getData)
+
+    Calendar.findByIdAndUpdate(getData._id, {
+        data: {
+            state: getData.data.state,
+            work_time: getData.data.work_time
+        }
+    }).then((match, err) => {
+        if (err) return res.json({
+            success: false,
+            message: "알수 없는 에러입니다.",
+            err
+        })
+        if (!match) return res.json({
+            success: false,
+            message: "업데이트 할 수 없습니다.",
+        })
+        return res.status(200).json({
+            success: true,
+            message: "정상적으로 업데이트 되었습니다."
+        })
     })
 })
 

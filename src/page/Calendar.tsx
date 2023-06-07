@@ -7,6 +7,8 @@ import { ko } from 'date-fns/esm/locale'; //한국어 설정
 
 import { useDispatch, useSelector } from "react-redux";
 import CalendarItem from "../components/calendar_item/container_component/CalendarItem";
+
+
 import { RootState } from "../modules";
 import { styled } from "styled-components";
 
@@ -119,16 +121,6 @@ export default function Calendar() {
         })
     }, [dispatch]);
 
-    const mySchFunc = useCallback(async (_id: any, option: boolean) => {
-        // await dispatch(selfCheck(_id, option))
-        // let form = {
-        //     _id: _id,
-        //     user_name: authData.auth.user_name
-        // }
-        // console.log(authData.auth)
-        // let result = await axios.post("http://localhost:9999/api/calendar/readbyme", { form }, { withCredentials: true })
-        // return result.data.success;
-    }, [dispatch])
 
 
     useEffect(() => {
@@ -178,7 +170,6 @@ export default function Calendar() {
                         memberProps={member}
                         deleteSchedule={deleteSchedule}
                         loading={!calendarData.loading}
-                        mySchFunc={mySchFunc}
                         nameValue={nameValue}
                     />
                 ) : "loading..."
@@ -191,6 +182,7 @@ export default function Calendar() {
 
 const SettingWrap = styled.div`
     width: 100%;
+    background-color: #F9F9F9;
 
     .react-datepicker-wrapper {
         width: 50%;

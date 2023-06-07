@@ -52,7 +52,7 @@ const tempMember = [
     },
 ]
 
-export default function CalendarItem({ dateProps, memberProps, deleteSchedule, loading, mySchFunc, nameValue }: any) {
+export default function CalendarItem({ dateProps, memberProps, deleteSchedule, loading, nameValue }: any) {
     // console.log(dateProps)
 
     let members = memberProps;
@@ -87,6 +87,6 @@ export default function CalendarItem({ dateProps, memberProps, deleteSchedule, l
     }
 
     return (
-        <Index calendarProps={form} memberProps={members} deleteSchedule={deleteSchedule} loading={loading} mySchFunc={mySchFunc} nameValue={nameValue} />
+        <Index calendarProps={form} memberProps={members} deleteSchedule={deleteSchedule} loading={loading} nameValue={nameValue} />
     )
 }

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import TimePicker from "../../timePicker/container_component/TimePicker";
 
 
 const ItemWrap = styled.div`
     width : 100%;
-    background-color : #eee;
+    background-color : #F9F9F9;
     padding-bottom: 120px;
 
 
@@ -18,8 +18,8 @@ const ItemWrap = styled.div`
     .calc-desc {
         display: flex;
         flex-wrap: wrap;
-        width : calc(100% - 60px);
-        background-color: skyblue;
+        width : calc(100% - 40px);
+        background-color: #e7e7e7;
 
     }
 `
@@ -29,8 +29,8 @@ const CardWrap = styled.div`
     padding: 12px;
     display: flex;
     justify-content: space-between;
-    max-width: 230px;
-    min-width: 210px;
+    max-width: 320px;
+    min-width: 270px;
     width : 32%;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -129,18 +129,15 @@ const WorkState = styled.div<{ state: String }>`
 `
 
 
-export default function Index({ calendarProps, memberProps, deleteSchedule, loading, mySchFunc, nameValue }: any) {
+export default function Index({ calendarProps, memberProps, deleteSchedule, loading, nameValue }: any) {
+    const [toggle, setToggle] = useState(false);
+    const [updateProps, setUpdateProps] = useState('');
+
     const mapLength = calendarProps.last_date;
     const nowDate = calendarProps.now_date;
     const getMapArray = Array.from({ length: mapLength }, (value, index) => index + 1);
 
 
-
-    const getDate = (memberDate: any, calendarDate: any) => {
-        let check = memberDate === calendarDate ? true : false;
-
-        if (check) return true
-    };
     const offDay = (state: string, work_time: any) => {
         const harf = 4;
 
@@ -177,16 +174,15 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
         <ItemWrap>
             {
                 getMapArray.map((ele, index) => {
-                    console.log('ele ->', ele, 'getMap ->', getMapArray.length)
                     return (
                         <div key={ele} className={ele === nowDate ? "now" : ""} style={{ display: "flex", justifyContent: "space-between", padding: '2px 0', borderRadius: 4, margin: "4px 0" }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "60px", height: "60px", fontWeight: 700 }}>{ele}일 </div>
+                            <div style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", height: "60px", fontWeight: 700 }}>{ele}일 </div>
 
                             <div className="calc-desc" >
                                 {
 
                                     loading && memberProps.map((m: any, index: number) => {
-                                        if (m.date_at && m.date_at[2] && m.date_at[2] === ele && mySchFunc(m._id, lastCheck(ele, getMapArray.length))) {
+                                        if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
 
 
                                             return <CardWrap key={m._id} id={m._id} >
@@ -211,7 +207,12 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                                                 <WorkState state={m.data.state} className="work-state">
                                                     {offDay(m.data.state, m.data.work_time)}
                                                 </WorkState>
-                                                <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => deleteSchedule(m._id)}>X </button>
+                                                <div >
+                                                    <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => deleteSchedule(m._id)}>X </button>
+                                                    <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => { setToggle(!toggle); setUpdateProps(m._id) }}>수정</button>
+
+
+                                                </div>
                                             </CardWrap>
                                         }
                                     })
@@ -221,6 +222,17 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                     )
                 })
             }
+            {
+                toggle && (
+                    <div style={{ display: toggle ? "block" : "none", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "100%", backgroundColor: "coral" }}>
+
+                        <TimePicker timeProps={updateProps} />
+                    </div>
+                )
+            }
         </ItemWrap>
+
     )
+
 }
+

@@ -80,18 +80,24 @@ export function deleteData(_id: any): any {
                     return result.data.success
                 }
             }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
 
+export function updateData(_id: any, form: any): any {
+    return async (dispatch: any, getState: any) => {
+        dispatch({
+            type: CALENDAR_STATE_LOADING
+        })
+        try {
+            const updateData = await axios.post("http://localhsot:9999/api/calendar/updatebyid", form, { withCredentials: true });
 
+            dispatch({
+                type: CALENDAR_STATE_SUCCESS,
 
-
-
-
-            // if (deleteData.data.success) {
-            // dispatch({
-            //     type: CALENDAR_STATE_SUCCESS
-            // })
-            // }
-
+            })
         } catch (err) {
             console.log(err)
         }
