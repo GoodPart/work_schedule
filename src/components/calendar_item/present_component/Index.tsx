@@ -3,18 +3,162 @@ import styled from "styled-components";
 import TimePicker from "../../timePicker/container_component/TimePicker";
 
 
+
+export default function Index({ calendarProps, memberProps, deleteSchedule, loading, nameValue }: any) {
+    const [toggle, setToggle] = useState(false);
+    const [updateProps, setUpdateProps] = useState('');
+
+    const mapLength = calendarProps.last_date;
+    const nowDate = calendarProps.now_date;
+    const getMapArray = Array.from({ length: mapLength }, (value, index) => index + 1);
+
+
+    const offDay = (state: string, work_time: any) => {
+        const harf = 4;
+
+
+        if (state === '월차' || state === '외근') {
+            return <p>{state}</p>
+        } else {
+            const h = work_time[0];
+            const m = work_time[1] == 0 ? `0${work_time[1]}` : work_time[1];
+
+            if (state === '오전 반차') {
+                return <><p>{state}</p> <p>14:00</p></>
+            } else if (state === '오후 반차') {
+
+                const newH = h
+
+                return <><p>{state}</p><p>{newH} : {m}</p></>
+            }
+            return <><p>{state}</p><p>{h} : {m}</p></>
+        }
+
+    };
+
+    return (
+        <ItemWrap>
+            {
+                getMapArray.map((ele, index1) => {
+                    return (
+                        <div key={ele} className={ele === nowDate ? "day__wrap now" : "day__wrap"} >
+                            <div className="day-desc" style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", minHeight: "60px", fontWeight: 700 }}>{ele}일 </div>
+
+                            <div className="calc-desc" >
+                                {
+
+                                    loading ? memberProps.map((m: any, index2: number) => {
+                                        if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
+
+
+                                            return <CardWrap key={m._id} id={m._id} delay={index2} >
+                                                <div className="wrap">
+                                                    <div className="card__section">
+                                                        <div className="content">
+                                                            <div className="name">
+                                                                {m.user_name}
+                                                            </div>
+                                                            <div className="info">
+                                                                <div className="info--item">
+                                                                    주임 연구원
+                                                                </div>
+                                                                <div className="info--item">
+                                                                    가산 사무소 / 디자인팀
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <WorkState state={m.data.state} className="work-state">
+                                                    {offDay(m.data.state, m.data.work_time)}
+                                                </WorkState>
+                                                <div >
+                                                    <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => deleteSchedule(m._id)}>X </button>
+                                                    <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}>수정</button>
+
+
+                                                </div>
+                                            </CardWrap>
+                                        }
+                                    }) : memberProps.map((m: any, index: number) => {
+                                        return <ScltonDiv />
+                                    })
+                                }
+                            </div>
+                        </div>
+                    )
+                })
+            }
+            {
+                toggle && (
+                    <div className="timepicker__wrap" style={{ display: toggle ? "block" : "none" }}>
+                        <div className="inner__wrap">
+                            <button type="button" onClick={() => setToggle(!toggle)}>닫기</button>
+                            <TimePicker timeProps={updateProps} />
+                        </div>
+                    </div>
+                )
+            }
+        </ItemWrap>
+
+    )
+
+}
+const ScltonDiv = styled.div`
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    width : 100%;
+    background-color: #e7e7e7;
+
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 80%;
+        height: 100%;
+        background: linear-gradient(to right, #e7e7e7, #ccc, #e7e7e7);
+        animation: loading 2s infinite linear;
+    }
+
+    @keyframes loading {
+    0% {
+        transform: translateX(-50vw);
+    }
+    50%,
+    100% {
+        transform: translateX(100vw);
+    }
+}
+`
 const ItemWrap = styled.div`
     width : 100%;
     background-color : #F9F9F9;
     padding-bottom: 120px;
 
 
-    .now {
-        /* color : red; */
-        font-weight : bold;
+    .day__wrap {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        padding: 2px 0;
+        border-radius: 4px;
+        margin: 4px 0;
+
+        
     }
 
-/* style={{ display: "flex", flexWrap: "wrap", padding: "16px", width: "calc(100% - 100px)", backgroundColor: "#fff", borderRadius: "3px" }} */
+    .now {
+        font-weight : bold;
+
+        .calc-desc {
+            border: 2px solid #1f5ca1;
+            box-sizing: border-box;
+        }
+    }
+
     .calc-desc {
         display: flex;
         flex-wrap: wrap;
@@ -22,29 +166,87 @@ const ItemWrap = styled.div`
         background-color: #e7e7e7;
 
     }
+
+    .day-desc {
+        position: relative;
+        &:after {
+                content: '';
+                position: absolute;
+                top: 24px;
+                left : 50%;
+                transform: translateX(-50%);
+                width : 4px;
+                height: calc(100% - 28px);
+                background-color: #1f5ca1;
+                border-radius : 12px
+            }
+
+    }
+    .timepicker__wrap {
+        position :  fixed;
+        top: 0;
+        left: 0;
+        right : 0;
+        bottom : 0;
+        width: 100%;
+        height : 100%;
+        background-color: rgba(0,0,0,0.6);
+        cursor: not-allowed;
+    }
+
+    .timepicker__wrap .inner__wrap {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 32px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor : default;
+        transition: margin .4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .4s cubic-bezier(0.16, 1, 0.3, 1);
+
+        &:hover {
+            margin-top: -10px;
+            box-shadow: 0px 10px 19px -12px rgba(0,0,0,0.75);
+        }
+    }
 `
 
-const CardWrap = styled.div`
+const CardWrap = styled.div<{ delay: Number }>`
+    opacity :0;
     margin: 4px;
     padding: 12px;
     display: flex;
     justify-content: space-between;
     max-width: 320px;
     min-width: 270px;
-    width : 32%;
+    width : 300px;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
-    transition: all.2s ease-in-out;
+    transition: transform .2s cubic-bezier(0.16, 1, 0.3, 1);
+    animation-name: showPC;
+    animation-duration: 2s;
+    animation-delay: ${(props) => `.${props.delay}s`};
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: forwards;
+    animation-direction: normal;
 
     &:hover {
         transform: translateY(-4px);
         box-shadow: 0px 10px 19px -12px rgba(0,0,0,0.75);
     }
 
-    @media (max-width:605px){
+    @media (max-width:741px){
         max-width: 100%;
         width : 100%;
+
+        animation-name: showMO;
+        animation-duration: 1s;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+        animation-fill-mode: forwards;
+        animation-direction: normal;
     }
 
     .wrap {
@@ -61,7 +263,7 @@ const CardWrap = styled.div`
             background-color: #ddd;
         }
 
-        @media (max-width:605px){
+        @media (max-width:741px){
         width : 100% !important;
     }
     }
@@ -111,6 +313,27 @@ const CardWrap = styled.div`
     .cancle-btn {
         height: 24px;
     }
+
+    @keyframes showPC {
+        0% {
+            opacity : 0;
+            
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    @keyframes showMO {
+        0% {
+            opacity : 0;
+            transform : scale(.8);
+        }
+        100% {
+            opacity : 1;
+            transform : scale(1);
+
+        }
+    }
 `
 
 const WorkState = styled.div<{ state: String }>`
@@ -127,112 +350,3 @@ const WorkState = styled.div<{ state: String }>`
         border-radius: 12px;
     }
 `
-
-
-export default function Index({ calendarProps, memberProps, deleteSchedule, loading, nameValue }: any) {
-    const [toggle, setToggle] = useState(false);
-    const [updateProps, setUpdateProps] = useState('');
-
-    const mapLength = calendarProps.last_date;
-    const nowDate = calendarProps.now_date;
-    const getMapArray = Array.from({ length: mapLength }, (value, index) => index + 1);
-
-
-    const offDay = (state: string, work_time: any) => {
-        const harf = 4;
-
-
-        if (state === '월차' || state === '외근') {
-            return <p>{state}</p>
-        } else {
-            const h = work_time[0];
-            const m = work_time[1] == 0 ? `0${work_time[1]}` : work_time[1];
-
-            if (state === '오전 반차') {
-                return <><p>{state}</p> <p>14:00</p></>
-            } else if (state === '오후 반차') {
-
-                const newH = h + harf;
-
-                return <><p>{state}</p><p>{newH} : {m}</p></>
-            }
-            return <><p>{state}</p><p>{h} : {m}</p></>
-        }
-
-    };
-
-    const lastCheck = (mapEle: any, mapLength: any) => {
-        if (Number(mapEle) <= mapLength) {
-            return true
-        } else {
-
-            return false
-        }
-    }
-
-    return (
-        <ItemWrap>
-            {
-                getMapArray.map((ele, index) => {
-                    return (
-                        <div key={ele} className={ele === nowDate ? "now" : ""} style={{ display: "flex", justifyContent: "space-between", padding: '2px 0', borderRadius: 4, margin: "4px 0" }}>
-                            <div style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", height: "60px", fontWeight: 700 }}>{ele}일 </div>
-
-                            <div className="calc-desc" >
-                                {
-
-                                    loading && memberProps.map((m: any, index: number) => {
-                                        if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
-
-
-                                            return <CardWrap key={m._id} id={m._id} >
-                                                <div className="wrap">
-                                                    <div className="card__section">
-                                                        <div className="content">
-                                                            <div className="name">
-                                                                {m.user_name}
-                                                            </div>
-                                                            <div className="info">
-                                                                <div className="info--item">
-                                                                    주임 연구원
-                                                                </div>
-                                                                <div className="info--item">
-                                                                    가산 사무소 / 디자인팀
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                                <WorkState state={m.data.state} className="work-state">
-                                                    {offDay(m.data.state, m.data.work_time)}
-                                                </WorkState>
-                                                <div >
-                                                    <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => deleteSchedule(m._id)}>X </button>
-                                                    <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => { setToggle(!toggle); setUpdateProps(m._id) }}>수정</button>
-
-
-                                                </div>
-                                            </CardWrap>
-                                        }
-                                    })
-                                }
-                            </div>
-                        </div>
-                    )
-                })
-            }
-            {
-                toggle && (
-                    <div style={{ display: toggle ? "block" : "none", position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "100%", backgroundColor: "coral" }}>
-
-                        <TimePicker timeProps={updateProps} />
-                    </div>
-                )
-            }
-        </ItemWrap>
-
-    )
-
-}
-

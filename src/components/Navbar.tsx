@@ -3,6 +3,83 @@ import { useState, useCallback, useEffect } from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 
+import { useSelector, useDispatch } from "react-redux"
+import { RootState } from "../modules";
+import { signOutAction } from "../modules/register"
+import axios from "axios"
+
+
+
+
+
+export default function NavBar({ onBodyChange, scrollV }: any) {
+    const dispatch = useDispatch();
+    const authData = useSelector((state: RootState) => state.authCheckReducer.auth);
+    const registData = useSelector((state: RootState) => state.registerReducer);
+    const [toggle, setToggle] = useState(false);
+    // const [scrollV, setScrollV] = useState(false);
+    // const logout = () => {
+    //     axios.get("http://localhost:9999/api/users/logout", {
+    //         withCredentials: true
+    //     })
+
+    // }
+    const logout = useCallback(async () => {
+        await dispatch(signOutAction())
+    }, [dispatch])
+    const onToggle = (e: any) => {
+        setToggle(!toggle)
+        onBodyChange(!toggle)
+    }
+    const resetToggle = () => {
+        setToggle(false)
+        onBodyChange(false)
+    }
+
+    useEffect(() => {
+        console.log('registData', registData.loading)
+    }, [registData.loading, authData])
+    // if (!authData) return <>loading...</>
+    return (
+        <Nav scroll={scrollV.toString()}>
+            <div className="inner-wrap">
+                <DefaultNav>
+                    <NavItem>
+                        <Link to='/'>Home</Link>
+
+                        {
+                            authData ? <button type="button" onClick={() => logout()}  >로그아웃</button> : <Link to='/signin'>로그인</Link>
+                        }
+
+
+                        {
+                            authData ? <Link to='/my-page'>내 정보</Link> : ""
+                        }
+
+
+                        <Link to='/calendar'>calendar</Link>
+                    </NavItem>
+                </DefaultNav>
+                <Hamberger >
+                    <div className={toggle ? 'wrap active' : 'wrap'}>
+                        <NavItem className="ham-nav__item">
+                            <Link to='/' onClick={() => resetToggle()}>Home</Link>
+
+                            <Link to='/signin' onClick={() => resetToggle()}>로그인</Link>
+
+                            <Link to='/my-page' onClick={() => resetToggle()}>내 정보</Link>
+
+                            <Link to='/calendar' onClick={() => resetToggle()}>calendar</Link>
+                        </NavItem>
+                    </div>
+                    <HamIcon className="toggle-icon" toggle={toggle} onClick={(e: any) => onToggle(e)} />
+                </Hamberger>
+            </div>
+
+        </Nav>
+    )
+}
+
 //style
 const Logo = styled.div`
     cursor : pointer;
@@ -127,50 +204,3 @@ const HamIcon = styled.div<{ toggle: Boolean }>`
         transform : ${(props) => props.toggle ? `rotate(-45deg) translateY(-50%)` : 'rotate(0deg)'}
     }
 `
-
-
-export default function NavBar({ onBodyChange, scrollV }: any) {
-    const [toggle, setToggle] = useState(false);
-    // const [scrollV, setScrollV] = useState(false);
-
-    const onToggle = (e: any) => {
-        setToggle(!toggle)
-        onBodyChange(!toggle)
-    }
-    const resetToggle = () => {
-        setToggle(false)
-        onBodyChange(false)
-    }
-    return (
-        <Nav scroll={scrollV.toString()}>
-            <div className="inner-wrap">
-                <DefaultNav>
-                    <NavItem>
-                        <Link to='/'>Home</Link>
-
-                        <Link to='/signin'>로그인</Link>
-
-                        <Link to='/my-page'>내 정보</Link>
-
-                        <Link to='/calendar'>calendar</Link>
-                    </NavItem>
-                </DefaultNav>
-                <Hamberger >
-                    <div className={toggle ? 'wrap active' : 'wrap'}>
-                        <NavItem className="ham-nav__item">
-                            <Link to='/' onClick={() => resetToggle()}>Home</Link>
-
-                            <Link to='/signin' onClick={() => resetToggle()}>로그인</Link>
-
-                            <Link to='/my-page' onClick={() => resetToggle()}>내 정보</Link>
-
-                            <Link to='/calendar' onClick={() => resetToggle()}>calendar</Link>
-                        </NavItem>
-                    </div>
-                    <HamIcon className="toggle-icon" toggle={toggle} onClick={(e: any) => onToggle(e)} />
-                </Hamberger>
-            </div>
-
-        </Nav>
-    )
-}

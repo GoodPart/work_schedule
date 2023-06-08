@@ -55,7 +55,6 @@ function App() {
       <NavBar onBodyChange={onBodyChange} scrollV={scrollV} />
 
 
-      <input type="button" onClick={() => logout()} value="로그아웃" /><br />
       <RouterArea />
     </BrowserRouter>
   );

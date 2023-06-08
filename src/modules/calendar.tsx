@@ -86,18 +86,22 @@ export function deleteData(_id: any): any {
     }
 }
 
-export function updateData(_id: any, form: any): any {
+export function updateData(form: any): any {
     return async (dispatch: any, getState: any) => {
         dispatch({
             type: CALENDAR_STATE_LOADING
         })
+
         try {
-            const updateData = await axios.post("http://localhsot:9999/api/calendar/updatebyid", form, { withCredentials: true });
+            const updateData = await axios.post("http://localhost:9999/api/calendar/updatebyid", form, { withCredentials: true });
 
-            dispatch({
-                type: CALENDAR_STATE_SUCCESS,
+            if (updateData.data.success) {
+                dispatch({
+                    type: CALENDAR_STATE_SUCCESS,
 
-            })
+                })
+            }
+
         } catch (err) {
             console.log(err)
         }

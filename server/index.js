@@ -196,7 +196,6 @@ app.post('/api/calendar/readbyme', auth, async (req, res) => {
         return res.status(200).json({
             success: false,
         })
-        // return res.send(err)
     })
 
 })
@@ -240,7 +239,6 @@ app.post('/api/calendar/deletebyid', auth, async (req, res) => {
 
 app.post('/api/calendar/updatebyid', auth, async (req, res) => {
     const getData = req.body;
-    console.log(getData)
 
     Calendar.findByIdAndUpdate(getData._id, {
         data: {

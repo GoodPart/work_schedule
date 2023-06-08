@@ -4,7 +4,7 @@ import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../modules";
-import { updateData } from "../../../modules/calendar";
+import { updateData } from "../../../modules/calendar"
 
 export default function TimePicker({ timeProps }: any) {
     const [timeInfo, setTImeinfo] = useState('');
@@ -16,14 +16,12 @@ export default function TimePicker({ timeProps }: any) {
             })
     }
 
-    const updateSchedule = useCallback(async (_id: any, form: any) => {
-        await dispatch(updateData(_id, form));
-    }, [dispatch])
+
 
 
     useEffect(() => {
         setTIme();
     }, [])
 
-    return <Index timeInfo={timeInfo} updateSchedule={updateSchedule} />
+    return <Index timeInfo={timeInfo} />
 }

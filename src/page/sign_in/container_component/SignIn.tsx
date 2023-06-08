@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, ChangeEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Index from "../present_component/Index";
 
@@ -15,6 +15,20 @@ export default function SignIn() {
 
     const [userId, setUserId] = useState('');
     const [userPw, setUserPw] = useState('');
+    const [form, setForm] = useState({
+        userId: '',
+        userPw: ''
+    })
+
+    const onChange = (e: ChangeEvent<HTMLInputElement>): any => {
+        const { name, value } = e.target;
+        setForm({
+            ...form,
+            [name]: value
+        })
+
+        console.log(form)
+    };
 
     const handleChangeId = (e: any) => {
         let value = e.target.value;
@@ -39,6 +53,10 @@ export default function SignIn() {
 
         setUserId("")
         setUserPw("")
+        setForm({
+            userId: '',
+            userPw: ''
+        })
     };
 
     return (

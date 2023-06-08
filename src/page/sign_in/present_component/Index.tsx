@@ -1,14 +1,38 @@
+import React, { ChangeEventHandler, FormEventHandler } from 'react';
+import styled from 'styled-components'
+import { Link } from 'react-router-dom';
+
+
+import * as InputForm from '../../../components/styledComponents/InputStyled';
+import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
+
+
 export default function Index({ handleChangeId, handleChangePw, submit, dataProps }: any) {
     return (
-        <>
-            <input onChange={(e) => handleChangeId(e)} value={dataProps.userId} />
-            <label>아이디</label>
 
-            <input onChange={(e) => handleChangePw(e)} value={dataProps.userPw} />
-            <label>비밀번호</label>
+        <div style={{ width: "100%" }}>
+            <form action="submit" onSubmit={submit}>
+                <InputForm.InputFormWrap check={dataProps.userId}>
+                    <input type="text" id='userId' name='userId'
+                        onChange={handleChangeId}
+                        value={dataProps.userId}
+                    />
+                    <label htmlFor='userId'>ID</label>
+                </InputForm.InputFormWrap>
+                <br />
 
-            <input type="button" onClick={() => submit()} value="로그인" />
-
-        </>
+                <InputForm.InputFormWrap check={dataProps.userPw}>
+                    <input type="password" id='userPw' name='userPw'
+                        onChange={handleChangePw}
+                        value={dataProps.userPw}
+                    />
+                    <label htmlFor='userPw'>Password</label>
+                </InputForm.InputFormWrap>
+                <br />
+                <ButtonForm.SubmitBtn type='button' onClick={submit}>Sign In</ButtonForm.SubmitBtn>
+            </form>
+            <br />
+            <div>Don't have an account? <Link style={{ color: "#0F9485", textDecoration: "none", fontWeight: "bold" }} to={'/signup'}>Sign Up</Link></div>
+        </div>
     )
 }

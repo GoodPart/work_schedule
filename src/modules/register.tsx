@@ -56,6 +56,24 @@ export function signInAction(form: any): any {
     }
 }
 
+export function signOutAction(): any {
+    return async (dispatch: any, getState: any) => {
+        dispatch({
+            type: LOADING
+        })
+        try {
+            const result = await axios.get("http://localhost:9999/api/users/logout", { withCredentials: true })
+            if (result.data.success) {
+                dispatch({
+                    type: SUCCESS
+                })
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
+
 
 export function registerReducer(state = initState, action: any): any {
     switch (action.type) {

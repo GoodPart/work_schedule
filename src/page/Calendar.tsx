@@ -14,6 +14,9 @@ import { styled } from "styled-components";
 
 import { deleteData, insertData, selfCheck } from "../modules/calendar";
 
+
+import loading from '../loading.gif'
+
 export default function Calendar() {
 
     const dispatch = useDispatch();
@@ -44,7 +47,9 @@ export default function Calendar() {
     }, {
         withCredentials: true
     }).then((res => {
+        // if (res.data.success) {
         setMember(res.data.result)
+        // }
     }))
 
     const inCrease = () => {
@@ -131,7 +136,7 @@ export default function Calendar() {
 
     return (
         <SettingWrap>
-            <div style={{ position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "16px 24px", width: "calc(100% - 24px)" }}>
+            <div style={{ zIndex: 100, position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "16px 24px", width: "calc(100% - 24px)" }}>
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
                     <h2 style={{ padding: 0, margin: 0 }}>{stdDate.y}년 {stdDate.m}월</h2>
                     <div>
@@ -172,7 +177,7 @@ export default function Calendar() {
                         loading={!calendarData.loading}
                         nameValue={nameValue}
                     />
-                ) : "loading..."
+                ) : <img style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} src={loading} />
             }
 
         </SettingWrap>
