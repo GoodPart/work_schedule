@@ -184,12 +184,13 @@ app.post('/api/calendar/read', async (req, res) => {
 
 app.post('/api/calendar/readbyme', auth, async (req, res) => {
     const getData = req.body.form; // body = {_id, user_name}
+    // console.log(req.body)
 
     // console.log('readbyme->', getData)
     await Calendar.findById({
         _id: getData._id
     }).then((match, err) => {
-        console.log(match.user_name, getData.user_name)
+        // console.log(match.user_name, getData.user_name)
         if (match.user_name === getData.user_name) return res.status(200).json({
             success: true,
         })

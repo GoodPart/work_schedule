@@ -11,14 +11,37 @@ export const SubmitBtn = styled.button`
     font-size : 20px;
     font-weight: bold;
 
-
     &:disabled {
         cursor: not-allowed;
         background-color: gray
     }
 `
 
-export const defaultBtn = styled.input`
+export const defaultBtn = styled.button`
+    cursor: pointer;
+    width: 100%;
+    border : none;
+    background-color: #eee;
+    border : 1px solid #ddd;
+    border-radius: 4px;
+    color : #fff;
+    font-size : 12px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color .3s linear;
+
+    &:hover {
+        background-color: #0F9485;
+
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        background-color: gray;
+    }
+`
+
+export const defaultInputBtn = styled.input`
     & + label {
 
         cursor: pointer;

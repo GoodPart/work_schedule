@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import TimePicker from "../../timePicker/container_component/TimePicker";
 
+import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
 
 
-export default function Index({ calendarProps, memberProps, deleteSchedule, loading, nameValue }: any) {
+
+
+
+
+export default function Index({ calendarProps, memberProps, deleteSchedule, loading, nameValue, mySelf }: any) {
     const [toggle, setToggle] = useState(false);
     const [updateProps, setUpdateProps] = useState('');
 
@@ -49,6 +54,9 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
                                     loading ? memberProps.map((m: any, index2: number) => {
                                         if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
+                                            {
+
+                                            }
 
 
                                             return <CardWrap key={m._id} id={m._id} delay={index2} >
@@ -73,12 +81,14 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                                                 <WorkState state={m.data.state} className="work-state">
                                                     {offDay(m.data.state, m.data.work_time)}
                                                 </WorkState>
-                                                <div >
-                                                    <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => deleteSchedule(m._id)}>X </button>
-                                                    <button className="cancle-btn" type="button" disabled={nameValue ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}>수정</button>
-
-
-                                                </div>
+                                                {
+                                                    mySelf(m.user_name) ? (
+                                                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
+                                                            <ButtonForm.defaultBtn className="cancle-btn" type="button" disabled={mySelf(m.user_name) ? false : true} onClick={() => deleteSchedule(m._id)}><img src="delete.png" /></ButtonForm.defaultBtn>
+                                                            <ButtonForm.defaultBtn className="update-btn" type="button" disabled={mySelf(m.user_name) ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}><img src="update.png" /></ButtonForm.defaultBtn>
+                                                        </div>
+                                                    ) : <></>
+                                                }
                                             </CardWrap>
                                         }
                                     }) : memberProps.map((m: any, index: number) => {
@@ -154,7 +164,7 @@ const ItemWrap = styled.div`
         font-weight : bold;
 
         .calc-desc {
-            border: 2px solid #1f5ca1;
+            background-color: #0F9485;
             box-sizing: border-box;
         }
     }
@@ -170,16 +180,16 @@ const ItemWrap = styled.div`
     .day-desc {
         position: relative;
         &:after {
-                content: '';
-                position: absolute;
-                top: 24px;
-                left : 50%;
-                transform: translateX(-50%);
-                width : 4px;
-                height: calc(100% - 28px);
-                background-color: #1f5ca1;
-                border-radius : 12px
-            }
+            content: '';
+            position: absolute;
+            top: 24px;
+            left : 50%;
+            transform: translateX(-50%);
+            width : 4px;
+            height: calc(100% - 28px);
+            background-color: #0F9485;
+            border-radius : 12px
+        }
 
     }
     .timepicker__wrap {
@@ -215,8 +225,8 @@ const ItemWrap = styled.div`
 
 const CardWrap = styled.div<{ delay: Number }>`
     opacity :0;
-    margin: 4px;
-    padding: 12px;
+    margin: 6px 4px;
+    padding: 8px;
     display: flex;
     justify-content: space-between;
     max-width: 320px;
@@ -292,7 +302,7 @@ const CardWrap = styled.div<{ delay: Number }>`
     }
 
     .work-state {
-        margin-top : 12px;
+        /* margin-top : 12px; */
         flex-direction: column;
         width : 40%;
         align-self: center;
@@ -310,8 +320,21 @@ const CardWrap = styled.div<{ delay: Number }>`
         font-size: 12px;
     }
 
-    .cancle-btn {
+    .cancle-btn,
+    .update-btn {
+        width : 24px;
         height: 24px;
+
+        &:hover {
+            img {
+                filter : invert(1);
+            }
+        }
+
+        img {
+            width : 100%
+        }
+        
     }
 
     @keyframes showPC {
@@ -337,8 +360,22 @@ const CardWrap = styled.div<{ delay: Number }>`
 `
 
 const WorkState = styled.div<{ state: String }>`
-    position: relative;
-    &:after {
+    p:first-child {
+        margin: 0 auto;
+        padding: 2px 6px;
+        border-radius: 4px;
+        max-width: 60%;
+        min-width: 30%;
+        font-size : 12px;
+        font-weight: bold;
+        background-color: ${(props) => props.state === '출근' ? 'red' : props.state === '오후 반차' ? 'blue' : props.state === '오전 반차' ? 'green' : props.state === '월차' ? 'gray' : props.state === '외근' ? 'orange' : ''};
+        color : #fff;
+    }
+    p:last-child {
+        margin-top : 4px
+    }
+    
+    /* &:after {
         content: '';
         position: absolute;
         top: -12px;
@@ -348,5 +385,5 @@ const WorkState = styled.div<{ state: String }>`
         height: 8px;
         background-color: ${(props) => props.state === '출근' ? 'red' : props.state === '오후 반차' ? 'blue' : props.state === '오전 반차' ? 'green' : props.state === '월차' ? 'gray' : props.state === '외근' ? 'orange' : ''};
         border-radius: 12px;
-    }
+    } */
 `

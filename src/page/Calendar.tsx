@@ -12,8 +12,8 @@ import CalendarItem from "../components/calendar_item/container_component/Calend
 import { RootState } from "../modules";
 import { styled } from "styled-components";
 
-import { deleteData, insertData, selfCheck } from "../modules/calendar";
-
+import { deleteData, insertData } from "../modules/calendar";
+import { authCheckToServer } from '../modules/auth'
 
 import loading from '../loading.gif'
 
@@ -47,9 +47,9 @@ export default function Calendar() {
     }, {
         withCredentials: true
     }).then((res => {
-        // if (res.data.success) {
-        setMember(res.data.result)
-        // }
+        if (res.data.success) {
+            setMember(res.data.result)
+        }
     }))
 
     const inCrease = () => {
@@ -126,6 +126,15 @@ export default function Calendar() {
         })
     }, [dispatch]);
 
+    const mySelf = useCallback((item_name: any) => {
+
+        if (nameValue === item_name) {
+            return true
+        } else {
+            return false
+        }
+
+    }, [nameValue])
 
 
     useEffect(() => {
@@ -176,6 +185,7 @@ export default function Calendar() {
                         deleteSchedule={deleteSchedule}
                         loading={!calendarData.loading}
                         nameValue={nameValue}
+                        mySelf={mySelf}
                     />
                 ) : <img style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} src={loading} />
             }
