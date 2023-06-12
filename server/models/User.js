@@ -35,6 +35,12 @@ const userSchema = mongoose.Schema({
         type: String,
         max_length: 12
     },
+    rank_title: {
+        type: String,
+    },
+    office_name: {
+        type: String,
+    },
     team_name: {
         type: String
     },

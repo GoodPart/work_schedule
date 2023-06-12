@@ -29,6 +29,15 @@ export function insertData(form: any): any {
             type: CALENDAR_STATE_LOADING
         });
 
+        let getAuthData = getState().authCheckReducer.auth;
+        console.log(getAuthData)
+
+        form.user.user_id = getAuthData.user_id;
+        form.user.rank_title = getAuthData.rank_title
+        form.user.office_name = getAuthData.office_name
+        form.user.team_name = getAuthData.team_name
+
+
         try {
             const createData = await axios.post("http://localhost:9999/api/calendar/create", { form }, { withCredentials: true })
 
@@ -84,6 +93,7 @@ export function updateData(form: any): any {
                     type: CALENDAR_STATE_SUCCESS,
 
                 })
+                return updateData.data.success
             }
 
         } catch (err) {

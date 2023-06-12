@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TimePicker from "../../timePicker/container_component/TimePicker";
+
+
+import { initColorValue } from "../../styledComponents/CommonValue";
 
 import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
 
@@ -9,7 +12,7 @@ import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
 
 
 
-export default function Index({ calendarProps, memberProps, deleteSchedule, loading, nameValue, mySelf }: any) {
+export default function Index({ calendarProps, memberProps, deleteSchedule, loading, mySelf, getDayFunc }: any) {
     const [toggle, setToggle] = useState(false);
     const [updateProps, setUpdateProps] = useState('');
 
@@ -41,37 +44,46 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
     };
 
+
+    const toggleClose = () => {
+        setToggle(false)
+    }
+    useEffect(() => {
+
+    }, [toggle])
+
+
     return (
         <ItemWrap>
             {
                 getMapArray.map((ele, index1) => {
                     return (
                         <div key={ele} className={ele === nowDate ? "day__wrap now" : "day__wrap"} >
-                            <div className="day-desc" style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", minHeight: "60px", fontWeight: 700 }}>{ele}일 </div>
+                            <div className="day-desc"
+                                style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", minHeight: "60px", fontWeight: 700 }}>
+                                <span style={{ fontSize: '36px', color: "#444" }}>{ele < 10 ? `0${ele}` : ele}</span><span className="desc-day" style={getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '토' || getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '일' ? { color: initColorValue.point1 } : { color: "#000" }}>
+                                    {getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay())}
+                                </span>
+                            </div>
 
                             <div className="calc-desc" >
                                 {
 
                                     loading ? memberProps.map((m: any, index2: number) => {
                                         if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
-                                            {
-
-                                            }
-
-
-                                            return <CardWrap key={m._id} id={m._id} delay={index2} >
+                                            return <CardWrap key={m.user._id} id={m.user._id} delay={index2} >
                                                 <div className="wrap">
                                                     <div className="card__section">
                                                         <div className="content">
                                                             <div className="name">
-                                                                {m.user_name}
+                                                                {m.user.user_name}
                                                             </div>
                                                             <div className="info">
                                                                 <div className="info--item">
-                                                                    주임 연구원
+                                                                    {m.user.rank_title}
                                                                 </div>
                                                                 <div className="info--item">
-                                                                    가산 사무소 / 디자인팀
+                                                                    {m.user.office_name} / {m.user.team_name}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -82,10 +94,10 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                                                     {offDay(m.data.state, m.data.work_time)}
                                                 </WorkState>
                                                 {
-                                                    mySelf(m.user_name) ? (
+                                                    mySelf(m.user.user_name) ? (
                                                         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
-                                                            <ButtonForm.defaultBtn className="cancle-btn" type="button" disabled={mySelf(m.user_name) ? false : true} onClick={() => deleteSchedule(m._id)}><img src="delete.png" /></ButtonForm.defaultBtn>
-                                                            <ButtonForm.defaultBtn className="update-btn" type="button" disabled={mySelf(m.user_name) ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}><img src="update.png" /></ButtonForm.defaultBtn>
+                                                            <ButtonForm.defaultBtn className="cancle-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => deleteSchedule(m._id)}><img src="delete.png" /></ButtonForm.defaultBtn>
+                                                            <ButtonForm.defaultBtn className="update-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}><img src="update.png" /></ButtonForm.defaultBtn>
                                                         </div>
                                                     ) : <></>
                                                 }
@@ -104,8 +116,8 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                 toggle && (
                     <div className="timepicker__wrap" style={{ display: toggle ? "block" : "none" }}>
                         <div className="inner__wrap">
-                            <button type="button" onClick={() => setToggle(!toggle)}>닫기</button>
-                            <TimePicker timeProps={updateProps} />
+                            <button type="button" onClick={() => toggleClose()}>닫기</button>
+                            <TimePicker timeProps={updateProps} toggle={toggle} setToggle={setToggle} />
                         </div>
                     </div>
                 )
@@ -161,10 +173,8 @@ const ItemWrap = styled.div`
     }
 
     .now {
-        font-weight : bold;
-
         .calc-desc {
-            background-color: #0F9485;
+            background-color: ${initColorValue.point1};
             box-sizing: border-box;
         }
     }
@@ -172,25 +182,13 @@ const ItemWrap = styled.div`
     .calc-desc {
         display: flex;
         flex-wrap: wrap;
-        width : calc(100% - 40px);
+        width : calc(100% - 80px);
         background-color: #e7e7e7;
 
     }
 
     .day-desc {
         position: relative;
-        &:after {
-            content: '';
-            position: absolute;
-            top: 24px;
-            left : 50%;
-            transform: translateX(-50%);
-            width : 4px;
-            height: calc(100% - 28px);
-            background-color: #0F9485;
-            border-radius : 12px
-        }
-
     }
     .timepicker__wrap {
         position :  fixed;
@@ -219,6 +217,10 @@ const ItemWrap = styled.div`
         &:hover {
             margin-top: -10px;
             box-shadow: 0px 10px 19px -12px rgba(0,0,0,0.75);
+        }
+
+        @media (max-width:741px){
+            width : 80%
         }
     }
 `
@@ -274,8 +276,8 @@ const CardWrap = styled.div<{ delay: Number }>`
         }
 
         @media (max-width:741px){
-        width : 100% !important;
-    }
+            width : 100% !important;
+        }
     }
 
     .wrap, .work-state {
@@ -291,14 +293,19 @@ const CardWrap = styled.div<{ delay: Number }>`
         align-self: center;
     }
 
-    .card__section:first-child {
+    .card__section {
         display: flex;
     }
     .name { 
-        font-size: 24px
+        font-weight : bold;
+        font-size: 24px;
+    }
+    .card__section .content .info  {
+        margin-top :8px
     }
     .info--item {
         font-size: 10px;
+        font-weight : bold
     }
 
     .work-state {
@@ -312,12 +319,12 @@ const CardWrap = styled.div<{ delay: Number }>`
         margin : 0;
         padding : 0
     }
-    .work-state p:first-child {
+    .work-state p {
         font-size: 14px;
         font-weight: bold;
     }
     .work-state p:last-child {
-        font-size: 12px;
+        /* font-size: 12px; */
     }
 
     .cancle-btn,
@@ -362,28 +369,17 @@ const CardWrap = styled.div<{ delay: Number }>`
 const WorkState = styled.div<{ state: String }>`
     p:first-child {
         margin: 0 auto;
-        padding: 2px 6px;
+        padding: 2px 12px;
         border-radius: 4px;
         max-width: 60%;
         min-width: 30%;
-        font-size : 12px;
+        font-size : 14px;
         font-weight: bold;
-        background-color: ${(props) => props.state === '출근' ? 'red' : props.state === '오후 반차' ? 'blue' : props.state === '오전 반차' ? 'green' : props.state === '월차' ? 'gray' : props.state === '외근' ? 'orange' : ''};
+        background-color: ${(props) => props.state === '출근' ? initColorValue.state.color1 : props.state === '오후 반차' ? initColorValue.state.color4 : props.state === '오전 반차' ? initColorValue.state.color3 : props.state === '월차' ? initColorValue.state.color2 : props.state === '외근' ? initColorValue.state.color5 : ''};
         color : #fff;
     }
-    p:last-child {
-        margin-top : 4px
+    p + p {
+        margin-top : 4px !important
     }
-    
-    /* &:after {
-        content: '';
-        position: absolute;
-        top: -12px;
-        left : 50%;
-        transform: translateX(-50%);
-        width : 8px;
-        height: 8px;
-        background-color: ${(props) => props.state === '출근' ? 'red' : props.state === '오후 반차' ? 'blue' : props.state === '오전 반차' ? 'green' : props.state === '월차' ? 'gray' : props.state === '외근' ? 'orange' : ''};
-        border-radius: 12px;
-    } */
+
 `

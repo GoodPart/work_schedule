@@ -12,14 +12,18 @@ import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 import { useDispatch } from "react-redux";
 import loadingGIF from "../../../loading.gif"
 
-export default function Index({ timeInfo }: any) {
+export default function Index({ timeInfo, setToggle, toggle }: any) {
 
     const dispatch = useDispatch();
     const [startDate, setStartDate] = useState(new Date());
     const [workState, setWorkState] = useState(timeInfo.state);
 
     const updateSchedule = useCallback(async (form: any) => {
-        await dispatch(updateData(form));
+        const result = await dispatch(updateData(form));
+        // console.log(result)
+        if (result.success) {
+            setToggle(toggle)
+        }
     }, [dispatch])
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const InputFormWrap = styled.div<{check:any}>`
+export const InputFormWrap = styled.div<{ check: any }>`
     position: relative;
     width : 100%;
     z-index : 0;
@@ -14,6 +14,7 @@ export const InputFormWrap = styled.div<{check:any}>`
         color : #48484A;
         font-size : 16px;
         border-width: 1px;
+        font-weight : bold;
         border-style: solid;
     }
     input:focus {
@@ -30,14 +31,17 @@ export const InputFormWrap = styled.div<{check:any}>`
         cursor: text;
         position: absolute;
         display: inline-flex;
-        top: ${props => props.check.length > 0 ? "4px": "16px"};
-        left : ${props => props.check.length > 0 ? "16px": "16px"}; 
-        color : ${props=> props.check.length > 0 ? "#0F9485" : "#969696" };
+        top: ${props => props.check.length > 0 ? "4px" : "16px"};
+        left : ${props => props.check.length > 0 ? "16px" : "16px"}; 
+        color : ${props => props.check.length > 0 ? "#0F9485" : "#969696"};
         text-align: left;
         font-weight : bold;
-        font-size : ${props=> props.check.length > 0 ? "10px" : "16px" };
+        font-size : ${props => props.check.length > 0 ? "10px" : "16px"};
         transition: scale .6s cubic-bezier(0.075, 0.82, 0.165, 1), top .6s cubic-bezier(0.075, 0.82, 0.165, 1) ;
     };
+    input:read-only {
+        background-color: #ddd
+    }
     input:read-only + label {
         /* left: 0px; */
     }

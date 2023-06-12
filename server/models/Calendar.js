@@ -12,11 +12,22 @@ data : {
 */
 
 const calendarSchema = mongoose.Schema({
-    user_id: {
-        type: String
-    },
-    user_name: {
-        type: String
+    user: {
+        user_id: {
+            type: String
+        },
+        user_name: {
+            type: String
+        },
+        rank_title: {
+            type: String,
+        },
+        office_name: {
+            type: String,
+        },
+        team_name: {
+            type: String
+        },
     },
     data_month: {
         type: Number

@@ -72,21 +72,24 @@ export default function CalendarItem({ dateProps, memberProps, deleteSchedule, l
 
     const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
     const getDayFunc = (day: number) => {
-        return `${WEEKDAY[day]}요일`
+        return `${WEEKDAY[day]}`
     }
+
+    // console.log(new Date(dateY, dateM - 1, 1).getDay())
 
     let form = {
         first_date: firstDate,
-        first_day: getDayFunc(new Date(dateY, dateM, 1).getDay()),
+        // first_day: getDayFunc(new Date(dateY, dateM - 1, 1).getDay()),
         now_year: nowYear,
         now_month: nowMonth,
         now_date: nowDate,
-        now_day: getDayFunc(now.getDay()),
+        // now_day: getDayFunc(now.getDay()),
         last_date: lastDate,
-        last_day: getDayFunc(new Date(dateY, dateM, 0).getDay()),
+        dateY: dateY,
+        dateM: dateM
     }
 
     return (
-        <Index calendarProps={form} memberProps={members} deleteSchedule={deleteSchedule} loading={loading} nameValue={nameValue} mySelf={mySelf} />
+        <Index calendarProps={form} memberProps={members} deleteSchedule={deleteSchedule} loading={loading} mySelf={mySelf} getDayFunc={getDayFunc} />
     )
 }

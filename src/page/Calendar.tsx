@@ -98,7 +98,14 @@ export default function Calendar() {
         let pushMM = new Date(inputDate).getMinutes();
 
         let form = {
-            user_name: nameValue,
+            user: {
+                user_id: "",
+                user_name: nameValue,
+                rank_title: "",
+                office_name: "",
+                team_name: ""
+            },
+            // user_name: nameValue,
             date_at: [pushY, pushM, pushD],
             data: {
                 state: workState,
@@ -145,7 +152,7 @@ export default function Calendar() {
 
     return (
         <SettingWrap>
-            <div style={{ zIndex: 100, position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "16px 24px", width: "calc(100% - 24px)" }}>
+            <div style={{ zIndex: 100, position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "8px 24px", width: "calc(100% - 24px)" }}>
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
                     <h2 style={{ padding: 0, margin: 0 }}>{stdDate.y}년 {stdDate.m}월</h2>
                     <div>
