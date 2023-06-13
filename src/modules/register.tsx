@@ -13,7 +13,7 @@ const LOADING = 'process/LOADING' as const;
 const ERROR = 'process/ERROR' as const;
 const SUCCESS = 'process/SUCCESS' as const;
 
-const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
+const deployURL = "https://work-schedule-delta.vercel.app"
 
 //init state
 const initState = {

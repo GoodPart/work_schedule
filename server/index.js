@@ -11,7 +11,7 @@ const config = require('./config/key');
 
 const { auth } = require('./middleware/auth');
 
-const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
+const deployURL = "https://work-schedule-delta.vercel.app"
 
 app.use(cors({
     origin: `${deployURL}`,

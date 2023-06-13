@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 import { authCheckToServer } from '../modules/auth';
-const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
+const deployURL = "https://work-schedule-delta.vercel.app"
 
 
 export default function (Component: any, option: any) {

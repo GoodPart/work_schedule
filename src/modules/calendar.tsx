@@ -7,7 +7,7 @@ const CALENDAR_STATE_LOADING = 'calendar/CALENDAR_STATE_LOADING' as const;
 const CALENDAR_STATE_SUCCESS = 'calendar/CALENDAR_STATE_SUCCESS' as const;
 const CALENDAR_STATE_ERROR = 'calendar/CALENDAR_STATE_ERROR' as const;
 
-const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
+const deployURL = "https://work-schedule-delta.vercel.app"
 
 
 const initState = {
