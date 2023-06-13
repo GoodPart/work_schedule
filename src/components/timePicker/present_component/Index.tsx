@@ -6,24 +6,21 @@ import styled from "styled-components";
 
 import { updateData } from "../../../modules/calendar";
 
-
+import * as InputForm from '../../../components/styledComponents/InputStyled'
 import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 
 import { useDispatch } from "react-redux";
 import loadingGIF from "../../../loading.gif"
 
-export default function Index({ timeInfo, setToggle, toggle }: any) {
+export default function Index({ timeInfo, tgc }: any) {
 
     const dispatch = useDispatch();
     const [startDate, setStartDate] = useState(new Date());
-    const [workState, setWorkState] = useState(timeInfo.state);
+    const [workState, setWorkState] = useState('');
 
     const updateSchedule = useCallback(async (form: any) => {
-        const result = await dispatch(updateData(form));
-        // console.log(result)
-        if (result.success) {
-            setToggle(toggle)
-        }
+        await dispatch(updateData(form));
+        tgc()
     }, [dispatch])
 
     useEffect(() => {
@@ -31,6 +28,8 @@ export default function Index({ timeInfo, setToggle, toggle }: any) {
             let setDate = timeInfo && new Date(timeInfo.date_at[0], timeInfo.date_at[1], timeInfo.date_at[2], timeInfo.data.work_time[0], timeInfo.data.work_time[1])
 
             setStartDate(setDate)
+            setWorkState(timeInfo.data.state)
+            // console.log(timeInfo.data.state)
         }
     }, [timeInfo])
 
@@ -57,13 +56,22 @@ export default function Index({ timeInfo, setToggle, toggle }: any) {
             <>
                 <h2>{`${timeInfo.date_at[0]}년 ${timeInfo.date_at[1]}월 ${timeInfo.date_at[2]}일`}</h2>
             </>
-            <InputGroup>
+            <InputForm.InputFormWrapSelect>
+                <select onChange={(e: any) => setWorkState(e.target.value)} defaultValue={timeInfo.data.state}>
+                    <option value="출근" >출근</option>
+                    <option value="오전 반차" >오전 반차</option>
+                    <option value="오후 반차">오후 반차</option>
+                    <option value="월차">월차</option>
+                    <option value="외근">외근</option>
+                </select>
+            </InputForm.InputFormWrapSelect>
+            {/* <InputGroup>
                 <ButtonForm.defaultInputBtn type="radio" id="test11" name="test1" value="출근" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test11">출근</label>
                 <ButtonForm.defaultInputBtn type="radio" id="test22" name="test1" value="오전 반차" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test22">반차(오전)</label>
                 <ButtonForm.defaultInputBtn type="radio" id="test33" name="test1" value="오후 반차" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test33">반차(오후)</label>
                 <ButtonForm.defaultInputBtn type="radio" id="test44" name="test1" value="월차" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test44">월차</label>
                 <ButtonForm.defaultInputBtn type="radio" id="test55" name="test1" value="외근" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test55">외근</label>
-            </InputGroup>
+            </InputGroup> */}
             < DatePicker
                 selected={startDate}
                 onChange={(date: any) => setStartDate(date)}

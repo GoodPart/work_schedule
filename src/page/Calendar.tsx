@@ -12,6 +12,8 @@ import CalendarItem from "../components/calendar_item/container_component/Calend
 import { RootState } from "../modules";
 import { styled } from "styled-components";
 
+import * as InputForm from '../components/styledComponents/InputStyled'
+
 import { deleteData, insertData } from "../modules/calendar";
 import { authCheckToServer } from '../modules/auth'
 
@@ -37,7 +39,7 @@ export default function Calendar() {
         y: todayY,
         m: todayM + 1,
     });
-    let [workState, setWorkState] = useState("");
+    let [workState, setWorkState] = useState("출근");
 
     let monthCount = useRef(0);
 
@@ -148,11 +150,14 @@ export default function Calendar() {
         getSchedule(stdDate.m);
         setNameValue(authData.auth.user_name)
 
+
     }, [stdDate, monthCount, authData, calendarData.loading, mySch])
+
+    // if (!nameValue) return <>loading...</>
 
     return (
         <SettingWrap>
-            <div style={{ zIndex: 100, position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "8px 24px", width: "calc(100% - 24px)" }}>
+            <div style={{ zIndex: 100, position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "16px 24px", width: "calc(100% - 48px)", minWidth: "350px" }}>
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
                     <h2 style={{ padding: 0, margin: 0 }}>{stdDate.y}년 {stdDate.m}월</h2>
                     <div>
@@ -160,27 +165,36 @@ export default function Calendar() {
                     </div>
                 </div>
                 <div>
-                    <div style={{ display: "flex", fontWeight: "bold" }}><span style={{ marginRight: "6px" }}>작성자: </span><input style={{ border: "none", fontWeight: "bold" }} type="text" value={nameValue} disabled onChange={(e: any) => setNameValue(e.target.value)} /></div>
-                    <InputGroup>
-                        <input type="radio" id="test1" name="test" value="출근" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test1">출근</label>
-                        <input type="radio" id="test2" name="test" value="오전 반차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test2">반차(오전)</label>
-                        <input type="radio" id="test3" name="test" value="오후 반차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test3">반차(오후)</label>
-                        <input type="radio" id="test4" name="test" value="월차" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test4">월차</label>
-                        <input type="radio" id="test5" name="test" value="외근" onChange={(e) => setWorkState(e.target.value)} /><label htmlFor="test5">외근</label>
-                    </InputGroup>
-
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <DatePicker
-                            selected={inputDate}
-                            onChange={(date: any) => setInputDate(date)}
-                            showTimeSelect
-                            timeIntervals={30}
-                            timeCaption="time"
-                            dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
-                            locale={ko}
-                        />
+                    <div className="insert__form" >
+                        <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form">
+                            <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
+                            <label htmlFor={nameValue}>아이디</label>
+                        </InputForm.InputFormWrap>
+                        <div>
+                            <InputForm.InputFormWrapSelect>
+                                <select onChange={(e: any) => setWorkState(e.target.value)} key={workState} defaultValue={workState}>
+                                    <option value="출근" >출근</option>
+                                    <option value="오전 반차" >오전 반차</option>
+                                    <option value="오후 반차">오후 반차</option>
+                                    <option value="월차">월차</option>
+                                    <option value="외근">외근</option>
+                                </select>
+                            </InputForm.InputFormWrapSelect>
+                            <DatePicker
+                                selected={inputDate}
+                                onChange={(date: any) => setInputDate(date)}
+                                showTimeSelect
+                                timeIntervals={30}
+                                timeCaption="time"
+                                dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
+                                locale={ko}
+                            />
+                        </div>
                         <button onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</button>
+
                     </div>
+
+
 
                 </div>
             </div>
@@ -207,13 +221,26 @@ const SettingWrap = styled.div`
     background-color: #F9F9F9;
 
     .react-datepicker-wrapper {
-        width: 50%;
+        width: auto;
     }
     .react-datepicker-wrapper input {
-        width: 100%;
+        width: auto;
     }
     .react-datepicker-wrapper + button {
         width: 20%;
+    }
+    .insert__form {
+        display: flex;
+    }
+
+    .input__form {
+        width:  120px;
+    }
+
+     @media (max-width:560px){
+        .insert__form {
+            flex-direction: column;
+        }
     }
 `
 

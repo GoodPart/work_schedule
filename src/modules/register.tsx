@@ -23,6 +23,27 @@ const initState = {
     auth: ''
 }
 
+export function registerSignUp(form: any): any {
+
+    return async (dispatch: any, getState: any) => {
+
+        dispatch({
+            type: LOADING,
+        })
+        let data = await axios.post(`http://localhost:9999${SIGN_UP_URL}`, form, { withCredentials: true });
+
+        if (data.data.success) {
+            dispatch({
+                type: SUCCESS
+            });
+            return {
+                type: SIGN_UP,
+                payload: data.data.success
+            }
+        }
+    }
+}
+
 // 액션 함수
 export function registerSignIn(form: any): any {
     let data = axios.post(`http://localhost:9999${SIGN_IN_URL}`, form, { withCredentials: true });

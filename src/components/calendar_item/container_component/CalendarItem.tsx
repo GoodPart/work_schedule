@@ -75,15 +75,12 @@ export default function CalendarItem({ dateProps, memberProps, deleteSchedule, l
         return `${WEEKDAY[day]}`
     }
 
-    // console.log(new Date(dateY, dateM - 1, 1).getDay())
 
     let form = {
         first_date: firstDate,
-        // first_day: getDayFunc(new Date(dateY, dateM - 1, 1).getDay()),
         now_year: nowYear,
         now_month: nowMonth,
         now_date: nowDate,
-        // now_day: getDayFunc(now.getDay()),
         last_date: lastDate,
         dateY: dateY,
         dateM: dateM

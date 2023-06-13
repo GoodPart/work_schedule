@@ -32,7 +32,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
                 <ButtonForm.SubmitBtn type='button' onClick={submit}>Sign In</ButtonForm.SubmitBtn>
             </form>
             <br />
-            <div>Don't have an account? <Link style={{ color: "#0F9485", textDecoration: "none", fontWeight: "bold" }} to={'/signup'}>Sign Up</Link></div>
+            <div>아직 회원이 아닌가요? <Link style={{ color: "#0F9485", textDecoration: "none", fontWeight: "bold" }} to={'/signup'}>회원가입</Link></div>
         </div>
     )
 }

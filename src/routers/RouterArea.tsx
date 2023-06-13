@@ -3,7 +3,9 @@ import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 
 import Main from '../page/Main';
 import SignIn from '../page/sign_in/container_component/SignIn';
+import SignUp from '../page/sign_up/container_component/Signup';
 import MyPage from '../page/MyPage';
+import Setting from '../page/Setting';
 
 import Calendar from '../page/Calendar';
 import Auth from '../hoc/Auth';
@@ -13,14 +15,17 @@ export default function RouterArea() {
     const SignInPage: React.FunctionComponent = Auth(SignIn, false)
     const UserPage: React.FunctionComponent = Auth(MyPage, true);
     const CalendarPage: React.FunctionComponent = Auth(Calendar, null);
+    const SettingPage: React.FunctionComponent = Auth(Setting, null);
+    const SignUpPage: React.FunctionComponent = Auth(SignUp, false);
 
     return (
         <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/signin' element={<SignInPage />} />
+            <Route path='/signup' element={<SignUpPage />} />
             <Route path='/calendar' element={<CalendarPage />} />
             <Route path='/my-page' element={<UserPage />} />
-
+            <Route path='/setting' element={<SettingPage />} />
         </Routes>
     );
 };

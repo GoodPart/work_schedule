@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ScrollRestoration } from "react-router-dom";
 import styled from "styled-components";
 import TimePicker from "../../timePicker/container_component/TimePicker";
 
@@ -6,6 +7,7 @@ import TimePicker from "../../timePicker/container_component/TimePicker";
 import { initColorValue } from "../../styledComponents/CommonValue";
 
 import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
+
 
 
 
@@ -117,7 +119,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                     <div className="timepicker__wrap" style={{ display: toggle ? "block" : "none" }}>
                         <div className="inner__wrap">
                             <button type="button" onClick={() => toggleClose()}>닫기</button>
-                            <TimePicker timeProps={updateProps} toggle={toggle} setToggle={setToggle} />
+                            <TimePicker timeProps={updateProps} tgc={toggleClose} />
                         </div>
                     </div>
                 )

@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useCallback, useState } from 'react';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import axios from 'axios';
 
+import styled, { ThemeProvider } from 'styled-components';
+
 import { RootState } from './modules';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -9,9 +11,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import NavBar from './components/Navbar';
 import RouterArea from './routers/RouterArea';
 
-const MyContext = createContext('');
 
 function App() {
+
+  const theme = {
+    colors: {
+      bgColor: '#121212',
+    }
+  }
 
   const [overflowHidden, setOverflowHidden] = useState(false);
   const [scrollV, setScrollV] = useState(false);
@@ -52,10 +59,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <NavBar onBodyChange={onBodyChange} scrollV={scrollV} />
+      <ThemeProvider theme={theme}>
+        <NavBar onBodyChange={onBodyChange} scrollV={scrollV} />
 
 
-      <RouterArea />
+        <RouterArea />
+      </ThemeProvider>
     </BrowserRouter>
   );
 };

@@ -17,6 +17,8 @@ export const InputFormWrap = styled.div<{ check: any }>`
         font-weight : bold;
         border-style: solid;
     }
+
+
     input:focus {
         outline: 1px solid #0F9485;
     }
@@ -52,6 +54,8 @@ export const InputFormWrap = styled.div<{ check: any }>`
         right : 12px;
         transform: translateY(-50%);
     }
+
+    
 `
 
 export const InputFormWrapSelect = styled.div`
@@ -61,12 +65,52 @@ export const InputFormWrapSelect = styled.div`
 
     select {
         width: calc(100%);
-        padding: 16px;
+        padding: 8px;
         border-radius: 4px;
         border-color: #eee;
         color : #48484A;
         font-size : 16px;
         border-width: 1px;
         border-style: solid;
+    }
+`
+
+
+export const InputFormWrapToggle = styled.div<{ width: number, height: number }>`
+    position: relative;
+    width: ${props => props.width}px;
+    height: ${props => props.height}px;
+    background-color: #c2c2c2;
+    border-radius:  24px;
+
+    input[type='checkbox'] {
+        display: none;
+
+        & + label {
+            display: block;
+            width : 100%;
+            height : 100%;
+        }
+    }
+
+    input[type='checkbox'] + label {
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left : 0;
+            width: 32px;
+            height: 32px;
+            background-color: #444;
+            border-radius: 32px;
+
+        }
+    }
+
+    input[type='checkbox']:checked + label {
+        &:after {
+            left : inherit;
+            right : 0
+        }
     }
 `
