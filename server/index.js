@@ -11,8 +11,10 @@ const config = require('./config/key');
 
 const { auth } = require('./middleware/auth');
 
+const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
+
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: `${deployURL}:3000`,
     credentials: true
 }));
 app.use(bodyParser.urlencoded({ extended: true }));

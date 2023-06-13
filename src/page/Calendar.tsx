@@ -18,6 +18,8 @@ import { deleteData, insertData } from "../modules/calendar";
 import { authCheckToServer } from '../modules/auth'
 
 import loading from '../loading.gif'
+const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
+
 
 export default function Calendar() {
 
@@ -44,7 +46,7 @@ export default function Calendar() {
     let monthCount = useRef(0);
 
 
-    const getSchedule = (month: any) => axios.post("http://localhost:9999/api/calendar/read", {
+    const getSchedule = (month: any) => axios.post(`${deployURL}:9999/api/calendar/read`, {
         month: month
     }, {
         withCredentials: true

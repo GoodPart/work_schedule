@@ -5,6 +5,8 @@ import axios from 'axios';
 
 
 import { authCheckToServer } from '../modules/auth';
+const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
+
 
 export default function (Component: any, option: any) {
 
@@ -14,7 +16,7 @@ export default function (Component: any, option: any) {
         const dispatch = useDispatch();
 
         useEffect(() => {
-            axios.get('http://localhost:9999/api/users/auth', { withCredentials: true })
+            axios.get(`${deployURL}:9999/api/users/auth`, { withCredentials: true })
                 .then(res => {
                     const isAuth = res.data.user;
                     console.log('isAuth ->', res.data)

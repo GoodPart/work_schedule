@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Index from "../present_component/Index";
 import axios from "axios";
+const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
 
 
 export default function TimePicker({ timeProps, tgc }: any) {
     const [timeInfo, setTImeinfo] = useState('');
     const setTIme = () => {
-        axios.post("http://localhost:9999/api/calendar/findbyid", { _id: timeProps }, { withCredentials: true })
+        axios.post(`${deployURL}:9999/api/calendar/findbyid`, { _id: timeProps }, { withCredentials: true })
             .then(res => {
                 setTImeinfo(res.data.match)
             })

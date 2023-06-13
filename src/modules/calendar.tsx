@@ -7,6 +7,7 @@ const CALENDAR_STATE_LOADING = 'calendar/CALENDAR_STATE_LOADING' as const;
 const CALENDAR_STATE_SUCCESS = 'calendar/CALENDAR_STATE_SUCCESS' as const;
 const CALENDAR_STATE_ERROR = 'calendar/CALENDAR_STATE_ERROR' as const;
 
+const deployURL = "https://work-schedule-git-productionmaster-pks940122-gmailcom.vercel.app"
 
 
 const initState = {
@@ -39,7 +40,7 @@ export function insertData(form: any): any {
 
 
         try {
-            const createData = await axios.post("http://localhost:9999/api/calendar/create", { form }, { withCredentials: true })
+            const createData = await axios.post(`${deployURL}:9999/api/calendar/create`, { form }, { withCredentials: true })
 
             if (createData.data.success) {
                 dispatch({
@@ -65,7 +66,7 @@ export function deleteData(_id: any): any {
             let getAuthData = await getState().authCheckReducer.auth;
 
             if (getAuthData) {
-                const deleteData = await axios.post("http://localhost:9999/api/calendar/deletebyid", { _id: _id }, { withCredentials: true })
+                const deleteData = await axios.post(`${deployURL}:9999/api/calendar/deletebyid`, { _id: _id }, { withCredentials: true })
                 if (deleteData.data.success) {
                     dispatch({
                         type: CALENDAR_STATE_SUCCESS
@@ -86,7 +87,7 @@ export function updateData(form: any): any {
         })
 
         try {
-            const updateData = await axios.post("http://localhost:9999/api/calendar/updatebyid", form, { withCredentials: true });
+            const updateData = await axios.post(`${deployURL}:9999/api/calendar/updatebyid`, form, { withCredentials: true });
 
             if (updateData.data.success) {
                 dispatch({
