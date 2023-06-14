@@ -7,7 +7,8 @@ const port = 9999;
 
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
-const config = require('./config/key');
+// const config = require('./config/key');
+const config = process.env.MONGO_URI;
 
 const { auth } = require('./middleware/auth');
 
@@ -36,7 +37,7 @@ const { Calendar } = require('./models/Calendar');
 //몽고 DB 에러
 mongoose.set('strictQuery', true);
 
-mongoose.connect(config.mongoURI, {
+mongoose.connect(config, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("MongoDB Conntected"))
