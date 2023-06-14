@@ -37,7 +37,7 @@ const { Calendar } = require('./models/Calendar');
 //몽고 DB 에러
 mongoose.set('strictQuery', true);
 
-mongoose.connect(config, {
+mongoose.connect(`${config}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("MongoDB Conntected"))
