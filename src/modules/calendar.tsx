@@ -7,7 +7,7 @@ const CALENDAR_STATE_LOADING = 'calendar/CALENDAR_STATE_LOADING' as const;
 const CALENDAR_STATE_SUCCESS = 'calendar/CALENDAR_STATE_SUCCESS' as const;
 const CALENDAR_STATE_ERROR = 'calendar/CALENDAR_STATE_ERROR' as const;
 
-const deployURL = "https://work-schedule-delta.vercel.app"
+const deployURL = "http://ec2-43-201-0-7.ap-northeast-2.compute.amazonaws.com"
 
 
 const initState = {

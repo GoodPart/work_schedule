@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Index from "../present_component/Index";
 import axios from "axios";
-const deployURL = "https://work-schedule-delta.vercel.app"
+const deployURL = "http://ec2-43-201-0-7.ap-northeast-2.compute.amazonaws.com"
 
 
 export default function TimePicker({ timeProps, tgc }: any) {

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 import { authCheckToServer } from '../modules/auth';
-const deployURL = "https://work-schedule-delta.vercel.app"
+const deployURL = "http://ec2-43-201-0-7.ap-northeast-2.compute.amazonaws.com"
 
 
 export default function (Component: any, option: any) {

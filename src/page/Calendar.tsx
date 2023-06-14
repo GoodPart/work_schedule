@@ -18,7 +18,7 @@ import { deleteData, insertData } from "../modules/calendar";
 import { authCheckToServer } from '../modules/auth'
 
 import loading from '../loading.gif'
-const deployURL = "https://work-schedule-delta.vercel.app"
+const deployURL = "http://ec2-43-201-0-7.ap-northeast-2.compute.amazonaws.com"
 
 
 export default function Calendar() {

@@ -13,7 +13,7 @@ const LOADING = 'process/LOADING' as const;
 const ERROR = 'process/ERROR' as const;
 const SUCCESS = 'process/SUCCESS' as const;
 
-const deployURL = "https://work-schedule-delta.vercel.app"
+const deployURL = "http://ec2-43-201-0-7.ap-northeast-2.compute.amazonaws.com"
 
 //init state
 const initState = {
