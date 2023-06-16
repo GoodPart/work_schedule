@@ -59,7 +59,7 @@ export default function Calendar() {
     const inCrease = () => {
 
         monthCount.current = monthCount.current + 1
-        console.log(monthCount.current)
+        // console.log(monthCount.current)
 
         let result = new Date(new Date().setMonth(new Date().getMonth() + monthCount.current));
         const y = result.getFullYear();
@@ -126,7 +126,7 @@ export default function Calendar() {
 
     const deleteSchedule = useCallback(async (_id: any) => {
         await dispatch(deleteData(_id)).then((res: any) => {
-            console.log(res)
+            // console.log(res)
 
             if (!res) {
                 console.log('넘에 것 입니다.')

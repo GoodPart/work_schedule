@@ -72,7 +72,7 @@ userSchema.pre('save', function (next) {
 // 비밀번호 복호화
 userSchema.methods.comparePassword = function (plainPassword, cb) {
     bcrypt.compare(plainPassword, this.user_pw, (err, isMatch) => {
-        console.log('복호화 성공 여부 - ', isMatch)
+        // console.log('복호화 성공 여부 - ', isMatch)
         if (err) return cb(err)
         cb(null, isMatch)
     })

@@ -209,7 +209,7 @@ app.post('/api/calendar/findbyid', async (req, res) => {
     await Calendar.findById({
         _id: getData._id
     }).then((match, err) => {
-        console.log(match)
+        // console.log(match)
         if (err) return res.json({
             success: false,
             err

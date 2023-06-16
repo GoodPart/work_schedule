@@ -46,7 +46,7 @@ export default function SignUp() {
     const submit = () => {
         dispatch(registerSignUp(form))
             .then((res: any) => {
-                console.log(res)
+                // console.log(res)
                 res.payload && navigate('/');
             });
 

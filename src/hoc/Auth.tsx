@@ -19,13 +19,13 @@ export default function (Component: any, option: any) {
             axios.get('http://43.201.147.161:9999/api/users/auth', { withCredentials: true })
                 .then(res => {
                     const isAuth = res.data.user;
-                    console.log('isAuth ->', res.data)
+                    // console.log('isAuth ->', res.data)
 
 
 
                     if (!isAuth) {
                         //미 로그인 상태
-                        console.log('미 로그인!')
+                        // console.log('미 로그인!')
                         if (option) {
                             navigate('/signin')
                         }
@@ -33,7 +33,7 @@ export default function (Component: any, option: any) {
                         // 로그인 상태
                         dispatch(authCheckToServer(isAuth))
 
-                        console.log('로그인!')
+                        // console.log('로그인!')
                         if (option === false) {
                             //로그인 유저만 출입 가능
                             navigate('/')

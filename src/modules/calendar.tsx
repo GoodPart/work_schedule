@@ -31,7 +31,7 @@ export function insertData(form: any): any {
         });
 
         let getAuthData = getState().authCheckReducer.auth;
-        console.log(getAuthData)
+        // console.log(getAuthData)
 
         form.user.user_id = getAuthData.user_id;
         form.user.rank_title = getAuthData.rank_title
