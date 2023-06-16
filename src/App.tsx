@@ -48,7 +48,7 @@ function App() {
   // }, [])
 
   const logout = () => {
-    axios.get("http://localhost:9999/api/users/logout", {
+    axios.get("http://myworkday.pe.kr:9999/api/users/logout", {
       withCredentials: true
     })
       .then(res => {
