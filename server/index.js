@@ -12,7 +12,7 @@ const config = process.env.MONGO_URI;
 
 const { auth } = require('./middleware/auth');
 
-const deployURL = "https://work-schedule-delta.vercel.app"
+const deployURL = "http://43.201.147.161"
 
 app.use(cors({
     origin: `${deployURL}`,
