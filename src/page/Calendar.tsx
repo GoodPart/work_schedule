@@ -46,7 +46,7 @@ export default function Calendar() {
     let monthCount = useRef(0);
 
 
-    const getSchedule = (month: any) => axios.post("http://myworkday.pe.kr:9999/api/calendar/read", {
+    const getSchedule = (month: any) => axios.post("http://myworkday.pe.kr/api/calendar/read", {
         month: month
     }, {
         withCredentials: true
