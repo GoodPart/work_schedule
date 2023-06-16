@@ -6,7 +6,7 @@ import axios from "axios";
 export default function TimePicker({ timeProps, tgc }: any) {
     const [timeInfo, setTImeinfo] = useState('');
     const setTIme = () => {
-        axios.post("http://localhost:9999/api/calendar/findbyid", { _id: timeProps }, { withCredentials: true })
+        axios.post("http://43.201.147.161:9999/api/calendar/findbyid", { _id: timeProps }, { withCredentials: true })
             .then(res => {
                 setTImeinfo(res.data.match)
             })

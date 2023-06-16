@@ -30,7 +30,7 @@ export function registerSignUp(form: any): any {
         dispatch({
             type: LOADING,
         })
-        let data = await axios.post(`http://localhost:9999${SIGN_UP_URL}`, form, { withCredentials: true });
+        let data = await axios.post(`http://43.201.147.161:9999${SIGN_UP_URL}`, form, { withCredentials: true });
 
         if (data.data.success) {
             dispatch({
@@ -46,7 +46,7 @@ export function registerSignUp(form: any): any {
 
 // 액션 함수
 export function registerSignIn(form: any): any {
-    let data = axios.post(`http://localhost:9999${SIGN_IN_URL}`, form, { withCredentials: true });
+    let data = axios.post(`http://43.201.147.161:9999${SIGN_IN_URL}`, form, { withCredentials: true });
     let result = data.then(res => res.data);
 
     return {
@@ -59,7 +59,7 @@ export function registerSignIn(form: any): any {
 
 export function signInAction(form: any): any {
     return async (dispatch: any, getState: any) => {
-        let request = await axios.post(`http://localhost:9999${SIGN_IN_URL}`, form, { withCredentials: true });
+        let request = await axios.post(`http://43.201.147.161:9999${SIGN_IN_URL}`, form, { withCredentials: true });
 
         dispatch({
             type: LOADING
@@ -83,7 +83,7 @@ export function signOutAction(): any {
             type: LOADING
         })
         try {
-            const result = await axios.get("http://localhost:9999/api/users/logout", { withCredentials: true })
+            const result = await axios.get("http://43.201.147.161:9999/api/users/logout", { withCredentials: true })
             if (result.data.success) {
                 dispatch({
                     type: SUCCESS

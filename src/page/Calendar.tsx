@@ -44,7 +44,7 @@ export default function Calendar() {
     let monthCount = useRef(0);
 
 
-    const getSchedule = (month: any) => axios.post("http://localhost:9999/api/calendar/read", {
+    const getSchedule = (month: any) => axios.post("http://43.201.147.161:9999/api/calendar/read", {
         month: month
     }, {
         withCredentials: true
