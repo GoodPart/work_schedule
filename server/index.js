@@ -12,11 +12,12 @@ const config = process.env.MONGO_URI;
 
 const { auth } = require('./middleware/auth');
 
-const deployURL = "https://myworkday.com"
+const deployURL = "https://myworkday.pe.kr"
 
 app.use(cors({
     origin: `${deployURL}`,
-    credentials: true
+    credentials: true,
+    optionsSuccessStatus: 200
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
