@@ -16,7 +16,7 @@ export default function (Component: any, option: any) {
         const dispatch = useDispatch();
 
         useEffect(() => {
-            axios.get('https://myworkday.pe.kr:9999/api/users/auth', { withCredentials: true })
+            axios.get('https://myworkday.pe.kr:8888/api/users/auth', { withCredentials: true })
                 .then(res => {
                     const isAuth = res.data.user;
                     // console.log('isAuth ->', res.data)
