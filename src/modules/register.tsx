@@ -2,7 +2,7 @@ import axios from "axios";
 
 const SIGN_IN_URL = '/api/users/login' as const;
 const SIGN_UP_URL = '/api/users/signup' as const;
-const SIGN_OUT_URL = 'api/users/logout' as const;
+const SIGN_OUT_URL = '/api/users/logout' as const;
 
 //액션 타입
 const SIGN_IN = 'sign/SIGN_IN' as const;
@@ -31,7 +31,7 @@ export function registerSignUp(form: any): any {
         dispatch({
             type: LOADING,
         })
-        let data = await axios.post(`https://myworkday.pe.kr${SIGN_UP_URL}`, form, { withCredentials: true });
+        let data = await axios.post(`https://myworkday.pe.kr:9999${SIGN_UP_URL}`, form, { withCredentials: true });
 
         if (data.data.success) {
             dispatch({
@@ -47,7 +47,7 @@ export function registerSignUp(form: any): any {
 
 // 액션 함수
 export function registerSignIn(form: any): any {
-    let data = axios.post(`https://myworkday.pe.kr${SIGN_IN_URL}`, form, { withCredentials: true });
+    let data = axios.post(`https://myworkday.pe.kr:9999${SIGN_IN_URL}`, form, { withCredentials: true });
     let result = data.then(res => res.data);
 
     return {
@@ -60,7 +60,7 @@ export function registerSignIn(form: any): any {
 
 export function signInAction(form: any): any {
     return async (dispatch: any, getState: any) => {
-        let request = await axios.post(`https://myworkday.pe.kr${SIGN_IN_URL}`, form, { withCredentials: true });
+        let request = await axios.post(`https://myworkday.pe.kr:9999${SIGN_IN_URL}`, form, { withCredentials: true });
 
         dispatch({
             type: LOADING
@@ -84,7 +84,7 @@ export function signOutAction(): any {
             type: LOADING
         })
         try {
-            const result = await axios.get("https://myworkday.pe.kr/api/users/logout", { withCredentials: true })
+            const result = await axios.get("https://myworkday.pe.kr:9999/api/users/logout", { withCredentials: true })
             if (result.data.success) {
                 dispatch({
                     type: SUCCESS
