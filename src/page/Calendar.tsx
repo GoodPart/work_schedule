@@ -30,7 +30,6 @@ export default function Calendar() {
     let authData = useSelector((state: RootState) => state.authCheckReducer);
     const calendarData = useSelector((state: RootState) => state.calendarReducer)
 
-    let [mySch, setMySch] = useState(false);
     const [inputDate, setInputDate] = useState(new Date());
     let [nameValue, setNameValue] = useState(authData.auth.user_name);
 
@@ -43,6 +42,8 @@ export default function Calendar() {
         m: todayM + 1,
     });
     let [workState, setWorkState] = useState("출근");
+
+    let [ctlToggle, setCtlToggle] = useState(true);
 
     let monthCount = useRef(0);
 
@@ -60,7 +61,6 @@ export default function Calendar() {
     const inCrease = () => {
 
         monthCount.current = monthCount.current + 1
-        // console.log(monthCount.current)
 
         let result = new Date(new Date().setMonth(new Date().getMonth() + monthCount.current));
         const y = result.getFullYear();
@@ -154,19 +154,23 @@ export default function Calendar() {
         setNameValue(authData.auth.user_name)
 
 
-    }, [stdDate, monthCount, authData, calendarData.loading, mySch])
+    }, [stdDate, monthCount, authData, calendarData.loading])
 
     // if (!nameValue) return <>loading...</>
 
     return (
         <SettingWrap>
-            <div style={{ zIndex: 90, position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "16px 24px", width: "calc(100% - 48px)", minWidth: "350px" }}>
+            <div className={ctlToggle ? 'ctl-wrap' : 'ctl-wrap hide'} >
+                <div style={{ position: "absolute", top: '-50px', right: 40, display: "flex" }}>
+                    <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "inline-block" }} />
+                    <label htmlFor="check"><h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2></label>
+                </div>
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
                     <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="mo">
                         <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                         <label htmlFor={nameValue}>아이디</label>
                     </InputForm.InputFormWrap>
-                    <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
+                    {/* <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2> */}
                     <div>
                         <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
                     </div>
@@ -228,6 +232,28 @@ const SettingWrap = styled.div`
     width: 100%;
     background-color: #F9F9F9;
     width: calc(100% - 24px);
+
+    .ctl-wrap {
+        z-index : 90;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 24px;
+        width : calc(100% - 48px);
+        min-width: 350px;
+        transition: bottom .3s cubic-bezier(0.16, 1, 0.3, 1);;
+    }
+
+    .ctl-wrap.hide {
+        bottom: -150px;
+    }
+    .ctl-wrap.hide + div {
+        padding-bottom : 0
+    }
 
     .react-datepicker-wrapper {
         width: auto;
