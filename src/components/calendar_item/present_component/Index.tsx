@@ -163,6 +163,11 @@ const ItemWrap = styled.div`
     padding-bottom: 150px;
 
 
+    @media (min-width:561px) {
+        padding-bottom: 96px;
+      
+    }
+
     .day__wrap {
         position: relative;
         display: flex;
