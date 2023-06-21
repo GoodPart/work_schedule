@@ -146,7 +146,7 @@ const Hamberger = styled.div`
     .toggle-icon {
         cursor : pointer;
         position : absolute;
-        right : 16px;
+        right : 32px;
 
         &:after, &:before {
             content : '';
