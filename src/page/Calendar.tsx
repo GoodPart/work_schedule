@@ -161,9 +161,9 @@ export default function Calendar() {
     return (
         <SettingWrap>
             <div className={ctlToggle ? 'ctl-wrap' : 'ctl-wrap hide'} >
-                <div style={{ position: "absolute", top: '-50px', right: 40, display: "flex" }}>
-                    <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "inline-block" }} />
-                    <label htmlFor="check"><h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2></label>
+                <div data-device="mo" style={{ position: "absolute", top: '-50px', right: 40, display: "flex" }}>
+                    <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
+                    <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /><h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2></label>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
                     <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="mo">
@@ -172,6 +172,7 @@ export default function Calendar() {
                     </InputForm.InputFormWrap>
                     {/* <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2> */}
                     <div>
+                        <h2 data-device="pc" style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
                         <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
                     </div>
 
@@ -246,10 +247,18 @@ const SettingWrap = styled.div`
         width : calc(100% - 48px);
         min-width: 350px;
         transition: bottom .3s cubic-bezier(0.16, 1, 0.3, 1);;
+        
+    }
+
+    @media (max-width: 560px) {
+        .ctl-wrap {
+            padding: 8px 12px;
+            width: calc( 100% - 24px);
+        }
     }
 
     .ctl-wrap.hide {
-        bottom: -150px;
+        bottom: -134px;
     }
     .ctl-wrap.hide + div {
         padding-bottom : 0
@@ -271,11 +280,16 @@ const SettingWrap = styled.div`
     .input__form {
         width:  120px;
     }
-    .input__form[data-device='mo'] {
+    /* .input__form[data-device='mo'] {
         display: none;
+    } */
+    @media (min-width:561px) {
+        *[data-device='mo'] {
+            display: none !important;
+        }
     }
 
-     @media (max-width:560px){
+    @media (max-width:560px){
         .insert__form {
             flex-direction: column;
         }
@@ -283,11 +297,18 @@ const SettingWrap = styled.div`
             padding: 4px;
         }
 
-        .input__form[data-device='pc'] {
+        *[data-device='pc'] {
             display: none;
         }
-        .input__form[data-device='mo'] {
+        *[data-device='mo'] {
             display: block;
+        }
+
+        /* .input__form[data-device='pc'] {
+            display: none;
+        } */
+        .input__form[data-device='mo'] {
+            /* display: block; */
 
             input[type='text'] {
                 padding-top: 20px;
