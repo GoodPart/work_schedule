@@ -13,6 +13,7 @@ import { RootState } from "../modules";
 import { styled } from "styled-components";
 
 import * as InputForm from '../components/styledComponents/InputStyled'
+import * as ButtonForm from "../components/styledComponents/ButtonStyled"
 
 import { deleteData, insertData } from "../modules/calendar";
 import { authCheckToServer } from '../modules/auth'
@@ -44,7 +45,7 @@ export default function Calendar() {
     let monthCount = useRef(0);
 
 
-    const getSchedule = (month: any) => axios.post("http://43.201.147.161:9999/api/calendar/read", {
+    const getSchedule = (month: any) => axios.post("http://localhost:9999/api/calendar/read", {
         month: month
     }, {
         withCredentials: true
@@ -157,20 +158,25 @@ export default function Calendar() {
 
     return (
         <SettingWrap>
-            <div style={{ zIndex: 100, position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "16px 24px", width: "calc(100% - 48px)", minWidth: "350px" }}>
+            <div style={{ zIndex: 90, position: "fixed", bottom: 0, left: 0, backgroundColor: "#fff", border: "1px solid #ccc", display: "flex", justifyContent: "space-between", padding: "16px 24px", width: "calc(100% - 48px)", minWidth: "350px" }}>
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
-                    <h2 style={{ padding: 0, margin: 0 }}>{stdDate.y}년 {stdDate.m}월</h2>
+                    <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="mo">
+                        <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
+                        <label htmlFor={nameValue}>아이디</label>
+                    </InputForm.InputFormWrap>
+                    <h2 style={{ padding: 0, margin: 0, letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
                     <div>
                         <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
                     </div>
+
                 </div>
                 <div>
                     <div className="insert__form" >
-                        <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form">
+                        <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc">
                             <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                             <label htmlFor={nameValue}>아이디</label>
                         </InputForm.InputFormWrap>
-                        <div>
+                        <div className="form--wrap">
                             <InputForm.InputFormWrapSelect>
                                 <select onChange={(e: any) => setWorkState(e.target.value)} key={workState} defaultValue={workState}>
                                     <option value="출근" >출근</option>
@@ -190,7 +196,7 @@ export default function Calendar() {
                                 locale={ko}
                             />
                         </div>
-                        <button onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</button>
+                        <ButtonForm.SubmitBtn className="submit" style={{ width: "inherit" }} onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
 
                     </div>
 
@@ -236,11 +242,55 @@ const SettingWrap = styled.div`
     .input__form {
         width:  120px;
     }
+    .input__form[data-device='mo'] {
+        display: none;
+    }
 
      @media (max-width:560px){
         .insert__form {
             flex-direction: column;
         }
+        .insert__form select {
+            padding: 4px;
+        }
+
+        .input__form[data-device='pc'] {
+            display: none;
+        }
+        .input__form[data-device='mo'] {
+            display: block;
+
+            input[type='text'] {
+                padding-top: 20px;
+                padding-bottom: 8px;
+                font-size: 12px;
+
+                &+label {
+                    top: 2px;
+                }
+            }
+
+        }
+        .react-datepicker-wrapper input {
+            padding: 8px 4px !important;
+        }
+    }
+
+    .submit {
+        padding: 4px;
+        width: inherit;
+        font-size : 18px
+    }
+
+    @media (max-width:560px) {
+        .form--wrap {
+            * + * {
+                margin-top: 4px;
+            }
+        }
+        .submit {
+            margin-top: 4px;
+         } 
     }
 `
 
