@@ -73,7 +73,6 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
                                     loading ? memberProps.sort((a: any, b: any) => a.data.work_time[0] - b.data.work_time[0]).map((m: any, index2: number) => {
                                         if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
-                                            console.log(m)
                                             return <CardWrap key={m.user._id} id={m.user._id} delay={index2} >
                                                 <div className="wrap">
                                                     <div className="card__section">
