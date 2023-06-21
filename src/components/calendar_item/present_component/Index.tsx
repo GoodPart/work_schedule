@@ -160,7 +160,7 @@ const ScltonDiv = styled.div`
 const ItemWrap = styled.div`
     width : 100%;
     background-color : #F9F9F9;
-    padding-bottom: 120px;
+    padding-bottom: 94px;
 
 
     .day__wrap {
@@ -184,13 +184,16 @@ const ItemWrap = styled.div`
     .calc-desc {
         display: flex;
         flex-wrap: wrap;
-        width : calc(100% - 80px);
+        width : calc(100% - 92px);
         background-color: #e7e7e7;
+        margin-right: 12px;
 
     }
 
     .day-desc {
         position: relative;
+        margin-left: 12px;
+        
     }
     .timepicker__wrap {
         z-index : 10000;
