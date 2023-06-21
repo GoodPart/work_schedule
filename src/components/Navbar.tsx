@@ -107,11 +107,11 @@ const Nav = styled.nav<{ scroll: Boolean }>`
     background: hsla(0,0%,100%,.8);
     
     & + * {
-        padding-top : ${(props) => props.scroll ? "65px" : "0"};
+        padding-top : ${(props) => props.scroll ? "52px" : "0"};
     }
     .inner-wrap {
         display : flex;
-        padding : 16px 24px;
+        padding : 8px 24px;
         height: 32px;
     }
 `
@@ -165,7 +165,7 @@ const Hamberger = styled.div`
         overflow : hidden;
         height : 0;
         position : absolute;
-        top : 65px;
+        top : 48px;
         left : 0;
         width : 100%;
         background-color : #fff;
