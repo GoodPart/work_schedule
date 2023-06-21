@@ -63,7 +63,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                         <div key={ele} className={ele === nowDate ? "day__wrap now" : "day__wrap"} >
                             <div className="day-desc"
                                 style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", minHeight: "60px", fontWeight: 700 }}>
-                                <span style={{ fontSize: '36px', color: "#444" }}>{ele < 10 ? `0${ele}` : ele}</span><span className="desc-day" style={getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '토' || getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '일' ? { color: initColorValue.point1 } : { color: "#000" }}>
+                                <span style={{ fontSize: '36px', color: "#444", letterSpacing: "-0.05em" }}>{ele < 10 ? `0${ele}` : ele}</span><span className="desc-day" style={getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '토' || getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '일' ? { color: initColorValue.point1 } : { color: "#000" }}>
                                     {getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay())}
                                 </span>
                             </div>
@@ -71,8 +71,9 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                             <div className="calc-desc" >
                                 {
 
-                                    loading ? memberProps.map((m: any, index2: number) => {
+                                    loading ? memberProps.sort((a: any, b: any) => a.data.work_time[0] - b.data.work_time[0]).map((m: any, index2: number) => {
                                         if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
+                                            console.log(m)
                                             return <CardWrap key={m.user._id} id={m.user._id} delay={index2} >
                                                 <div className="wrap">
                                                     <div className="card__section">
@@ -160,7 +161,7 @@ const ScltonDiv = styled.div`
 const ItemWrap = styled.div`
     width : 100%;
     background-color : #F9F9F9;
-    padding-bottom: 94px;
+    padding-bottom: 150px;
 
 
     .day__wrap {
@@ -184,15 +185,13 @@ const ItemWrap = styled.div`
     .calc-desc {
         display: flex;
         flex-wrap: wrap;
-        width : calc(100% - 92px);
+        width : calc(100% - 70px);
         background-color: #e7e7e7;
-        margin-right: 12px;
 
     }
 
     .day-desc {
         position: relative;
-        margin-left: 12px;
         
     }
     .timepicker__wrap {
@@ -417,6 +416,7 @@ const WorkState = styled.div<{ state: String }>`
             p:first-child {
                 padding: 2px 6px;
                 max-width: 60%;
+                line-height: 16px;
             }
          }
     p + p {

@@ -107,7 +107,8 @@ const Nav = styled.nav<{ scroll: Boolean }>`
     background: hsla(0,0%,100%,.8);
     
     & + * {
-        padding-top : ${(props) => props.scroll ? "52px" : "0"};
+        padding : 0 12px;
+        padding-top : ${(props) => props.scroll ? "62px" : "0"};
     }
     .inner-wrap {
         display : flex;

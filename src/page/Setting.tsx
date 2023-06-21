@@ -9,7 +9,7 @@ import * as InputForm from "../components/styledComponents/InputStyled"
 
 export default function Setting() {
     return (
-        <>
+        <div className="layout-wrap">
             <h1>셋팅</h1>
             <p>모드</p>
             <InputForm.InputFormWrapToggle width={64} height={32}>
@@ -17,7 +17,7 @@ export default function Setting() {
                 <label htmlFor="checkbox"></label>
             </InputForm.InputFormWrapToggle>
 
-        </>
+        </div>
     )
 }
 

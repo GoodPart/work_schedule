@@ -10,7 +10,7 @@ import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 export default function Index({ handleChangeId, handleChangePw, submit, dataProps }: any) {
     return (
 
-        <div style={{ width: "100%" }}>
+        <div className='layout-wrap'>
             <form action="submit" onSubmit={submit}>
                 <InputForm.InputFormWrap check={dataProps.userId}>
                     <input type="text" id='userId' name='userId'
