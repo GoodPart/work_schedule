@@ -20,11 +20,9 @@ export default function NavBar({ onBodyChange, scrollV }: any) {
     const [toggle, setToggle] = useState(false);
 
     const logout = useCallback(async () => {
-        const result = await dispatch(signOutAction())
+        await dispatch(signOutAction())
 
-        if (result.success) {
-            window.location.reload();
-        }
+        window.location.reload();
 
     }, [dispatch])
     const onToggle = (e: any) => {
