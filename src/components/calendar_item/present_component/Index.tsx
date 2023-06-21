@@ -193,6 +193,7 @@ const ItemWrap = styled.div`
         position: relative;
     }
     .timepicker__wrap {
+        z-index : 10000;
         position :  fixed;
         top: 0;
         left: 0;
@@ -284,7 +285,7 @@ const CardWrap = styled.div<{ delay: Number }>`
 
     .wrap, .work-state {
         display: flex;
-        width : 60%
+        width : 70%
     }
 
 
@@ -297,13 +298,31 @@ const CardWrap = styled.div<{ delay: Number }>`
 
     .card__section {
         display: flex;
+        width :100%;
+
+
+        @media (max-width:741px){
+            display : flex;
+            .content {
+                display : flex;
+                width: 100%;
+            }
+            .content .info {
+                margin-left : 8px;
+                margin-top : 0 !important;
+                align-self : center;
+            }
+           
+        }
     }
     .name { 
         font-weight : bold;
-        font-size: 24px;
+        font-size: 20px;
+        letter-spacing : -0.05em
     }
     .card__section .content .info  {
-        margin-top :8px
+        margin-top :8px;
+        letter-spacing : -0.05em
     }
     .info--item {
         font-size: 10px;
@@ -313,8 +332,12 @@ const CardWrap = styled.div<{ delay: Number }>`
     .work-state {
         /* margin-top : 12px; */
         flex-direction: column;
-        width : 40%;
+        width : 30%;
         align-self: center;
+
+     @media (max-width:741px){
+        width : 30%
+    }
     }
     .work-state p {
         text-align: center;
@@ -343,8 +366,11 @@ const CardWrap = styled.div<{ delay: Number }>`
         img {
             width : 100%
         }
-        
     }
+    .update-btn {
+        margin-top : 4px
+    }
+
 
     @keyframes showPC {
         0% {
@@ -373,13 +399,23 @@ const WorkState = styled.div<{ state: String }>`
         margin: 0 auto;
         padding: 2px 12px;
         border-radius: 4px;
-        max-width: 60%;
+        max-width: 34%;
         min-width: 30%;
         font-size : 14px;
         font-weight: bold;
         background-color: ${(props) => props.state === '출근' ? initColorValue.state.color1 : props.state === '오후 반차' ? initColorValue.state.color4 : props.state === '오전 반차' ? initColorValue.state.color3 : props.state === '월차' ? initColorValue.state.color2 : props.state === '외근' ? initColorValue.state.color5 : ''};
         color : #fff;
+        word-break: keep-all;
+
+        
+        
     }
+     @media (max-width:741px){
+            p:first-child {
+                padding: 2px 6px;
+                max-width: 60%;
+            }
+         }
     p + p {
         margin-top : 4px !important
     }

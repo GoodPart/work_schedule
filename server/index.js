@@ -142,7 +142,7 @@ app.post('/api/users/login', (req, res) => {
 app.get('/api/users/logout', auth, (req, res) => {
     User.findOneAndUpdate({ _id: req.user._id }, { token: "" }).then((user, err) => {
         if (err) return res.json({ success: false, err })
-        return res.status(200).send({
+        return res.status(200).json({
             success: true
         })
     })

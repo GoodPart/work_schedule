@@ -65,13 +65,6 @@ export default function Index({ timeInfo, tgc }: any) {
                     <option value="외근">외근</option>
                 </select>
             </InputForm.InputFormWrapSelect>
-            {/* <InputGroup>
-                <ButtonForm.defaultInputBtn type="radio" id="test11" name="test1" value="출근" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test11">출근</label>
-                <ButtonForm.defaultInputBtn type="radio" id="test22" name="test1" value="오전 반차" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test22">반차(오전)</label>
-                <ButtonForm.defaultInputBtn type="radio" id="test33" name="test1" value="오후 반차" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test33">반차(오후)</label>
-                <ButtonForm.defaultInputBtn type="radio" id="test44" name="test1" value="월차" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test44">월차</label>
-                <ButtonForm.defaultInputBtn type="radio" id="test55" name="test1" value="외근" onChange={(e: any) => setWorkState(e.target.value)} /><label htmlFor="test55">외근</label>
-            </InputGroup> */}
             < DatePicker
                 selected={startDate}
                 onChange={(date: any) => setStartDate(date)}
@@ -95,6 +88,10 @@ const UpdateWrap = styled.div`
         & + button {
             margin-top : 16px;
             width: 100% !important;
+        }
+
+        input[type='text'] {
+            width : 100%
         }
     }
 `
