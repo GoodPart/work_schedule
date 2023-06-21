@@ -20,11 +20,9 @@ export default function NavBar({ onBodyChange, scrollV }: any) {
     const [toggle, setToggle] = useState(false);
 
     const logout = useCallback(async () => {
-        const result = await dispatch(signOutAction())
+        await dispatch(signOutAction())
 
-        if (result.success) {
-            window.location.reload();
-        }
+        window.location.reload();
 
     }, [dispatch])
     const onToggle = (e: any) => {
@@ -109,7 +107,8 @@ const Nav = styled.nav<{ scroll: Boolean }>`
     background: hsla(0,0%,100%,.8);
     
     & + * {
-        padding-top : ${(props) => props.scroll ? "52px" : "0"};
+        padding : 0 12px;
+        padding-top : ${(props) => props.scroll ? "62px" : "0"};
     }
     .inner-wrap {
         display : flex;

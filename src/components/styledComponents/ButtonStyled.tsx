@@ -19,7 +19,6 @@ export const SubmitBtn = styled.button`
 
 export const defaultBtn = styled.button`
     cursor: pointer;
-    width: 100%;
     border : none;
     background-color: #eee;
     border : 1px solid #ddd;
@@ -32,7 +31,6 @@ export const defaultBtn = styled.button`
 
     &:hover {
         background-color: #0F9485;
-
     }
 
     &:disabled {

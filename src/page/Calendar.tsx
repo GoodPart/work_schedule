@@ -108,11 +108,11 @@ export default function Calendar() {
                 office_name: "",
                 team_name: ""
             },
-            // user_name: nameValue,
             date_at: [pushY, pushM, pushD],
             data: {
                 state: workState,
-                work_time: [pushHH, pushMM]
+                // work_time: [pushHH, pushMM]
+                work_time: workState === '월차' ? [0, 0] : workState === '오전 반차' ? [1, 0] : workState === '외근' ? [2, 0] : [pushHH, pushMM]
             },
             data_month: pushM
         }
@@ -164,7 +164,7 @@ export default function Calendar() {
                         <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                         <label htmlFor={nameValue}>아이디</label>
                     </InputForm.InputFormWrap>
-                    <h2 style={{ padding: 0, margin: 0, letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
+                    <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
                     <div>
                         <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
                     </div>
@@ -225,6 +225,7 @@ export default function Calendar() {
 const SettingWrap = styled.div`
     width: 100%;
     background-color: #F9F9F9;
+    width: calc(100% - 24px);
 
     .react-datepicker-wrapper {
         width: auto;
@@ -265,9 +266,9 @@ const SettingWrap = styled.div`
                 padding-bottom: 8px;
                 font-size: 12px;
 
-                &+label {
+                /* &+label {
                     top: 2px;
-                }
+                } */
             }
 
         }
