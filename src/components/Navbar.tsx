@@ -1,7 +1,7 @@
 "use client"
 import { useState, useCallback, useEffect } from "react"
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { useSelector, useDispatch } from "react-redux"
 import { RootState } from "../modules";
@@ -14,18 +14,18 @@ import axios from "axios"
 
 export default function NavBar({ onBodyChange, scrollV }: any) {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const authData = useSelector((state: RootState) => state.authCheckReducer.auth);
     const registData = useSelector((state: RootState) => state.registerReducer);
     const [toggle, setToggle] = useState(false);
-    // const [scrollV, setScrollV] = useState(false);
-    // const logout = () => {
-    //     axios.get("http://localhost:9999/api/users/logout", {
-    //         withCredentials: true
-    //     })
 
-    // }
     const logout = useCallback(async () => {
-        await dispatch(signOutAction())
+        const result = await dispatch(signOutAction())
+
+        if (result.success) {
+            window.location.reload();
+        }
+
     }, [dispatch])
     const onToggle = (e: any) => {
         setToggle(!toggle)
@@ -39,16 +39,16 @@ export default function NavBar({ onBodyChange, scrollV }: any) {
     useEffect(() => {
         console.log('registData', registData.loading)
     }, [registData.loading, authData])
-    // if (!authData) return <>loading...</>
     return (
         <Nav scroll={scrollV.toString()}>
             <div className="inner-wrap">
+                <div className="title" style={{ textTransform: 'uppercase', fontSize: 22, fontWeight: 700, letterSpacing: '-0.05em', color: "rgb(68,68,68)" }}>My Work Day</div>
                 <DefaultNav>
                     <NavItem>
                         <Link to='/'>Home</Link>
 
                         {
-                            authData ? <button type="button" onClick={() => logout()}  >로그아웃</button> : <Link to='/signin'>로그인</Link>
+                            authData ? <button type="button" style={{ cursor: "pointer", display: "flex", marginLeft: "20px", fontSize: 14, color: "#666", backgroundColor: "transparent", border: "none", padding: 16 }} onClick={() => logout()}  >로그아웃</button> : <Link to='/signin'>로그인</Link>
                         }
 
 
@@ -67,7 +67,7 @@ export default function NavBar({ onBodyChange, scrollV }: any) {
                             <Link to='/' onClick={() => resetToggle()}>Home</Link>
 
                             {
-                                authData ? <button type="button" onClick={() => logout()}  >로그아웃</button> : <Link to='/signin' onClick={() => resetToggle()}>로그인</Link>
+                                authData ? <button type="button" style={{ cursor: "pointer", display: "flex", marginLeft: "20px", fontSize: 14, color: "#666", backgroundColor: "transparent", border: "none", padding: 16 }} onClick={() => logout()}  >로그아웃</button> : <Link to='/signin' onClick={() => resetToggle()}>로그인</Link>
                             }
                             {
                                 authData ? <Link to='/my-page' onClick={() => resetToggle()}>내 정보</Link> : ""
