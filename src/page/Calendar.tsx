@@ -186,10 +186,30 @@ export default function Calendar() {
                     theme: 'glass'
                 }}
             >
-                <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .6s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-22px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '14px', fontWeight: 700, width: 'max-content', textShadow: '0 0 black' }}>{stdDate.y}년 {stdDate.m}월</span>
+                <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .2s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-22px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '14px', fontWeight: 700, width: 'max-content', textShadow: '0 0 black' }}>{stdDate.y}년 {stdDate.m}월</span>
                 <div className="setting">
                     <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button className="today" onClick={() => todaySet()}>Today</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button>
                 </div>
+            </Toast>
+            <Toast
+                options={{
+                    className: toastState.state && toastState.id === 1 ? 'toasting' : '',
+                    width: '100%',
+                    height: '230px',
+                    // gap: '24px',
+                    theme: 'glass'
+                }}
+            >
+                <DatePicker
+                    selected={inputDate}
+                    onChange={(date: any) => setInputDate(date)}
+                    dateFormat="yyyy년 MMMM dd일"
+                    locale={ko}
+                    inline
+                    disabledKeyboardNavigation
+                />
+                <ButtonForm.SubmitBtn style={{ position: 'absolute', bottom: '10px', right: '20px', width: '20%' }} onClick={() => setToastState({ state: false, id: 0 })}>등록</ButtonForm.SubmitBtn>
+
             </Toast>
             <div data-device="mo" style={{ zIndex: 100, position: "fixed", bottom: ctlToggle ? '180px' : '52px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff' }}>
                 <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
@@ -243,25 +263,25 @@ export default function Calendar() {
                                     className: toastState.state && toastState.id === 0 ? 'toasting' : '',
                                     width: '100%',
                                     height: '158px',
-                                    // gap: '24px',
+                                    gap: '0',
                                     theme: 'glass'
                                 }}
                             >
                                 <div className="form__wrap" >
                                     <ul>
-                                        <li>
+                                        <li style={{ backgroundColor: initColorValue.state.color1 }}>
                                             <input type="radio" id="1" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="출근" defaultChecked /><label htmlFor="1">출근</label>
                                         </li>
-                                        <li>
+                                        <li style={{ backgroundColor: initColorValue.state.color3 }}>
                                             <input type="radio" id="2" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="오전 반차" /><label htmlFor="2">오전 반차</label>
                                         </li>
-                                        <li>
+                                        <li style={{ backgroundColor: initColorValue.state.color4 }}>
                                             <input type="radio" id="3" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="오후 반차" /><label htmlFor="3">오후 반차</label>
                                         </li>
-                                        <li>
+                                        <li style={{ backgroundColor: initColorValue.state.color2 }}>
                                             <input type="radio" id="4" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="월차" /><label htmlFor="4">월차</label>
                                         </li>
-                                        <li>
+                                        <li style={{ backgroundColor: initColorValue.state.color5 }}>
                                             <input type="radio" id="5" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="외근" /><label htmlFor="5">외근</label>
                                         </li>
                                     </ul>
@@ -272,7 +292,7 @@ export default function Calendar() {
                                     className: toastState.state && toastState.id === 2 ? 'toasting' : '',
                                     width: '100%',
                                     height: '158px',
-                                    // gap: '24px',
+                                    gap: '0',
                                     theme: 'glass'
                                 }}
                             >
@@ -296,28 +316,7 @@ export default function Calendar() {
                                     </ul>
                                 </div>
                             </Toast>
-                            <Toast
-                                options={{
-                                    className: toastState.state && toastState.id === 1 ? 'toasting' : '',
-                                    width: '100%',
-                                    height: '158px',
-                                    // gap: '24px',
-                                    theme: 'glass'
-                                }}
-                            >
-                                <div style={{ display: toastState.id == 1 ? 'block' : 'none' }}>
-                                    <DatePicker
-                                        selected={inputDate}
-                                        onChange={(date: any) => setInputDate(date)}
-                                        dateFormat="yyyy년 MMMM dd일"
-                                        locale={ko}
-                                        inline
-                                        disabledKeyboardNavigation
-                                    />
-                                </div>
-                                <button onClick={() => setToastState({ state: false, id: 0 })}>등록</button>
 
-                            </Toast>
                         </div>
                     </div>
 
@@ -505,25 +504,39 @@ const SettingWrap = styled.div`
             margin: 0 auto;
         }
         .form__group .form__wrap ul li{
+            position: relative;
             width: 18%;
             height : 45%;
+            border: none;
+
+            &:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left : 0;
+                width: 100%;
+                height: 8px;
+                background-color: #444;
+            }
             
         }
         .form__group .form__wrap ul li input {
            display: none;
 
             &+label {
-                display: block;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 padding: 0;
                 margin:  0;
                 width: 100%;
                 height: 100%;
                 background-color:  transparent;
                 color : #fff;
+                font-weight: 700;
                 border: none;
             }
             &:checked + label {
-                background-color: red;
             }
         }
 
@@ -551,6 +564,12 @@ const SettingWrap = styled.div`
         }
         .react-datepicker-wrapper input {
             padding: 8px 4px !important;
+        }
+        .react-datepicker {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-65%) scale(1.1);
         }
     }
 
