@@ -16,15 +16,15 @@ export default Toast;
 const ToastWrap = styled.div<{ options: any }>`
     z-index : 1000;
     position: fixed;
-    bottom: -${props => props.options.height};
+    bottom: calc(-10px - ${props => props.options.height});
     left : 50%;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
     width: ${props => props.options.width} ;
     height : ${props => props.options.height};
-    border-radius: 16px  ;
-    transition: bottom .6s .3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 16px;
+    transition: bottom .3s .1s cubic-bezier(0.16, 1, 0.3, 1);
     border: ${props => props.options.theme === 'glass' ? '1px solid #ddd' : ''};
     backdrop-filter: ${props => props.options.theme === 'glass' ? 'saturate(180%) blur(5px)' : ''};
     -webkit-backdrop-filter: ${props => props.options.theme === 'glass' ? 'saturate(180%) blur(5px)' : ''};
