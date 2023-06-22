@@ -400,14 +400,16 @@ const SettingWrap = styled.div`
         position: fixed;
         bottom: 0;
         left: 0;
-        background-color: #fff;
         border: 1px solid #ccc;
         display: flex;
         justify-content: space-between;
         padding: 16px 24px;
         width : calc(100% - 48px);
         min-width: 350px;
-        transition: bottom .3s cubic-bezier(0.16, 1, 0.3, 1);;
+        transition: bottom .3s cubic-bezier(0.16, 1, 0.3, 1);
+        backdrop-filter: saturate(180%) blur(5px);
+    -webkit-backdrop-filter: saturate(180%) blur(5px);
+    background: hsla(0,0%,100%,.4);
         
     }
 
@@ -478,10 +480,18 @@ const SettingWrap = styled.div`
             overflow: hidden;
             background-color: #444;
             width: 45%;
-            height : 45%;
-            border-radius: 20px;
+            height : 40%;
+            border-radius: 4px;
+            border : 1px solid #0F9485
+        }
+        .insert__form ul li > div{
+           height: 100%;
         }
 
+        .insert__form ul li > div input[type='text']:read-only{
+           border-radius: 0;
+           border: none;
+        }
 
         .form__group {
             width: 100%;
