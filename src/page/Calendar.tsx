@@ -4,20 +4,24 @@ import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale'; //한국어 설정
 
-
-import { useDispatch, useSelector } from "react-redux";
+//component
 import CalendarItem from "../components/calendar_item/container_component/CalendarItem";
+import Toast from "../components/Toast";
 
-
-import { RootState } from "../modules";
+//styled
 import { styled } from "styled-components";
-
 import * as InputForm from '../components/styledComponents/InputStyled'
 import * as ButtonForm from "../components/styledComponents/ButtonStyled"
+import { initColorValue } from "../components/styledComponents/CommonValue";
 
+
+//redux
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../modules";
 import { deleteData, insertData } from "../modules/calendar";
 import { authCheckToServer } from '../modules/auth'
 
+//img
 import loading from '../loading.gif'
 
 export default function Calendar() {
@@ -159,9 +163,23 @@ export default function Calendar() {
     return (
         <SettingWrap>
             <div className={ctlToggle ? 'ctl-wrap' : 'ctl-wrap hide'} >
-                <div data-device="mo" style={{ position: "absolute", top: '-50px', right: 40, display: "flex" }}>
+                <Toast
+                    options={{
+                        className: !ctlToggle ? 'toasting' : '',
+                        width: '34%',
+                        height: '36px',
+                        gap: '24px',
+                        theme: 'glass'
+                    }}
+                >
+                    <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .6s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-22px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '14px', fontWeight: 700, width: 'max-content', textShadow: '0 0 black' }}>{stdDate.y}년 {stdDate.m}월</span>
+                    <div className="setting">
+                        <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button className="today" onClick={() => todaySet()}>Today</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button>
+                    </div>
+                </Toast>
+                <div data-device="mo" style={{ position: "absolute", top: '-64px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff' }}>
                     <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
-                    <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /><h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2></label>
+                    <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /></label>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
                     <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="mo">
@@ -169,8 +187,8 @@ export default function Calendar() {
                         <label htmlFor={nameValue}>아이디</label>
                     </InputForm.InputFormWrap>
                     {/* <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2> */}
-                    <div>
-                        <h2 data-device="pc" style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
+                    <div data-device="pc">
+                        <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
                         <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
                     </div>
 
@@ -231,6 +249,26 @@ const SettingWrap = styled.div`
     width: 100%;
     background-color: #F9F9F9;
     width: calc(100% - 24px);
+
+    .setting {
+        display: flex;
+        justify-content: space-around;
+        width : 100%;
+        button {
+            padding: 6px;
+            border-radius: 12px;
+            border: none;
+            letter-spacing: -0.05em;
+            line-height: 12px;
+            font-size: 12px;
+            background-color: transparent;
+        }
+
+        button.today {
+            color  : #fff;
+            background-color: ${initColorValue.point1};
+        }
+    }
 
     .ctl-wrap {
         z-index : 90;
