@@ -104,6 +104,7 @@ const Nav = styled.nav<{ scroll: Boolean }>`
     border-bottom-style : solid;
     border-bottom: 1px solid rgb(234,234,234);
     backdrop-filter: saturate(180%) blur(5px);
+    -webkit-backdrop-filter: saturate(180%) blur(5px);
     background: hsla(0,0%,100%,.4);
     
     & + * {
