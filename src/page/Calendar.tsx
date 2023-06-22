@@ -45,8 +45,18 @@ export default function Calendar() {
         y: todayY,
         m: todayM + 1,
     });
-    let [workState, setWorkState] = useState("출근");
 
+
+    let [workState, setWorkState] = useState("출근");
+    let [timeState, setTimeState] = useState({
+        th: 8,
+        tm: 0
+
+    });
+    let [toastState, setToastState] = useState({
+        state: false,
+        id: 0
+    });
     let [ctlToggle, setCtlToggle] = useState(true);
 
     let monthCount = useRef(0);
@@ -103,8 +113,10 @@ export default function Calendar() {
         let pushM = new Date(inputDate).getMonth() + 1;
         let pushD = new Date(inputDate).getDate();
 
-        let pushHH = new Date(inputDate).getHours();
-        let pushMM = new Date(inputDate).getMinutes();
+        // let pushHH = new Date(inputDate).getHours();
+        // let pushMM = new Date(inputDate).getMinutes();
+        let pushHH = timeState.th;
+        let pushMM = timeState.tm;
 
         let form = {
             user: {
@@ -122,6 +134,7 @@ export default function Calendar() {
             },
             data_month: pushM
         }
+        // console.log('form-check->', form)
 
         createSchedule(form)
     }
@@ -164,30 +177,32 @@ export default function Calendar() {
 
     return (
         <SettingWrap>
-            <div className={ctlToggle ? 'ctl-wrap' : 'ctl-wrap hide'} >
-                <Toast
-                    options={{
-                        className: !ctlToggle ? 'toasting' : '',
-                        width: '34%',
-                        height: '36px',
-                        gap: '24px',
-                        theme: 'glass'
-                    }}
-                >
-                    <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .6s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-22px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '14px', fontWeight: 700, width: 'max-content', textShadow: '0 0 black' }}>{stdDate.y}년 {stdDate.m}월</span>
-                    <div className="setting">
-                        <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button className="today" onClick={() => todaySet()}>Today</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button>
-                    </div>
-                </Toast>
-                <div data-device="mo" style={{ position: "absolute", top: '-64px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff' }}>
-                    <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
-                    <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /></label>
+            <Toast
+                options={{
+                    className: !ctlToggle ? 'toasting' : '',
+                    width: '34%',
+                    height: '36px',
+                    gap: '24px',
+                    theme: 'glass'
+                }}
+            >
+                <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .6s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-22px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '14px', fontWeight: 700, width: 'max-content', textShadow: '0 0 black' }}>{stdDate.y}년 {stdDate.m}월</span>
+                <div className="setting">
+                    <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button className="today" onClick={() => todaySet()}>Today</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button>
                 </div>
+            </Toast>
+            <div data-device="mo" style={{ zIndex: 100, position: "fixed", bottom: ctlToggle ? '180px' : '52px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff' }}>
+                <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
+                <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /></label>
+            </div>
+            <div className={ctlToggle ? 'ctl-wrap' : 'ctl-wrap hide'} >
+
+
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
-                    <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="mo">
+                    {/* <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="mo">
                         <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                         <label htmlFor={nameValue}>아이디</label>
-                    </InputForm.InputFormWrap>
+                    </InputForm.InputFormWrap> */}
                     {/* <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2> */}
                     <div data-device="pc">
                         <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
@@ -195,8 +210,118 @@ export default function Calendar() {
                     </div>
 
                 </div>
-                <div>
-                    <div className="insert__form" >
+                <div className="insert__form" >
+                    <div className="form__wrap" data-device='mo'>
+                        {/* 상태, 날짜, 시간, 등록 */}
+                        <ul>
+                            <li>
+                                <InputForm.InputFormWrap check={workState}>
+                                    <input type="text" placeholder="상태" readOnly value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
+                                    <label>상태</label>
+                                </InputForm.InputFormWrap>
+                            </li>
+                            <li>
+                                <InputForm.InputFormWrap check={'1'}>
+                                    <input type="text" placeholder="날짜" readOnly value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
+                                    <label>날짜</label>
+                                </InputForm.InputFormWrap>
+                            </li>
+                            <li>
+                                <InputForm.InputFormWrap check={workState}>
+                                    <input type="text" placeholder="시간" readOnly value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })} onBlur={() => setToastState({ state: false, id: 0 })} />
+                                    <label>시간</label>
+                                </InputForm.InputFormWrap>
+                            </li>
+                            <li>
+                                <ButtonForm.SubmitBtn className="submit" style={{ width: '100%', height: '100%', margin: 0 }} onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
+                            </li>
+                        </ul>
+                        {/* 각 input에 맞는 팝업 그룹 */}
+                        <div className="form__group">
+                            <Toast
+                                options={{
+                                    className: toastState.state && toastState.id === 0 ? 'toasting' : '',
+                                    width: '100%',
+                                    height: '158px',
+                                    // gap: '24px',
+                                    theme: 'glass'
+                                }}
+                            >
+                                <div className="form__wrap" >
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="1" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="출근" defaultChecked /><label htmlFor="1">출근</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="2" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="오전 반차" /><label htmlFor="2">오전 반차</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="3" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="오후 반차" /><label htmlFor="3">오후 반차</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="4" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="월차" /><label htmlFor="4">월차</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="5" name="a" onChange={(e: any) => setWorkState(e.target.value)} defaultValue="외근" /><label htmlFor="5">외근</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </Toast>
+                            <Toast
+                                options={{
+                                    className: toastState.state && toastState.id === 2 ? 'toasting' : '',
+                                    width: '100%',
+                                    height: '158px',
+                                    // gap: '24px',
+                                    theme: 'glass'
+                                }}
+                            >
+                                <div className="form__wrap" >
+                                    <ul>
+                                        <li>
+                                            <input type="radio" id="11" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="1" data-th={8} data-tm={0} defaultChecked /><label htmlFor="11">8:00</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="22" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="2" data-th={8} data-tm={30} /><label htmlFor="22">8:30</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="33" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="3" data-th={9} data-tm={0} /><label htmlFor="33">9:00</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="44" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="4" data-th={9} data-tm={30} /><label htmlFor="44">9:30</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="55" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="5" data-th={10} data-tm={0} /><label htmlFor="55">10:00</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </Toast>
+                            <Toast
+                                options={{
+                                    className: toastState.state && toastState.id === 1 ? 'toasting' : '',
+                                    width: '100%',
+                                    height: '158px',
+                                    // gap: '24px',
+                                    theme: 'glass'
+                                }}
+                            >
+                                <div style={{ display: toastState.id == 1 ? 'block' : 'none' }}>
+                                    <DatePicker
+                                        selected={inputDate}
+                                        onChange={(date: any) => setInputDate(date)}
+                                        dateFormat="yyyy년 MMMM dd일"
+                                        locale={ko}
+                                        inline
+                                        disabledKeyboardNavigation
+                                    />
+                                </div>
+                                <button onClick={() => setToastState({ state: false, id: 0 })}>등록</button>
+
+                            </Toast>
+                        </div>
+                    </div>
+
+                    <div data-device='pc'>
                         <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc">
                             <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                             <label htmlFor={nameValue}>아이디</label>
@@ -219,13 +344,12 @@ export default function Calendar() {
                                 timeCaption="time"
                                 dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
                                 locale={ko}
+                                disabledKeyboardNavigation
                             />
                         </div>
                         <ButtonForm.SubmitBtn className="submit" style={{ width: "inherit" }} onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
 
                     </div>
-
-
 
                 </div>
             </div>
@@ -273,6 +397,7 @@ const SettingWrap = styled.div`
     }
 
     .ctl-wrap {
+        overflow: hidden;
         z-index : 90;
         position: fixed;
         bottom: 0;
@@ -290,13 +415,17 @@ const SettingWrap = styled.div`
 
     @media (max-width: 560px) {
         .ctl-wrap {
-            padding: 8px 12px;
-            width: calc( 100% - 24px);
+            height: 140px;
+            padding: 8px;
+            border-radius: 24px;
+            left: 50%;
+            bottom: 12px;
+            transform: translateX(-50%);
         }
     }
 
     .ctl-wrap.hide {
-        bottom: -134px;
+        bottom: -164px;
     }
     .ctl-wrap.hide + div {
         padding-bottom : 0
@@ -311,26 +440,83 @@ const SettingWrap = styled.div`
     .react-datepicker-wrapper + button {
         width: 20%;
     }
-    .insert__form {
-        display: flex;
-    }
+    
 
     .input__form {
         width:  120px;
     }
-    /* .input__form[data-device='mo'] {
-        display: none;
-    } */
+
     @media (min-width:561px) {
         *[data-device='mo'] {
             display: none !important;
         }
     }
 
+    // only mobile
     @media (max-width:560px){
-        .insert__form {
+       .form__wrap, .form__wrap ul {
+        width: 100%;
+        height : 100%
+       }
+       .form__wrap ul {
+            padding: 0;
+            list-style: none;
+       }
+       .insert__form {
+            display: flex;
             flex-direction: column;
+            width : 100%;
+            height : 100%;
         }
+        .insert__form ul {
+            display: flex;
+            flex-wrap : wrap;
+            justify-content: space-evenly;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        .insert__form ul li {
+            overflow: hidden;
+            background-color: #444;
+            width: 45%;
+            height : 45%;
+            border-radius: 20px;
+        }
+
+
+        .form__group {
+            width: 100%;
+            height : 100%
+        }
+
+        // 내부 토스트 스타일
+        .form__group .form__wrap ul{
+            margin: 0 auto;
+        }
+        .form__group .form__wrap ul li{
+            width: 18%;
+            height : 45%;
+            
+        }
+        .form__group .form__wrap ul li input {
+           display: none;
+
+            &+label {
+                display: block;
+                padding: 0;
+                margin:  0;
+                width: 100%;
+                height: 100%;
+                background-color:  transparent;
+                color : #fff;
+                border: none;
+            }
+            &:checked + label {
+                background-color: red;
+            }
+        }
+
         .insert__form select {
             padding: 4px;
         }
@@ -342,20 +528,14 @@ const SettingWrap = styled.div`
             display: block;
         }
 
-        /* .input__form[data-device='pc'] {
-            display: none;
-        } */
+       
         .input__form[data-device='mo'] {
-            /* display: block; */
 
             input[type='text'] {
                 padding-top: 20px;
                 padding-bottom: 8px;
                 font-size: 12px;
 
-                /* &+label {
-                    top: 2px;
-                } */
             }
 
         }
@@ -379,6 +559,19 @@ const SettingWrap = styled.div`
         .submit {
             margin-top: 4px;
          } 
+    }
+
+    @keyframes checkMotion {
+        0% {
+            transform: scale(1)
+        }
+        75% {
+            transform: scale(1.3)
+        }
+        100% {
+            transform: scale(1)
+
+        }
     }
 `
 
