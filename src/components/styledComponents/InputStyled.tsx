@@ -39,6 +39,7 @@ export const InputFormWrap = styled.div<{ check: any }>`
         color : ${props => props.check.length > 0 ? "#0F9485" : "#969696"};
         text-align: left;
         font-weight : bold;
+        font-family: 'NotoSansKR_Bold';
         font-size : ${props => props.check.length > 0 ? "10px" : "16px"};
         transition: scale .6s cubic-bezier(0.075, 0.82, 0.165, 1), top .6s cubic-bezier(0.075, 0.82, 0.165, 1) ;
     };

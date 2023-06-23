@@ -212,6 +212,9 @@ const ItemWrap = styled.div`
     .day-desc {
         position: relative;
         
+        span {
+            font-family: 'NotoSansKR_Bold';
+        }
     }
     .timepicker__wrap {
         z-index : 10000;
@@ -252,6 +255,7 @@ const ItemWrap = styled.div`
 `
 
 const CardWrap = styled.div<{ delay: Number }>`
+    position: relative;
     opacity :0;
     margin: 6px 4px;
     padding: 8px;
@@ -273,7 +277,20 @@ const CardWrap = styled.div<{ delay: Number }>`
     animation-direction: normal;
 
     &.your-calc {
-        border : 2px solid ${initColorValue.state.color2}
+        /* border : 2px solid ${initColorValue.state.color4} */
+        &:after {
+            content : 'ME';
+            position: absolute;
+            top : 4px;
+            left : 4px;
+            padding : 2px 4px;
+            font-size : 10px;
+            font-weight:700;
+            line-height : 10px;
+            background-color : ${initColorValue.state.color2};
+            color : #fff;
+            border-radius : 2px;
+        }
     }
 
     &:hover {
@@ -352,9 +369,17 @@ const CardWrap = styled.div<{ delay: Number }>`
         }
     }
     .name { 
+        font-family: 'NotoSansKR_Bold';
         font-weight : bold;
         font-size: 20px;
-        letter-spacing : -0.05em
+        letter-spacing : -0.05em;
+        margin-top : 8px;
+    }
+    //mobile
+    @media (max-width: 560px) {
+        .name {
+            margin-top : 0
+        }
     }
     .card__section .content .info  {
         margin-top :8px;
