@@ -195,7 +195,7 @@ export default function Calendar() {
                 options={{
                     className: toastState.state && toastState.id === 1 ? 'toasting' : '',
                     width: 'calc(100% - 24px)',
-                    height: '230px',
+                    height: '320px',
                     gap: '24px',
                     theme: 'glass'
                 }}
@@ -219,11 +219,6 @@ export default function Calendar() {
 
 
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
-                    {/* <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="mo">
-                        <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
-                        <label htmlFor={nameValue}>아이디</label>
-                    </InputForm.InputFormWrap> */}
-                    {/* <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2> */}
                     <div data-device="pc">
                         <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
                         <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
@@ -236,19 +231,19 @@ export default function Calendar() {
                         <ul>
                             <li>
                                 <InputForm.InputFormWrap check={workState}>
-                                    <input type="text" placeholder="상태" readOnly value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
+                                    <input type="text" placeholder="상태" disabled={nameValue ? false : true} value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
                                     <label>상태</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={'1'}>
-                                    <input type="text" placeholder="날짜" readOnly value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
+                                    <input type="text" placeholder="날짜" disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                                     <label>날짜</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={workState}>
-                                    <input type="text" placeholder="시간" readOnly value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
+                                    <input type="text" placeholder="시간" disabled={nameValue ? false : true} value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
                                         onBlur={() => setToastState({ state: false, id: 0 })}
                                     />
                                     <label>시간</label>
@@ -571,9 +566,9 @@ const SettingWrap = styled.div`
         }
         .react-datepicker {
             position: absolute;
-            top: 20px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-65%) scale(.9);
+            transform: translate(-65%, -50%) scale(.9);
             background-color: transparent;
             border: none;
 
