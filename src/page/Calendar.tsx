@@ -229,19 +229,19 @@ export default function Calendar() {
                         {/* 상태, 날짜, 시간, 등록 */}
                         <ul>
                             <li>
-                                <InputForm.InputFormWrap check={workState}>
+                                <InputForm.InputFormWrap check={workState} cMode={true}>
                                     <input type="text" placeholder="상태" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
                                     <label>상태</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
-                                <InputForm.InputFormWrap check={'1'}>
+                                <InputForm.InputFormWrap check={'1'} cMode={true}>
                                     <input type="text" placeholder="날짜" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                                     <label>날짜</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
-                                <InputForm.InputFormWrap check={workState}>
+                                <InputForm.InputFormWrap check={workState} cMode={true}>
                                     <input type="text" placeholder="시간" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
                                         onBlur={() => setToastState({ state: false, id: 0 })}
                                     />
@@ -317,7 +317,7 @@ export default function Calendar() {
                     </div>
 
                     <div data-device='pc'>
-                        <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc">
+                        <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc" cMode={true}>
                             <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                             <label htmlFor={nameValue}>아이디</label>
                         </InputForm.InputFormWrap>

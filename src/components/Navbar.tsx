@@ -9,10 +9,12 @@ import { signOutAction } from "../modules/register"
 import axios from "axios"
 
 
+import { initColorValue } from "./styledComponents/CommonValue"
 
 
 
-export default function NavBar({ onBodyChange, scrollV }: any) {
+
+export default function NavBar({ onBodyChange, scrollV, modeColor, modeChangeToggle }: any) {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const authData = useSelector((state: RootState) => state.authCheckReducer.auth);
@@ -38,11 +40,11 @@ export default function NavBar({ onBodyChange, scrollV }: any) {
         console.log('registData', registData.loading)
     }, [registData.loading, authData])
     return (
-        <Nav scroll={scrollV.toString()}>
+        <Nav scroll={scrollV.toString()} cMode={modeColor}>
             <div className="inner-wrap">
                 <div className="title" style={{ textTransform: 'uppercase', fontSize: 22, fontWeight: 700, letterSpacing: '-0.05em', color: "rgb(68,68,68)" }}>My Work Day</div>
                 <DefaultNav>
-                    <NavItem>
+                    <NavItem cMode={modeColor}>
                         <Link to='/'>Home</Link>
 
                         {
@@ -59,9 +61,9 @@ export default function NavBar({ onBodyChange, scrollV }: any) {
                         <Link to='/setting'>설정</Link>
                     </NavItem>
                 </DefaultNav>
-                <Hamberger >
+                <Hamberger cMode={modeColor}>
                     <div className={toggle ? 'wrap active' : 'wrap'}>
-                        <NavItem className="ham-nav__item">
+                        <NavItem className="ham-nav__item" cMode={modeColor}>
                             <Link to='/' onClick={() => resetToggle()}>Home</Link>
 
                             {
@@ -74,6 +76,7 @@ export default function NavBar({ onBodyChange, scrollV }: any) {
                             <Link to='/calendar' onClick={() => resetToggle()}>calendar</Link>
 
                             <Link to='/setting' onClick={() => resetToggle()}>설정</Link>
+                            <button type="button" onClick={() => modeChangeToggle()}>{modeColor}</button>
                         </NavItem>
                     </div>
                     <HamIcon className="toggle-icon" toggle={toggle} onClick={(e: any) => onToggle(e)} />
@@ -93,7 +96,7 @@ const Logo = styled.div`
     span {
     }
 `
-const Nav = styled.nav<{ scroll: Boolean }>`
+const Nav = styled.nav<{ scroll: Boolean, cMode: String }>`
     z-index : 100;
     position : ${(props) => props.scroll ? "fixed" : "inherit"};
     top : ${(props) => props.scroll ? "0px" : "inherit"};
@@ -105,7 +108,7 @@ const Nav = styled.nav<{ scroll: Boolean }>`
     border-bottom: 1px solid rgb(234,234,234);
     backdrop-filter: saturate(180%) blur(5px);
     -webkit-backdrop-filter: saturate(180%) blur(5px);
-    background: hsla(0,0%,100%,.4);
+    background: ${props => props.cMode === 'light' ? initColorValue.light.glass : initColorValue.dark.glass} ;
     
     & + * {
         padding : 0 12px;
@@ -117,7 +120,7 @@ const Nav = styled.nav<{ scroll: Boolean }>`
         height: 32px;
     }
 `
-const NavItem = styled.div`
+const NavItem = styled.div<{ cMode: String }>`
     display : flex;
     gap : 1.5rem;
     height : 100%;
@@ -129,12 +132,10 @@ const NavItem = styled.div`
         margin-left : 20px;
         font-size : 14px;
         text-decoration : none;
-        color : #666;
+        color : ${props => props.cMode === 'light' ? initColorValue.light.text : initColorValue.dark.text};
+        /* color : #666; */
         transition : color .6s cubic-bezier(0.22, 1, 0.36, 1);
 
-        &:hover {
-            color : #000;
-        }
     }
 `
 const DefaultNav = styled.div`
@@ -142,7 +143,7 @@ const DefaultNav = styled.div`
         display : none
     }
 `
-const Hamberger = styled.div`
+const Hamberger = styled.div<{ cMode: string }>`
     background-color : green;
 
     .toggle-icon {
@@ -156,7 +157,7 @@ const Hamberger = styled.div`
             position : absolute;
             width : 100%;
             height : 1px;
-            background-color : #333;
+            background-color : ${props => props.cMode === 'light' ? initColorValue.light.hambergerToggle : initColorValue.dark.hambergerToggle};
             transition : top .3s cubic-bezier(0.22, 1, 0.36, 1), transform .3s cubic-bezier(0.22, 1, 0.36, 1);
         }
         &:before {
@@ -170,7 +171,7 @@ const Hamberger = styled.div`
         top : 48px;
         left : 0;
         width : 100%;
-        background-color : #fff;
+        background-color : ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};
 
         &.active {
             height : 100vh;

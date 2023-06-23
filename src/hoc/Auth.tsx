@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { authCheckToServer } from '../modules/auth';
 
-export default function (Component: any, option: any) {
+export default function (Component: any, option: any, modeColor: any) {
 
     function AuthenticationCheck(props: any) {
 
@@ -14,7 +14,7 @@ export default function (Component: any, option: any) {
         const dispatch = useDispatch();
 
         useEffect(() => {
-            axios.get('http://43.201.147.161:9999/api/users/auth', { withCredentials: true })
+            axios.get('http://localhost:9999/api/users/auth', { withCredentials: true })
                 .then(res => {
                     const isAuth = res.data.user;
                     console.log('isAuth ->', res.data)
@@ -42,7 +42,7 @@ export default function (Component: any, option: any) {
 
 
         return (
-            <Component />
+            <Component modeColor={modeColor} />
         )
     };
 

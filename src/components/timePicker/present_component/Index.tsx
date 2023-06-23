@@ -72,14 +72,14 @@ export default function Index({ timeInfo, tgc }: any) {
 
     return (
         <UpdateWrap>
-            <InputForm.InputFormWrap check={'1'}>
+            <InputForm.InputFormWrap check={'1'} cMode={true}>
                 <input type="text" placeholder="날짜" readOnly value={`${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${startDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                 <label>날짜</label>
             </InputForm.InputFormWrap>
             <div className="insert__form">
                 <ul>
                     <li>
-                        <InputForm.InputFormWrap check={workState}>
+                        <InputForm.InputFormWrap check={workState} cMode={true}>
                             <input type="text" placeholder="상태" className="toasted" readOnly inputMode="none" value={workState} onFocus={() => setToastState({ state: true, id: 0 })}
                                 onBlur={() => setToastState({ state: false, id: 0 })}
                             />
@@ -87,7 +87,7 @@ export default function Index({ timeInfo, tgc }: any) {
                         </InputForm.InputFormWrap>
                     </li>
                     <li>
-                        <InputForm.InputFormWrap check={workState}>
+                        <InputForm.InputFormWrap check={workState} cMode={true}>
                             <input type="text" placeholder="시간" className="toasted" readOnly inputMode="none" value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
                                 onBlur={() => setToastState({ state: false, id: 3 })}
                             />

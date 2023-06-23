@@ -1,9 +1,19 @@
 export const initColorValue = {
     light: {
-        bg: "#252525",
+        bg: "#F9F9F9",
+        glass: "hsla(0,0%,180%,.4)",
+        text: "#666",
+        textBlack: '#000',
+        hambergerToggle: '#333',
     },
     dark: {
-        bg: "##F9F9F9"
+        bg: "#252525",
+        bg1: "#333237",
+        glass: "hsla(0,0%,0%,.4)",
+        text: "#fff",
+        textWhite: "#fff",
+        hambergerToggle: '#333',
+
     },
     point1: "#0F9485",
     state: {

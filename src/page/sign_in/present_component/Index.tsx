@@ -12,7 +12,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
 
         <div className='layout-wrap'>
             <form action="submit" onSubmit={submit}>
-                <InputForm.InputFormWrap check={dataProps.userId}>
+                <InputForm.InputFormWrap check={dataProps.userId} cMode={true}>
                     <input type="text" id='userId' name='userId'
                         onChange={handleChangeId}
                         value={dataProps.userId}
@@ -21,7 +21,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
                 </InputForm.InputFormWrap>
                 <br />
 
-                <InputForm.InputFormWrap check={dataProps.userPw}>
+                <InputForm.InputFormWrap check={dataProps.userPw} cMode={true}>
                     <input type="password" id='userPw' name='userPw'
                         onChange={handleChangePw}
                         value={dataProps.userPw}

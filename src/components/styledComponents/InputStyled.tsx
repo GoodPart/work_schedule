@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const InputFormWrap = styled.div<{ check: any }>`
+export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
     position: relative;
     width : 100%;
     z-index : 0;
