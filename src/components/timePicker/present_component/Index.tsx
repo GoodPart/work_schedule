@@ -90,8 +90,8 @@ export default function Index({ timeInfo, tgc }: any) {
                     </li>
                 </ul>
             </div>
-            <ButtonForm.SubmitBtn className="submit" style={{ width: '100%', height: '100%', margin: 0 }} >등록</ButtonForm.SubmitBtn>
-
+            {/* <ButtonForm.SubmitBtn className="submit" style={{ width: '100%', height: '100%', margin: 0 }} >등록</ButtonForm.SubmitBtn> */}
+            <ButtonForm.SubmitBtn type='button' onClick={() => onSubmit()}>수정하기</ButtonForm.SubmitBtn>
             {/* <>
                 <h2>{`${timeInfo.date_at[0]}년 ${timeInfo.date_at[1]}월 ${timeInfo.date_at[2]}일`}</h2>
             </>
