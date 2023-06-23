@@ -48,8 +48,10 @@ export default function Index({ timeInfo, tgc }: any) {
 
     const onSubmit = () => {
 
-        let pushHH = new Date(startDate).getHours();
-        let pushMM = new Date(startDate).getMinutes();
+        let pushHH = timeState.th;
+        let pushMM = timeState.tm;
+        // let pushHH = new Date(startDate).getHours();
+        // let pushMM = new Date(startDate).getMinutes();
 
         let form = {
             _id: timeInfo._id,
