@@ -29,7 +29,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
                     <label htmlFor='userPw'>Password</label>
                 </InputForm.InputFormWrap>
                 <br />
-                <ButtonForm.SubmitBtn type='button' onClick={submit}>Sign In</ButtonForm.SubmitBtn>
+                <ButtonForm.SubmitBtn type='button' onClick={submit}>로그인</ButtonForm.SubmitBtn>
             </form>
             <br />
             <div>아직 회원이 아닌가요? <Link style={{ color: "#0F9485", textDecoration: "none", fontWeight: "bold" }} to={'/signup'}>회원가입</Link></div>
