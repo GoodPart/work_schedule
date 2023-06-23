@@ -200,6 +200,7 @@ export default function Calendar() {
                     theme: 'glass'
                 }}
             >
+                <ButtonForm.SubmitBtn style={{ position: "absolute", top: 4, right: 4, width: "fit-content", padding: 9, fontSize: '0.6rem', }} type="button" onClick={() => setToastState({ state: false, id: 0 })}>X</ButtonForm.SubmitBtn>
                 <DatePicker
                     selected={inputDate}
                     onChange={(date: any) => setInputDate(date)}
@@ -231,19 +232,19 @@ export default function Calendar() {
                         <ul>
                             <li>
                                 <InputForm.InputFormWrap check={workState}>
-                                    <input type="text" placeholder="상태" inputMode="none" disabled={nameValue ? false : true} value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
+                                    <input type="text" placeholder="상태" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
                                     <label>상태</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={'1'}>
-                                    <input type="text" placeholder="날짜" inputMode="none" disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
+                                    <input type="text" placeholder="날짜" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                                     <label>날짜</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={workState}>
-                                    <input type="text" placeholder="시간" inputMode="none" disabled={nameValue ? false : true} value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
+                                    <input type="text" placeholder="시간" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
                                         onBlur={() => setToastState({ state: false, id: 0 })}
                                     />
                                     <label>시간</label>
@@ -479,15 +480,24 @@ const SettingWrap = styled.div`
             width: 45%;
             height : 40%;
             border-radius: 4px;
-            border : 1px solid #0F9485
+            /* border : 1px solid #0F9485; */
+            box-sizing: border-box;
         }
         .insert__form ul li > div{
            height: 100%;
         }
 
+         .insert__form ul li > div input[type='text'],
+        .insert__form ul li > div input[type='text']:read-only {
+           border: none;
+        }
         .insert__form ul li > div input[type='text']:read-only{
            border-radius: 0;
            border: none;
+
+           &.toasted {
+            background-color: #fff;
+           }
         }
         .insert__form ul li > div input[type='text']:focus, .insert__form ul li > div input[type='text']:focus-within {
             text-shadow: 0 0 0 black;

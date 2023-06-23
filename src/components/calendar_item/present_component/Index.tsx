@@ -118,7 +118,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                 toggle && (
                     <div className="timepicker__wrap" style={{ display: toggle ? "block" : "none" }}>
                         <div className="inner__wrap">
-                            <button type="button" onClick={() => toggleClose()}>닫기</button>
+                            <ButtonForm.SubmitBtn style={{ position: "absolute", top: 4, right: 4, width: "fit-content", padding: 9, fontSize: '0.6rem', }} type="button" onClick={() => toggleClose()}>X</ButtonForm.SubmitBtn>
                             <TimePicker timeProps={updateProps} tgc={toggleClose} />
                         </div>
                     </div>

@@ -74,7 +74,7 @@ export default function Index({ timeInfo, tgc }: any) {
                 <ul>
                     <li>
                         <InputForm.InputFormWrap check={workState}>
-                            <input type="text" placeholder="상태" inputMode="none" value={workState} onFocus={() => setToastState({ state: true, id: 0 })}
+                            <input type="text" placeholder="상태" className="toasted" readOnly inputMode="none" value={workState} onFocus={() => setToastState({ state: true, id: 0 })}
                                 onBlur={() => setToastState({ state: false, id: 0 })}
                             />
                             <label>상태</label>
@@ -82,7 +82,7 @@ export default function Index({ timeInfo, tgc }: any) {
                     </li>
                     <li>
                         <InputForm.InputFormWrap check={workState}>
-                            <input type="text" placeholder="시간" inputMode="none" value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
+                            <input type="text" placeholder="시간" className="toasted" readOnly inputMode="none" value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
                                 onBlur={() => setToastState({ state: false, id: 3 })}
                             />
                             <label>시간</label>

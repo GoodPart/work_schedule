@@ -7,7 +7,7 @@ export const InputFormWrap = styled.div<{ check: any }>`
     z-index : 0;
 
     input {
-        width: calc(100% - 32px);
+        width: 100%;
         padding: 24px 16px 16px 16px;
         border-radius: 4px;
         border-color: #eee;
@@ -16,6 +16,7 @@ export const InputFormWrap = styled.div<{ check: any }>`
         border-width: 1px;
         font-weight : bold;
         border-style: solid;
+        box-sizing: border-box;
     }
 
 
