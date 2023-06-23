@@ -487,6 +487,10 @@ const SettingWrap = styled.div`
            border-radius: 0;
            border: none;
         }
+        .insert__form ul li > div input[type='text']:focus, .insert__form ul li > div input[type='text']:focus-within {
+            text-shadow: 0 0 0 black;
+            outline: none;
+        }
 
         .form__group {
             width: 100%;
