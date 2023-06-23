@@ -229,19 +229,19 @@ export default function Calendar() {
                         <ul>
                             <li>
                                 <InputForm.InputFormWrap check={workState}>
-                                    <input type="text" placeholder="상태" disabled={nameValue ? false : true} value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
+                                    <input type="text" placeholder="상태" inputMode="none" disabled={nameValue ? false : true} value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
                                     <label>상태</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={'1'}>
-                                    <input type="text" placeholder="날짜" disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
+                                    <input type="text" placeholder="날짜" inputMode="none" disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                                     <label>날짜</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={workState}>
-                                    <input type="text" placeholder="시간" disabled={nameValue ? false : true} value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
+                                    <input type="text" placeholder="시간" inputMode="none" disabled={nameValue ? false : true} value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
                                         onBlur={() => setToastState({ state: false, id: 0 })}
                                     />
                                     <label>시간</label>
