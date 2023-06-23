@@ -8,7 +8,7 @@ import { authCheckToServer } from '../modules/auth';
 const deployURL = "http://ec2-43-201-0-7.ap-northeast-2.compute.amazonaws.com"
 
 
-export default function (Component: any, option: any) {
+export default function (Component: any, option: any, modeColor: any) {
 
     function AuthenticationCheck(props: any) {
 
@@ -44,7 +44,7 @@ export default function (Component: any, option: any) {
 
 
         return (
-            <Component />
+            <Component modeColor={modeColor} />
         )
     };
 

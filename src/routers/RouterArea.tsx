@@ -9,14 +9,16 @@ import Setting from '../page/Setting';
 
 import Calendar from '../page/Calendar';
 import Auth from '../hoc/Auth';
-export default function RouterArea() {
+export default function RouterArea(modeColor: any) {
 
-    const HomePage: React.FunctionComponent = Auth(Main, null);
-    const SignInPage: React.FunctionComponent = Auth(SignIn, false)
-    const UserPage: React.FunctionComponent = Auth(MyPage, true);
-    const CalendarPage: React.FunctionComponent = Auth(Calendar, null);
-    const SettingPage: React.FunctionComponent = Auth(Setting, null);
-    const SignUpPage: React.FunctionComponent = Auth(SignUp, false);
+    const _modeColor = Object.values(modeColor)[0];
+
+    const HomePage: React.FunctionComponent = Auth(Main, null, _modeColor);
+    const SignInPage: React.FunctionComponent = Auth(SignIn, false, _modeColor)
+    const UserPage: React.FunctionComponent = Auth(MyPage, true, _modeColor);
+    const CalendarPage: React.FunctionComponent = Auth(Calendar, null, _modeColor);
+    const SettingPage: React.FunctionComponent = Auth(Setting, null, _modeColor);
+    const SignUpPage: React.FunctionComponent = Auth(SignUp, false, _modeColor);
 
     return (
         <Routes>
