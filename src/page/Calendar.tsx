@@ -182,11 +182,11 @@ export default function Calendar() {
                     className: !ctlToggle ? 'toasting' : '',
                     width: '34%',
                     height: '36px',
-                    gap: '24px',
+                    gap: '36px',
                     theme: 'glass'
                 }}
             >
-                <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .2s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-22px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '14px', fontWeight: 700, width: 'max-content', textShadow: '0 0 black' }}>{stdDate.y}년 {stdDate.m}월</span>
+                <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .2s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-24px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '1rem', fontWeight: 700, width: 'max-content' }}>{stdDate.y}년 {stdDate.m}월</span>
                 <div className="setting">
                     <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button className="today" onClick={() => todaySet()}>Today</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button>
                 </div>
@@ -194,9 +194,9 @@ export default function Calendar() {
             <Toast
                 options={{
                     className: toastState.state && toastState.id === 1 ? 'toasting' : '',
-                    width: '100%',
+                    width: 'calc(100% - 24px)',
                     height: '230px',
-                    // gap: '24px',
+                    gap: '24px',
                     theme: 'glass'
                 }}
             >
@@ -211,7 +211,7 @@ export default function Calendar() {
                 <ButtonForm.SubmitBtn style={{ position: 'absolute', bottom: '10px', right: '20px', width: '20%' }} onClick={() => setToastState({ state: false, id: 0 })}>등록</ButtonForm.SubmitBtn>
 
             </Toast>
-            <div data-device="mo" style={{ zIndex: 100, position: "fixed", bottom: ctlToggle ? '180px' : '52px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff' }}>
+            <div data-device="mo" style={{ zIndex: 100, position: "fixed", bottom: ctlToggle ? '194px' : '36px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff', transition: 'bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1) ' }}>
                 <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
                 <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /></label>
             </div>
@@ -248,7 +248,9 @@ export default function Calendar() {
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={workState}>
-                                    <input type="text" placeholder="시간" readOnly value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })} onBlur={() => setToastState({ state: false, id: 0 })} />
+                                    <input type="text" placeholder="시간" readOnly value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
+                                        onBlur={() => setToastState({ state: false, id: 0 })}
+                                    />
                                     <label>시간</label>
                                 </InputForm.InputFormWrap>
                             </li>
@@ -407,10 +409,10 @@ const SettingWrap = styled.div`
         padding: 16px 24px;
         width : calc(100% - 48px);
         min-width: 350px;
-        transition: bottom .3s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: bottom 1s .1s cubic-bezier(0.16, 1, 0.3, 1);
         backdrop-filter: saturate(180%) blur(5px);
-    -webkit-backdrop-filter: saturate(180%) blur(5px);
-    background: hsla(0,0%,100%,.4);
+        -webkit-backdrop-filter: saturate(180%) blur(5px);
+        background: hsla(0,0%,100%,.4);
         
     }
 
@@ -420,7 +422,7 @@ const SettingWrap = styled.div`
             padding: 8px;
             border-radius: 24px;
             left: 50%;
-            bottom: 12px;
+            bottom: 24px;
             transform: translateX(-50%);
         }
     }
@@ -479,7 +481,6 @@ const SettingWrap = styled.div`
         }
         .insert__form ul li {
             overflow: hidden;
-            background-color: #444;
             width: 45%;
             height : 40%;
             border-radius: 4px;
@@ -509,7 +510,7 @@ const SettingWrap = styled.div`
             height : 45%;
             border: none;
 
-            &:after {
+            /* &:after {
                 content: '';
                 position: absolute;
                 top: 0;
@@ -517,7 +518,7 @@ const SettingWrap = styled.div`
                 width: 100%;
                 height: 8px;
                 background-color: #444;
-            }
+            } */
             
         }
         .form__group .form__wrap ul li input {
@@ -531,12 +532,15 @@ const SettingWrap = styled.div`
                 margin:  0;
                 width: 100%;
                 height: 100%;
-                background-color:  transparent;
+                /* background-color:  transparent; */
+                background-color: #444;
                 color : #fff;
                 font-weight: 700;
+                font-size : 0.75rem;
                 border: none;
             }
             &:checked + label {
+                background-color: #0F9485;
             }
         }
 
@@ -569,7 +573,13 @@ const SettingWrap = styled.div`
             position: absolute;
             top: 20px;
             left: 50%;
-            transform: translateX(-65%) scale(1.1);
+            transform: translateX(-65%) scale(.9);
+            background-color: transparent;
+            border: none;
+
+        }
+        .react-datepicker__header {
+            background-color: transparent;
         }
     }
 
