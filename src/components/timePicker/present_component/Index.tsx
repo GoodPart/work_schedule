@@ -41,6 +41,10 @@ export default function Index({ timeInfo, tgc }: any) {
         if (timeInfo) {
             let setDate = timeInfo && new Date(timeInfo.date_at[0], timeInfo.date_at[1], timeInfo.date_at[2], timeInfo.data.work_time[0], timeInfo.data.work_time[1])
 
+            setTimeState({
+                th: timeInfo.data.work_time[0],
+                tm: timeInfo.data.work_time[1]
+            })
             setStartDate(setDate)
             setWorkState(timeInfo.data.state)
         }

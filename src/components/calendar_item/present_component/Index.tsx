@@ -98,8 +98,8 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                                                 {
                                                     mySelf(m.user.user_name) ? (
                                                         <div className="addon" >
-                                                            <ButtonForm.defaultBtn className="cancle-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => deleteSchedule(m._id)}><img style={{ width: '100%', display: "block", height: "auto" }} src="delete.png" /></ButtonForm.defaultBtn>
-                                                            <ButtonForm.defaultBtn className="update-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}><img style={{ width: '100%', display: "block", height: "auto" }} src="update.png" /></ButtonForm.defaultBtn>
+                                                            <ButtonForm.defaultBtn className="cancle-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => deleteSchedule(m._id)}></ButtonForm.defaultBtn>
+                                                            <ButtonForm.defaultBtn className="update-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}></ButtonForm.defaultBtn>
                                                         </div>
                                                     ) : <></>
                                                 }
@@ -175,6 +175,10 @@ const ItemWrap = styled.div`
         justify-content: space-evenly;
         transform: scale(0);
         width: 0;
+
+        button {
+            display: block;
+        }
         
     }
 
@@ -386,20 +390,20 @@ const CardWrap = styled.div<{ delay: Number }>`
 
     .cancle-btn,
     .update-btn {
+        display :block;
         width : 24px;
         height: 24px;
+        background-image : url('delete.png');
+        background-repeat: no-repeat;
+        background-size: 50%;
+        background-position: center;
 
         &:hover {
-            img {
-                filter : invert(1);
-            }
-        }
-
-        img {
-            width : 100%
+                /* filter : invert(1); */
         }
     }
     .update-btn {
+        background-image : url('update.png');
         margin-top : 4px
     }
 
