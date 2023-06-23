@@ -55,7 +55,7 @@ export default function Calendar() {
         state: false,
         id: 0
     });
-    let [ctlToggle, setCtlToggle] = useState(true);
+    let [ctlToggle, setCtlToggle] = useState(false);
 
     let monthCount = useRef(0);
 
@@ -210,7 +210,7 @@ export default function Calendar() {
                 <ButtonForm.SubmitBtn style={{ position: 'absolute', bottom: '10px', right: '20px', width: '20%' }} onClick={() => setToastState({ state: false, id: 0 })}>등록</ButtonForm.SubmitBtn>
 
             </Toast>
-            <div data-device="mo" style={{ zIndex: 100, position: "fixed", bottom: ctlToggle ? '194px' : '36px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff', transition: 'bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1) ' }}>
+            <div style={{ zIndex: 100, position: "fixed", bottom: ctlToggle ? '194px' : '36px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff', transition: 'bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1) ' }}>
                 <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
                 <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /></label>
             </div>

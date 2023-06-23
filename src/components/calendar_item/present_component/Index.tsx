@@ -98,8 +98,8 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                                                 {
                                                     mySelf(m.user.user_name) ? (
                                                         <div className="addon" >
-                                                            <ButtonForm.defaultBtn className="cancle-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => deleteSchedule(m._id)}><img src="delete.png" /></ButtonForm.defaultBtn>
-                                                            <ButtonForm.defaultBtn className="update-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}><img src="update.png" /></ButtonForm.defaultBtn>
+                                                            <ButtonForm.defaultBtn className="cancle-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => deleteSchedule(m._id)}><img style={{ width: '100%', display: "block", height: "auto" }} src="delete.png" /></ButtonForm.defaultBtn>
+                                                            <ButtonForm.defaultBtn className="update-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}><img style={{ width: '100%', display: "block", height: "auto" }} src="update.png" /></ButtonForm.defaultBtn>
                                                         </div>
                                                     ) : <></>
                                                 }
