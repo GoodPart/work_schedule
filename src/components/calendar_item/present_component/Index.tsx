@@ -223,14 +223,16 @@ const ItemWrap = styled.div`
     }
 
     .timepicker__wrap .inner__wrap {
+        overflow: hidden;
         position: absolute;
-        top: 50%;
+        /* top: 50%; */
+        bottom: 24px;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translateX(-50%);
         background-color: #fff;
         padding: 32px;
         border: 1px solid #ddd;
-        border-radius: 4px;
+        border-radius: 12px;
         cursor : default;
         transition: margin .4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .4s cubic-bezier(0.16, 1, 0.3, 1);
 
