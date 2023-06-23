@@ -73,7 +73,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
                                     loading ? memberProps.sort((a: any, b: any) => a.data.work_time[0] - b.data.work_time[0]).map((m: any, index2: number) => {
                                         if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
-                                            return <CardWrap key={m.user._id} id={m.user._id} delay={index2} >
+                                            return <CardWrap key={m.user._id} id={m.user._id} delay={index2} className={mySelf(m.user.user_name) ? "your-calc" : ""} >
                                                 <div className="wrap">
                                                     <div className="card__section">
                                                         <div className="content">
@@ -97,7 +97,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                                                 </WorkState>
                                                 {
                                                     mySelf(m.user.user_name) ? (
-                                                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
+                                                        <div className="addon" >
                                                             <ButtonForm.defaultBtn className="cancle-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => deleteSchedule(m._id)}><img src="delete.png" /></ButtonForm.defaultBtn>
                                                             <ButtonForm.defaultBtn className="update-btn" type="button" disabled={mySelf(m.user.user_name) ? false : true} onClick={() => { setUpdateProps(m._id); setToggle(!toggle) }}><img src="update.png" /></ButtonForm.defaultBtn>
                                                         </div>
@@ -168,6 +168,16 @@ const ItemWrap = styled.div`
       
     }
 
+    .addon {
+        /* display: none; */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        transform: scale(0);
+        width: 0;
+        
+    }
+
     .day__wrap {
         position: relative;
         display: flex;
@@ -191,6 +201,7 @@ const ItemWrap = styled.div`
         flex-wrap: wrap;
         width : calc(100% - 70px);
         background-color: #e7e7e7;
+
 
     }
 
@@ -243,6 +254,7 @@ const CardWrap = styled.div<{ delay: Number }>`
     max-width: 320px;
     min-width: 270px;
     width : 300px;
+    min-height: 58px;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -254,9 +266,21 @@ const CardWrap = styled.div<{ delay: Number }>`
     animation-fill-mode: forwards;
     animation-direction: normal;
 
+    &.your-calc {
+        border : 2px solid ${initColorValue.state.color2}
+    }
+
     &:hover {
-        transform: translateY(-4px);
+        /* transform: translateY(-4px); */
         box-shadow: 0px 10px 19px -12px rgba(0,0,0,0.75);
+    }
+    &.your-calc:hover {
+        .addon {
+            transition: transform .3s .1s cubic-bezier(0.16, 1, 0.3, 1);
+            transform : scale(1);
+            width : auto
+            
+        }
     }
 
     @media (max-width:741px){
