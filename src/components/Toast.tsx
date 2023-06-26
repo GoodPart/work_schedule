@@ -1,9 +1,10 @@
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import styled from 'styled-components';
+import { initColorValue } from './styledComponents/CommonValue';
 
-const Toast = ({ children, options }: any) => {
+const Toast = ({ children, options, cMode }: any) => {
     return (
-        <ToastWrap options={options} className={options.className}>
+        <ToastWrap options={options} className={options.className} cMode={cMode}>
             {children}
         </ToastWrap>
     )
@@ -13,7 +14,7 @@ const Toast = ({ children, options }: any) => {
 
 export default Toast;
 
-const ToastWrap = styled.div<{ options: any }>`
+const ToastWrap = styled.div<{ options: any, cMode: string }>`
     z-index : 1000;
     position: fixed;
     bottom: calc(-10px - ${props => props.options.height});
@@ -25,11 +26,12 @@ const ToastWrap = styled.div<{ options: any }>`
     height : ${props => props.options.height};
     border-radius: 16px;
     transition: bottom 1s .1s cubic-bezier(0.16, 1, 0.3, 1);
-    border: ${props => props.options.theme === 'glass' ? '1px solid #ddd' : ''};
+    /* border: ${props => props.options.theme === 'glass' ? '1px solid #ddd' : ''}; */
     backdrop-filter: ${props => props.options.theme === 'glass' ? 'saturate(180%) blur(5px)' : ''};
     -webkit-backdrop-filter: ${props => props.options.theme === 'glass' ? 'saturate(180%) blur(5px)' : ''};
     box-shadow: 0px 4px 6px 1px rgba(0,0,0,0.38);
-    background: ${props => props.options.theme === 'glass' ? 'hsla(0,0%,100%,.4);' : '#fff'}; 
+    background: ${props => props.options.theme === 'glass' && props.cMode === 'light' ? 'hsla(0,0%,100%,.4);' : 'hsla(0,0%,0%,.4);'}; 
+    
 
 
     &.toasting {

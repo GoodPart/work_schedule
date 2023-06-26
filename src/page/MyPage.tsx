@@ -77,15 +77,14 @@ export default function MyPage({ modeColor }: any) {
 }
 
 const InnerWrap = styled.div<{ cMode: string }>`
+    /* padding-top: 24px; */
     background-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};
     height: 100%;
     
     h2 {
+        margin: 0;
+        padding: 12px 0;
         color: ${props => props.cMode === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
     }
-    input[type='text'] {
-        background-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
-        border-color: transparent;
-        color: ${props => props.cMode === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
-    }
+    
 `

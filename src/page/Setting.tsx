@@ -7,19 +7,32 @@ import styled from "styled-components";
 
 import * as InputForm from "../components/styledComponents/InputStyled"
 
-export default function Setting() {
+export default function Setting({ modeColor }: any) {
     return (
-        <div className="layout-wrap">
+        <InnerWrap cMode={modeColor}>
             <h1>셋팅</h1>
             <p>모드</p>
-            <InputForm.InputFormWrapToggle width={64} height={32}>
-                <input id="checkbox" type="checkbox" />
-                <label htmlFor="checkbox"></label>
-            </InputForm.InputFormWrapToggle>
 
-        </div>
+        </InnerWrap>
     )
 }
 
 
 
+
+const InnerWrap = styled.div<{ cMode: string }>`
+    /* padding-top: 24px; */
+    background-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};
+    height: 100%;
+    
+    h1 {
+        margin: 0;
+        padding: 12px 0;
+        color: ${props => props.cMode === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
+    }
+    p {
+        color: ${props => props.cMode === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
+        
+    }
+    
+`

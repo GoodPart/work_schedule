@@ -11,15 +11,45 @@ import axios from "axios"
 
 import { initColorValue } from "./styledComponents/CommonValue"
 
+import * as InputForm from '../components/styledComponents/InputStyled'
 
 
 
-export default function NavBar({ onBodyChange, scrollV, modeColor, modeChangeToggle }: any) {
+
+export default function NavBar({ modeColor, modeChangeToggle }: any) {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const authData = useSelector((state: RootState) => state.authCheckReducer.auth);
     const registData = useSelector((state: RootState) => state.registerReducer);
     const [toggle, setToggle] = useState(false);
+
+
+    const [overflowHidden, setOverflowHidden] = useState(false);
+    const [scrollV, setScrollV] = useState(false);
+    const onBodyChange = () => {
+        setOverflowHidden(!overflowHidden);
+    }
+    const handleScroll = useCallback((e: any) => {
+        const { scrollY } = window
+
+        if (scrollY > 0) {
+            //스크롤 시작
+            setScrollV(true)
+        } else {
+            //원위치
+            setScrollV(false)
+        }
+    }, [])
+
+    useEffect(() => {
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    }, [modeColor])
+
 
     const logout = useCallback(async () => {
         await dispatch(signOutAction())
@@ -29,20 +59,20 @@ export default function NavBar({ onBodyChange, scrollV, modeColor, modeChangeTog
     }, [dispatch])
     const onToggle = (e: any) => {
         setToggle(!toggle)
-        onBodyChange(!toggle)
+        // onBodyChange(!toggle)
     }
     const resetToggle = () => {
         setToggle(false)
-        onBodyChange(false)
+        // onBodyChange(false)
     }
 
     useEffect(() => {
-        console.log('registData', registData.loading)
     }, [registData.loading, authData])
     return (
-        <Nav scroll={scrollV.toString()} cMode={modeColor}>
+        <Nav scroll={scrollV} cMode={modeColor}>
+
             <div className="inner-wrap">
-                <div className="title" style={{ textTransform: 'uppercase', fontSize: 22, fontWeight: 700, letterSpacing: '-0.05em', color: "rgb(68,68,68)" }}>My Work Day</div>
+                <div className="title" style={{ textTransform: 'uppercase', fontSize: 22, fontWeight: 700, letterSpacing: '-0.05em', color: modeColor === 'light' ? initColorValue.light.text : initColorValue.dark.text }}>My Work Day</div>
                 <DefaultNav>
                     <NavItem cMode={modeColor}>
                         <Link to='/'>Home</Link>
@@ -76,13 +106,16 @@ export default function NavBar({ onBodyChange, scrollV, modeColor, modeChangeTog
                             <Link to='/calendar' onClick={() => resetToggle()}>calendar</Link>
 
                             <Link to='/setting' onClick={() => resetToggle()}>설정</Link>
-                            <button type="button" onClick={() => modeChangeToggle()}>{modeColor}</button>
                         </NavItem>
                     </div>
-                    <HamIcon className="toggle-icon" toggle={toggle} onClick={(e: any) => onToggle(e)} />
+                    <HamIcon className="toggle-icon" toggle={toggle} onClick={(e: any) => { e.preventDefault(); onToggle(e) }} />
                 </Hamberger>
             </div>
-
+            {/* <button type="button" onClick={(e) => { e.preventDefault(); modeChangeToggle() }}>{modeColor}</button> */}
+            <InputForm.InputFormWrapToggle width={48} height={24} cMode={modeColor}>
+                <input id="checkbox" type="checkbox" onChange={e => modeChangeToggle()} />
+                <label htmlFor="checkbox" ></label>
+            </InputForm.InputFormWrapToggle>
         </Nav>
     )
 }
@@ -96,23 +129,20 @@ const Logo = styled.div`
     span {
     }
 `
-const Nav = styled.nav<{ scroll: Boolean, cMode: String }>`
+const Nav = styled.nav<{ scroll: any, cMode: String }>`
     z-index : 100;
-    position : ${(props) => props.scroll ? "fixed" : "inherit"};
+    position : ${(props) => props.scroll ? "fixed" : "relative"};
     top : ${(props) => props.scroll ? "0px" : "inherit"};
+    display: flex;
     width : 100%;
     box-sizing : border-box;
-    border-bottom-width : 1px;
-    border-bottom-color  : ${(props) => props.scroll ? "rgb(234,234,234)" : "transparent"};
-    border-bottom-style : solid;
-    border-bottom: 1px solid rgb(234,234,234);
     backdrop-filter: saturate(180%) blur(5px);
     -webkit-backdrop-filter: saturate(180%) blur(5px);
-    background: ${props => props.cMode === 'light' ? initColorValue.light.glass : initColorValue.dark.glass} ;
+    background: ${props => props.cMode === 'light' ? initColorValue.light.glass : initColorValue.dark.bg} ;
     
     & + * {
         padding : 0 12px;
-        padding-top : ${(props) => props.scroll ? "62px" : "0"};
+        padding-top : ${(props) => props.scroll ? "49px" : "0"};
     }
     .inner-wrap {
         display : flex;
@@ -157,7 +187,7 @@ const Hamberger = styled.div<{ cMode: string }>`
             position : absolute;
             width : 100%;
             height : 1px;
-            background-color : ${props => props.cMode === 'light' ? initColorValue.light.hambergerToggle : initColorValue.dark.hambergerToggle};
+            background-color : ${props => props.cMode === 'light' ? initColorValue.light.text : initColorValue.dark.text};
             transition : top .3s cubic-bezier(0.22, 1, 0.36, 1), transform .3s cubic-bezier(0.22, 1, 0.36, 1);
         }
         &:before {
@@ -203,11 +233,16 @@ const HamIcon = styled.div<{ toggle: Boolean }>`
     &.toggle-icon:after{
         /* top : 50%; */
         top : ${(props) => props.toggle ? '16px' : '20px'};
-        transform : ${(props) => props.toggle ? `rotate(45deg) translateY(-50%)` : 'rotate(0deg)'}
+        transform : ${(props) => props.toggle ? `rotate(45deg) translateY(-50%)` : 'rotate(0deg)'};
     }
     &.toggle-icon:before {
         /* bottom : 50%; */
         top : ${(props) => props.toggle ? '16px' : '10px'};
-        transform : ${(props) => props.toggle ? `rotate(-45deg) translateY(-50%)` : 'rotate(0deg)'}
+        transform : ${(props) => props.toggle ? `rotate(-45deg) translateY(-50%)` : 'rotate(0deg)'};
+
     }
+`
+
+const modeToggle = styled.button<{ cMode: string }>`
+    
 `

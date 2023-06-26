@@ -204,6 +204,7 @@ app.post('/api/calendar/readbyme', auth, async (req, res) => {
     })
 
 })
+// 캘린더 일정 찾기
 app.post('/api/calendar/findbyid', async (req, res) => {
     const getData = req.body; // body = {_id}
 
@@ -222,7 +223,7 @@ app.post('/api/calendar/findbyid', async (req, res) => {
     })
 
 })
-
+// 캘린더 일정 제거
 app.post('/api/calendar/deletebyid', auth, async (req, res) => {
     const getData = req.body;
 
@@ -240,8 +241,22 @@ app.post('/api/calendar/deletebyid', auth, async (req, res) => {
         })
 
     })
+});
+
+app.post('/api/calendar/deleteallbydatamonth', async (req, res) => {
+    const getData = req.body;
+
+    Calendar.find({
+        data_month: getData.data_month
+    }).then((match, err) => {
+        console.log(match)
+        match.map((item, index) => {
+            item.deleteOne(item)
+        })
+    })
 })
 
+// 캘린더 일정 수정
 app.post('/api/calendar/updatebyid', auth, async (req, res) => {
     const getData = req.body;
 

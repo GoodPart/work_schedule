@@ -14,7 +14,7 @@ import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
 
 
 
-export default function Index({ calendarProps, memberProps, deleteSchedule, loading, mySelf, getDayFunc }: any) {
+export default function Index({ calendarProps, memberProps, deleteSchedule, loading, mySelf, getDayFunc, modeColor }: any) {
     const [toggle, setToggle] = useState(false);
     const [updateProps, setUpdateProps] = useState('');
 
@@ -56,14 +56,14 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
 
     return (
-        <ItemWrap>
+        <ItemWrap cMode={modeColor}>
             {
                 getMapArray.map((ele, index1) => {
                     return (
                         <div key={ele} className={ele === nowDate ? "day__wrap now" : "day__wrap"} >
                             <div className="day-desc"
                                 style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", minHeight: "60px", fontWeight: 700 }}>
-                                <span style={{ fontSize: '36px', color: "#444", letterSpacing: "-0.05em" }}>{ele < 10 ? `0${ele}` : ele}</span><span className="desc-day" style={getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '토' || getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '일' ? { color: initColorValue.point1 } : { color: "#000" }}>
+                                <span style={{ fontSize: '36px', color: modeColor === 'light' ? '#48484A' : "#fff", letterSpacing: "-0.05em" }}>{ele < 10 ? `0${ele}` : ele}</span><span className="desc-day" style={getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '토' || getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '일' ? { color: initColorValue.point1 } : { color: modeColor === 'light' ? '#48484A' : "#fff", letterSpacing: "-0.05em" }}>
                                     {getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay())}
                                 </span>
                             </div>
@@ -73,7 +73,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
                                     loading ? memberProps.sort((a: any, b: any) => a.data.work_time[0] - b.data.work_time[0]).map((m: any, index2: number) => {
                                         if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
-                                            return <CardWrap key={m.user._id} id={m.user._id} delay={index2} className={mySelf(m.user.user_name) ? "your-calc" : ""} >
+                                            return <CardWrap key={m.user._id} id={m.user._id} delay={index2} cMode={modeColor} className={mySelf(m.user.user_name) ? "your-calc" : ""} >
                                                 <div className="wrap">
                                                     <div className="card__section">
                                                         <div className="content">
@@ -117,9 +117,9 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
             {
                 toggle && (
                     <div className="timepicker__wrap" style={{ display: toggle ? "block" : "none" }}>
-                        <div className="inner__wrap">
+                        <div className="inner__wrap" style={{ backgroundColor: modeColor === 'light' ? initColorValue.light.bg : initColorValue.dark.bg, borderColor: modeColor === 'light' ? initColorValue.light.bg : initColorValue.dark.bg }}>
                             <ButtonForm.SubmitBtn style={{ position: "absolute", top: 4, right: 4, width: "fit-content", padding: 9, fontSize: '0.6rem', }} type="button" onClick={() => toggleClose()}>X</ButtonForm.SubmitBtn>
-                            <TimePicker timeProps={updateProps} tgc={toggleClose} />
+                            <TimePicker timeProps={updateProps} tgc={toggleClose} modeColor={modeColor} />
                         </div>
                     </div>
                 )
@@ -157,9 +157,10 @@ const ScltonDiv = styled.div`
     }
 }
 `
-const ItemWrap = styled.div`
+const ItemWrap = styled.div<{ cMode: string }>`
     width : 100%;
-    background-color : #F9F9F9;
+    /* background-color : #F9F9F9; */
+    background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};;
     padding-bottom: 150px;
 
 
@@ -188,7 +189,7 @@ const ItemWrap = styled.div`
         justify-content: space-between;
         padding: 2px 0;
         border-radius: 4px;
-        margin: 4px 0;
+        /* margin: 4px 0; */
 
         
     }
@@ -204,7 +205,9 @@ const ItemWrap = styled.div`
         display: flex;
         flex-wrap: wrap;
         width : calc(100% - 70px);
-        background-color: #e7e7e7;
+        /* background-color: #e7e7e7; */
+        background-color: ${props => props.cMode === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg};;
+        
 
 
     }
@@ -236,7 +239,7 @@ const ItemWrap = styled.div`
         bottom: 24px;
         left: 50%;
         transform: translateX(-50%);
-        background-color: #fff;
+        /* background-color: #fff; */
         padding: 32px;
         border: 1px solid #ddd;
         border-radius: 12px;
@@ -254,7 +257,7 @@ const ItemWrap = styled.div`
     }
 `
 
-const CardWrap = styled.div<{ delay: Number }>`
+const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     position: relative;
     opacity :0;
     margin: 6px 4px;
@@ -265,8 +268,12 @@ const CardWrap = styled.div<{ delay: Number }>`
     min-width: 270px;
     width : 300px;
     min-height: 58px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
+
+    /* border: 1px solid #ddd; */
+    border-width: 1px;
+    border-style: solid;
+    border-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
     border-radius: 4px;
     transition: transform .2s cubic-bezier(0.16, 1, 0.3, 1);
     animation-name: showPC;
@@ -328,7 +335,8 @@ const CardWrap = styled.div<{ delay: Number }>`
             transform: translateY(-50%);
             width : 1px;
             height: 80%;
-            background-color: #ddd;
+            /* background-color: #ddd; */
+            background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};;
         }
 
         @media (max-width:741px){
@@ -374,6 +382,7 @@ const CardWrap = styled.div<{ delay: Number }>`
         font-size: 20px;
         letter-spacing : -0.05em;
         margin-top : 8px;
+        color: ${props => props.cMode === 'light' ? '##48484A' : "#fff"};
     }
     //mobile
     @media (max-width: 560px) {
@@ -383,7 +392,9 @@ const CardWrap = styled.div<{ delay: Number }>`
     }
     .card__section .content .info  {
         margin-top :8px;
-        letter-spacing : -0.05em
+        letter-spacing : -0.05em;
+        color: ${props => props.cMode === 'light' ? '##48484A' : "#ccc"};
+
     }
     .info--item {
         font-size: 10px;
@@ -395,6 +406,7 @@ const CardWrap = styled.div<{ delay: Number }>`
         flex-direction: column;
         width : 30%;
         align-self: center;
+        color: ${props => props.cMode === 'light' ? '##48484A' : "#fff"};
 
      @media (max-width:741px){
         width : 30%

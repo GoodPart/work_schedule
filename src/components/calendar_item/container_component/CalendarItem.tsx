@@ -52,7 +52,7 @@ const tempMember = [
     },
 ]
 
-export default function CalendarItem({ dateProps, memberProps, deleteSchedule, loading, nameValue, mySelf }: any) {
+export default function CalendarItem({ dateProps, memberProps, deleteSchedule, loading, mySelf, modeColor }: any) {
     // console.log(dateProps)
 
     let members = memberProps;
@@ -87,6 +87,6 @@ export default function CalendarItem({ dateProps, memberProps, deleteSchedule, l
     }
 
     return (
-        <Index calendarProps={form} memberProps={members} deleteSchedule={deleteSchedule} loading={loading} mySelf={mySelf} getDayFunc={getDayFunc} />
+        <Index calendarProps={form} memberProps={members} deleteSchedule={deleteSchedule} loading={loading} mySelf={mySelf} getDayFunc={getDayFunc} modeColor={modeColor} />
     )
 }

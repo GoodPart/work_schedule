@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { initColorValue } from './CommonValue'
 
 export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
     position: relative;
@@ -9,16 +10,22 @@ export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
     input {
         width: 100%;
         padding: 24px 16px 16px 16px;
-        border-radius: 4px;
-        border-color: #eee;
-        color : #48484A;
+        /* color : #48484A; */
+        color: ${props => props.cMode === 'light' ? '##fff' : "#48484A"};;
         font-size : 16px;
         border-width: 1px;
-        font-weight : bold;
         border-style: solid;
+        border-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
+        border-radius: 4px;
+        font-weight : bold;
         box-sizing: border-box;
+        background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};;
     }
 
+    input:read-only {
+        /* background-color: #ddd */
+        background-color: ${props => props.cMode === 'light' ? "#ddd" : "#2f2f33"};
+    }
 
     input:focus {
         outline: 1px solid #0F9485;
@@ -43,9 +50,8 @@ export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
         font-size : ${props => props.check.length > 0 ? "10px" : "16px"};
         transition: scale .6s cubic-bezier(0.075, 0.82, 0.165, 1), top .6s cubic-bezier(0.075, 0.82, 0.165, 1) ;
     };
-    input:read-only {
-        background-color: #ddd
-    }
+   
+    
     input:read-only + label {
         /* left: 0px; */
     }
@@ -78,8 +84,10 @@ export const InputFormWrapSelect = styled.div`
 `
 
 
-export const InputFormWrapToggle = styled.div<{ width: number, height: number }>`
+export const InputFormWrapToggle = styled.div<{ width: number, height: number, cMode: string }>`
     position: relative;
+    display: flex;
+    align-self: center;
     width: ${props => props.width}px;
     height: ${props => props.height}px;
     background-color: #c2c2c2;
@@ -101,18 +109,44 @@ export const InputFormWrapToggle = styled.div<{ width: number, height: number }>
             position: absolute;
             top: 0;
             left : 0;
-            width: 32px;
-            height: 32px;
+            width: ${props => props.height}px;
+            height: ${props => props.height}px;
             background-color: #444;
-            border-radius: 32px;
+            border-radius: ${props => props.height}px;
+            transition: left .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            
+        }
 
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left : calc(100% - 20px - 3px);
+            transform: translate(0, -50%);
+            width : 20px;
+            height: 20px;
+            /* background-color: ; */
+            background-image: url('moon.png');
+            background-size: cover;
+            transition: left .5s cubic-bezier(0.075, 0.82, 0.165, 1);
         }
     }
 
     input[type='checkbox']:checked + label {
         &:after {
             left : inherit;
-            right : 0
+            left : calc(100% - ${props => props.height}px) 
+        }
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left : 3px;
+            transform: translate(0, -50%);
+            width : 20px;
+            height: 20px;
+            background-image: url('sun.png');
+            background-size: cover;
         }
     }
 `
