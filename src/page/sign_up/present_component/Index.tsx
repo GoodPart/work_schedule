@@ -93,7 +93,6 @@ export default function Index({ onChange, form, submit, modeColor }: any) {
 const InnerWrap = styled.div<{ cMode: string }>`
     /* padding-top: 24px; */
     background-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};
-    height: 100%;
     
     h2 {
         margin: 0;

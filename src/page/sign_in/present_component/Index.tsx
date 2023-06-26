@@ -9,7 +9,6 @@ import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 
 export default function Index({ handleChangeId, handleChangePw, submit, dataProps, modeColor }: any) {
     return (
-
         <InnerWrap cMode={modeColor}>
             <form action="submit" onSubmit={submit}>
                 <InputForm.InputFormWrap check={dataProps.userId} cMode={modeColor}>
@@ -40,7 +39,6 @@ const InnerWrap = styled.div<{ cMode: string }>`
     /* padding-top: 24px; */
     background-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};
     height: 100%;
-    
     h2 {
         margin: 0;
         padding: 12px 0;
