@@ -6,7 +6,8 @@ export const initColorValue = {
         textBlack: '#000',
         hambergerToggle: '#333',
         calcDesc: '#dddd',
-        border: '#ccc'
+        border: '#ccc',
+        white: "#fff",
     },
     dark: {
         bg: "#252525",

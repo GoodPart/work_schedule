@@ -73,7 +73,7 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
     return (
         <UpdateWrap>
             <InputForm.InputFormWrap check={'1'} cMode={colorMode}>
-                <input type="text" placeholder="날짜" readOnly value={`${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${startDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
+                <input type="text" placeholder="날짜" style={{ backgroundColor: colorMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1 }} readOnly value={`${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${startDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                 <label>날짜</label>
             </InputForm.InputFormWrap>
             <div className="insert__form">

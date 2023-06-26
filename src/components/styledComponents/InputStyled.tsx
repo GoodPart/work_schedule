@@ -19,7 +19,7 @@ export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
         border-radius: 4px;
         font-weight : bold;
         box-sizing: border-box;
-        background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
+        /* background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1}; */
     }
 
     input:read-only {

@@ -7,7 +7,7 @@ import Index from "../present_component/Index";
 import { useDispatch, useSelector } from 'react-redux';
 import { registerSignUp } from "../../../modules/register";
 
-export default function SignUp() {
+export default function SignUp({ modeColor }: any) {
 
 
     const dispatch = useDispatch();
@@ -70,6 +70,7 @@ export default function SignUp() {
             onChange={onChange}
             form={form}
             submit={submit}
+            modeColor={modeColor}
         />
     )
 }
