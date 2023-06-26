@@ -13,7 +13,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
         <InnerWrap cMode={modeColor}>
             <form action="submit" onSubmit={submit}>
                 <InputForm.InputFormWrap check={dataProps.userId} cMode={modeColor}>
-                    <input type="text" id='userId' name='userId'
+                    <input type="text" style={{ backgroundColor: "transparent" }} id='userId' name='userId'
                         onChange={handleChangeId}
                         value={dataProps.userId}
                     />
@@ -22,7 +22,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
                 <br />
 
                 <InputForm.InputFormWrap check={dataProps.userPw} cMode={modeColor}>
-                    <input type="password" id='userPw' name='userPw'
+                    <input type="password" style={{ backgroundColor: "transparent" }} id='userPw' name='userPw'
                         onChange={handleChangePw}
                         value={dataProps.userPw}
                     />

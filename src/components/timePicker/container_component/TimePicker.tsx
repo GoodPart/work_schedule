@@ -4,7 +4,7 @@ import axios from "axios";
 const deployURL = "http://ec2-43-201-0-7.ap-northeast-2.compute.amazonaws.com"
 
 
-export default function TimePicker({ timeProps, tgc }: any) {
+export default function TimePicker({ timeProps, tgc, colorMode }: any) {
     const [timeInfo, setTImeinfo] = useState('');
     const setTIme = () => {
         axios.post("https://myworkday.pe.kr:8888/api/calendar/findbyid", { _id: timeProps }, { withCredentials: true })
@@ -20,5 +20,5 @@ export default function TimePicker({ timeProps, tgc }: any) {
 
     }, [])
 
-    return <Index timeInfo={timeInfo} tgc={tgc} />
+    return <Index timeInfo={timeInfo} tgc={tgc} colorMode={colorMode} />
 }
