@@ -320,7 +320,7 @@ export default function Calendar({ modeColor }: any) {
                     </div>
 
                     <div data-device='pc'>
-                        <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc" cMode={true}>
+                        <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc" cMode={modeColor}>
                             <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                             <label htmlFor={nameValue}>아이디</label>
                         </InputForm.InputFormWrap>
@@ -447,7 +447,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
     }
 
     .react-datepicker__day, .react-datepicker__day-name, .react-datepicker__current-month {
-        color : ${props => props.cMode === 'light' ? initColorValue.light.text : initColorValue.dark.textBlack}
+        color : ${props => props.cMode === 'light' ? initColorValue.dark.textBlack : initColorValue.light.white}
     }
     .react-datepicker__day:hover {
         background-color: ${initColorValue.point1};
