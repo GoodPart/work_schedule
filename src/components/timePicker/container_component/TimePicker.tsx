@@ -3,10 +3,10 @@ import Index from "../present_component/Index";
 import axios from "axios";
 
 
-export default function TimePicker({ timeProps, tgc }: any) {
+export default function TimePicker({ timeProps, tgc, colorMode }: any) {
     const [timeInfo, setTImeinfo] = useState('');
     const setTIme = () => {
-        axios.post("http://43.201.147.161:9999/api/calendar/findbyid", { _id: timeProps }, { withCredentials: true })
+        axios.post("http://localhost:9999/api/calendar/findbyid", { _id: timeProps }, { withCredentials: true })
             .then(res => {
                 setTImeinfo(res.data.match)
             })
@@ -19,5 +19,5 @@ export default function TimePicker({ timeProps, tgc }: any) {
 
     }, [])
 
-    return <Index timeInfo={timeInfo} tgc={tgc} />
+    return <Index timeInfo={timeInfo} tgc={tgc} colorMode={colorMode} />
 }
