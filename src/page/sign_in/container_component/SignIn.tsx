@@ -7,7 +7,7 @@ import Index from "../present_component/Index";
 import { useDispatch, useSelector } from 'react-redux';
 import { registerSignIn } from "../../../modules/register";
 
-export default function SignIn() {
+export default function SignIn({ modeColor }: any) {
 
 
     const dispatch = useDispatch();
@@ -68,6 +68,7 @@ export default function SignIn() {
                 userId: userId,
                 userPw: userPw
             }}
+            modeColor={modeColor}
         />
     )
 }

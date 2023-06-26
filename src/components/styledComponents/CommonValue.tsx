@@ -15,6 +15,7 @@ export const initColorValue = {
         text: "#fff",
         textWhite: "#fff",
         hambergerToggle: '#333',
+        textBlack: '#000'
 
     },
     point1: "#0F9485",

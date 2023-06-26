@@ -232,19 +232,19 @@ export default function Calendar({ modeColor }: any) {
                         {/* 상태, 날짜, 시간, 등록 */}
                         <ul>
                             <li>
-                                <InputForm.InputFormWrap check={workState} cMode={true}>
+                                <InputForm.InputFormWrap check={workState} cMode={modeColor}>
                                     <input type="text" placeholder="상태" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={workState} onFocus={() => setToastState({ state: true, id: 0 })} onBlur={() => setToastState({ state: false, id: 0 })} />
                                     <label>상태</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
-                                <InputForm.InputFormWrap check={'1'} cMode={true}>
+                                <InputForm.InputFormWrap check={'1'} cMode={modeColor}>
                                     <input type="text" placeholder="날짜" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                                     <label>날짜</label>
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
-                                <InputForm.InputFormWrap check={workState} cMode={true}>
+                                <InputForm.InputFormWrap check={workState} cMode={modeColor}>
                                     <input type="text" placeholder="시간" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
                                         onBlur={() => setToastState({ state: false, id: 0 })}
                                     />
@@ -432,7 +432,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
     }
 
     .ctl-wrap.hide {
-        bottom: -164px;
+        bottom: -200px;
     }
     .ctl-wrap.hide + div {
         padding-bottom : 0
@@ -449,7 +449,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
     }
 
     .react-datepicker__day, .react-datepicker__day-name, .react-datepicker__current-month {
-        color : #fff 
+        color : ${props => props.cMode === 'light' ? initColorValue.light.text : initColorValue.dark.textBlack}
     }
     .react-datepicker__day:hover {
         background-color: ${initColorValue.point1};
