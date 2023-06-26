@@ -16,51 +16,18 @@ import { initColorValue } from './components/styledComponents/CommonValue';
 
 function App() {
 
-
-  const [overflowHidden, setOverflowHidden] = useState(false);
-  const [scrollV, setScrollV] = useState(false);
-
-
   const [modeColor, setModeColor] = useState('dark');
-  const modeChangeToggle = () => setModeColor(modeColor === 'light' ? 'dark' : 'light')
-
-
-  const onBodyChange = () => {
-    setOverflowHidden(!overflowHidden);
+  const modeChangeToggle = () => {
+    setModeColor(modeColor === 'light' ? 'dark' : 'light');
   }
-  const handleScroll = useCallback((e: any) => {
-    const { scrollY } = window
 
-    if (scrollY > 0) {
-      //스크롤 시작
-      setScrollV(true)
-    } else {
-      //원위치
-      setScrollV(false)
-    }
-  }, [])
+  // console.log(document.querySelector("#root"))
 
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   }
-  // }, [])
-
-  const logout = () => {
-    axios.get("http://localhost:9999/api/users/logout", {
-      withCredentials: true
-    })
-      .then(res => {
-        console.log(res.data)
-      })
-  }
 
 
   return (
     <BrowserRouter>
-      <NavBar onBodyChange={onBodyChange} scrollV={scrollV} modeColor={modeColor} modeChangeToggle={modeChangeToggle} />
+      <NavBar modeColor={modeColor} modeChangeToggle={modeChangeToggle} />
 
 
       <RouterArea modColor={modeColor} />

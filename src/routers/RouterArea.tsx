@@ -9,7 +9,7 @@ import Setting from '../page/Setting';
 
 import Calendar from '../page/Calendar';
 import Auth from '../hoc/Auth';
-export default function RouterArea(modeColor: any) {
+export default function RouterArea(modeColor: any, modeChangeToggle: any) {
 
     const _modeColor = Object.values(modeColor)[0];
 

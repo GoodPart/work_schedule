@@ -19,12 +19,11 @@ import { initColorValue } from "../components/styledComponents/CommonValue";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../modules";
 import { deleteData, insertData } from "../modules/calendar";
-import { authCheckToServer } from '../modules/auth'
 
 //img
 import loading from '../loading.gif'
 
-export default function Calendar() {
+export default function Calendar({ modeColor }: any) {
 
     const dispatch = useDispatch();
 
@@ -171,10 +170,10 @@ export default function Calendar() {
 
     }, [stdDate, monthCount, authData, calendarData.loading])
 
-    // if (!nameValue) return <>loading...</>
+    // if (!nameValue) return <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: '100%', height: '100%', backgroundColor: modeColor === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1 }}>loading...</div>
 
     return (
-        <SettingWrap>
+        <SettingWrap cMode={modeColor}>
             <Toast
                 options={{
                     className: !ctlToggle ? 'toasting' : '',
@@ -183,8 +182,9 @@ export default function Calendar() {
                     gap: '36px',
                     theme: 'glass'
                 }}
+                cMode={modeColor}
             >
-                <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .2s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-24px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '1rem', fontWeight: 700, width: 'max-content' }}>{stdDate.y}년 {stdDate.m}월</span>
+                <span style={{ opacity: ctlToggle ? 0 : 1, transition: 'opacity .6s .2s cubic-bezier(0.16, 1, 0.3, 1)', position: 'absolute', top: '-24px', left: '50%', transform: 'translateX(-50%)', letterSpacing: '-0.05em', fontSize: '1rem', fontWeight: 700, width: 'max-content', color: modeColor === 'light' ? '#48484A' : "#fff" }}>{stdDate.y}년 {stdDate.m}월</span>
                 <div className="setting">
                     <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button className="today" onClick={() => todaySet()}>Today</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button>
                 </div>
@@ -197,6 +197,7 @@ export default function Calendar() {
                     gap: '24px',
                     theme: 'glass'
                 }}
+                cMode={modeColor}
             >
                 <ButtonForm.SubmitBtn style={{ position: "absolute", top: 4, right: 4, width: "fit-content", padding: 9, fontSize: '0.6rem', }} type="button" onClick={() => setToastState({ state: false, id: 0 })}>X</ButtonForm.SubmitBtn>
                 <DatePicker
@@ -262,6 +263,7 @@ export default function Calendar() {
                                     gap: '0',
                                     theme: 'glass'
                                 }}
+                                cMode={modeColor}
                             >
                                 <div className="form__wrap" >
                                     <ul>
@@ -291,6 +293,7 @@ export default function Calendar() {
                                     gap: '0',
                                     theme: 'glass'
                                 }}
+                                cMode={modeColor}
                             >
                                 <div className="form__wrap" >
                                     <ul>
@@ -355,8 +358,8 @@ export default function Calendar() {
                         memberProps={member}
                         deleteSchedule={deleteSchedule}
                         loading={!calendarData.loading}
-                        nameValue={nameValue}
                         mySelf={mySelf}
+                        modeColor={modeColor}
                     />
                 ) : <img style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} src={loading} />
             }
@@ -366,9 +369,9 @@ export default function Calendar() {
 }
 
 
-const SettingWrap = styled.div`
+const SettingWrap = styled.div<{ cMode: string }>`
     width: 100%;
-    background-color: #F9F9F9;
+    background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};;
     width: calc(100% - 24px);
 
     .setting {
@@ -383,6 +386,8 @@ const SettingWrap = styled.div`
             line-height: 12px;
             font-size: 12px;
             background-color: transparent;
+            color: ${props => props.cMode === 'light' ? '#48484A' : "#fff"};
+
         }
 
         button.today {
@@ -397,16 +402,19 @@ const SettingWrap = styled.div`
         position: fixed;
         bottom: 0;
         left: 0;
-        border: 1px solid #ccc;
+        border: ${props => props.cMode === 'light' ? initColorValue.light.border : initColorValue.dark.bg};;
         display: flex;
         justify-content: space-between;
         padding: 16px 24px;
         width : calc(100% - 48px);
         min-width: 350px;
         transition: bottom 1s .1s cubic-bezier(0.16, 1, 0.3, 1);
+        
         backdrop-filter: saturate(180%) blur(5px);
         -webkit-backdrop-filter: saturate(180%) blur(5px);
-        background: hsla(0,0%,100%,.4);
+        background: ${props => props.cMode === 'light' ? initColorValue.light.glass : initColorValue.dark.glass};;
+        /* background: hsla(0,0%,100%,.4); */
+        /* ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1}; */
         
     }
 
@@ -437,6 +445,14 @@ const SettingWrap = styled.div`
     .react-datepicker-wrapper + button {
         width: 20%;
     }
+
+    .react-datepicker__day, .react-datepicker__day-name, .react-datepicker__current-month {
+        color : #fff 
+    }
+    .react-datepicker__day:hover {
+        background-color: ${initColorValue.point1};
+    }
+
     
 
     .input__form {
@@ -494,7 +510,7 @@ const SettingWrap = styled.div`
            border: none;
 
            &.toasted {
-            background-color: #fff;
+            /* background-color: #fff; */
            }
         }
         .insert__form ul li > div input[type='text']:focus, .insert__form ul li > div input[type='text']:focus-within {

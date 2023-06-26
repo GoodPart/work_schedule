@@ -16,7 +16,7 @@ import loadingGIF from "../../../loading.gif"
 import Toast from "../../Toast";
 import { initColorValue } from "../../styledComponents/CommonValue";
 
-export default function Index({ timeInfo, tgc }: any) {
+export default function Index({ timeInfo, tgc, colorMode }: any) {
 
     const dispatch = useDispatch();
     const [startDate, setStartDate] = useState(new Date());
@@ -72,23 +72,23 @@ export default function Index({ timeInfo, tgc }: any) {
 
     return (
         <UpdateWrap>
-            <InputForm.InputFormWrap check={'1'} cMode={true}>
+            <InputForm.InputFormWrap check={'1'} cMode={colorMode}>
                 <input type="text" placeholder="날짜" readOnly value={`${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${startDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                 <label>날짜</label>
             </InputForm.InputFormWrap>
             <div className="insert__form">
                 <ul>
                     <li>
-                        <InputForm.InputFormWrap check={workState} cMode={true}>
-                            <input type="text" placeholder="상태" className="toasted" readOnly inputMode="none" value={workState} onFocus={() => setToastState({ state: true, id: 0 })}
+                        <InputForm.InputFormWrap check={workState} cMode={colorMode}>
+                            <input type="text" style={{ backgroundColor: "transparent" }} placeholder="상태" className="toasted" readOnly inputMode="none" value={workState} onFocus={() => setToastState({ state: true, id: 0 })}
                                 onBlur={() => setToastState({ state: false, id: 0 })}
                             />
                             <label>상태</label>
                         </InputForm.InputFormWrap>
                     </li>
                     <li>
-                        <InputForm.InputFormWrap check={workState} cMode={true}>
-                            <input type="text" placeholder="시간" className="toasted" readOnly inputMode="none" value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
+                        <InputForm.InputFormWrap check={workState} cMode={colorMode}>
+                            <input type="text" style={{ backgroundColor: "transparent" }} placeholder="시간" className="toasted" readOnly inputMode="none" value={`${timeState.th} : ${timeState.tm == 0 ? '0' + timeState.tm : timeState.tm}`} onFocus={() => setToastState({ state: true, id: 2 })}
                                 onBlur={() => setToastState({ state: false, id: 3 })}
                             />
                             <label>시간</label>
@@ -96,31 +96,7 @@ export default function Index({ timeInfo, tgc }: any) {
                     </li>
                 </ul>
             </div>
-            {/* <ButtonForm.SubmitBtn className="submit" style={{ width: '100%', height: '100%', margin: 0 }} >등록</ButtonForm.SubmitBtn> */}
             <ButtonForm.SubmitBtn type='button' onClick={() => onSubmit()}>수정하기</ButtonForm.SubmitBtn>
-            {/* <>
-                <h2>{`${timeInfo.date_at[0]}년 ${timeInfo.date_at[1]}월 ${timeInfo.date_at[2]}일`}</h2>
-            </>
-            <InputForm.InputFormWrapSelect>
-                <select onChange={(e: any) => setWorkState(e.target.value)} defaultValue={timeInfo.data.state}>
-                    <option value="출근" >출근</option>
-                    <option value="오전 반차" >오전 반차</option>
-                    <option value="오후 반차">오후 반차</option>
-                    <option value="월차">월차</option>
-                    <option value="외근">외근</option>
-                </select>
-            </InputForm.InputFormWrapSelect>
-            < DatePicker
-                selected={startDate}
-                onChange={(date: any) => setStartDate(date)}
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={30}
-                timeCaption="Time"
-                dateFormat="h:mm aa"
-                locale={ko}
-            />
-            <ButtonForm.SubmitBtn type='button' onClick={() => onSubmit()}>수정하기</ButtonForm.SubmitBtn> */}
 
             <Toast
                 options={{
@@ -130,6 +106,7 @@ export default function Index({ timeInfo, tgc }: any) {
                     gap: '0',
                     theme: 'glass'
                 }}
+                cMode={colorMode}
             >
                 <div className="form__wrap" >
                     <ul>
@@ -159,6 +136,7 @@ export default function Index({ timeInfo, tgc }: any) {
                     gap: '0',
                     theme: 'glass'
                 }}
+                cMode={colorMode}
             >
                 <div className="form__wrap" >
                     <ul>
