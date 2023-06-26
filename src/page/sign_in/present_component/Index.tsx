@@ -1,18 +1,18 @@
 import React, { ChangeEventHandler, FormEventHandler } from 'react';
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
-
+import { initColorValue } from '../../../components/styledComponents/CommonValue';
 
 import * as InputForm from '../../../components/styledComponents/InputStyled';
 import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 
 
-export default function Index({ handleChangeId, handleChangePw, submit, dataProps }: any) {
+export default function Index({ handleChangeId, handleChangePw, submit, dataProps, modeColor }: any) {
     return (
 
-        <div className='layout-wrap'>
+        <InnerWrap cMode={modeColor}>
             <form action="submit" onSubmit={submit}>
-                <InputForm.InputFormWrap check={dataProps.userId} cMode={true}>
+                <InputForm.InputFormWrap check={dataProps.userId} cMode={modeColor}>
                     <input type="text" id='userId' name='userId'
                         onChange={handleChangeId}
                         value={dataProps.userId}
@@ -21,7 +21,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
                 </InputForm.InputFormWrap>
                 <br />
 
-                <InputForm.InputFormWrap check={dataProps.userPw} cMode={true}>
+                <InputForm.InputFormWrap check={dataProps.userPw} cMode={modeColor}>
                     <input type="password" id='userPw' name='userPw'
                         onChange={handleChangePw}
                         value={dataProps.userPw}
@@ -33,6 +33,18 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
             </form>
             <br />
             <div>아직 회원이 아닌가요? <Link style={{ color: "#0F9485", textDecoration: "none", fontWeight: "bold" }} to={'/signup'}>회원가입</Link></div>
-        </div>
+        </InnerWrap>
     )
 }
+const InnerWrap = styled.div<{ cMode: string }>`
+    /* padding-top: 24px; */
+    background-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};
+    height: 100%;
+    
+    h2 {
+        margin: 0;
+        padding: 12px 0;
+        color: ${props => props.cMode === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
+    }
+    
+`
