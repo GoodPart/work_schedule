@@ -10,6 +10,7 @@ import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 export default function Index({ handleChangeId, handleChangePw, submit, dataProps, modeColor }: any) {
     return (
         <InnerWrap cMode={modeColor}>
+            <h2>로그인</h2>
             <form action="submit" onSubmit={submit}>
                 <InputForm.InputFormWrap check={dataProps.userId} cMode={modeColor}>
                     <input type="text" style={{ backgroundColor: "transparent" }} id='userId' name='userId'

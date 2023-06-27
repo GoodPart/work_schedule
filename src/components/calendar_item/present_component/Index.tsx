@@ -106,7 +106,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                                             </CardWrap>
                                         }
                                     }) : memberProps.map((m: any, index: number) => {
-                                        return <ScltonDiv />
+                                        return <ScltonDiv cMode={modeColor} />
                                     })
                                 }
                             </div>
@@ -129,12 +129,15 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
     )
 
 }
-const ScltonDiv = styled.div`
+const ScltonDiv = styled.div<{ cMode: string }>`
     position: relative;
     overflow: hidden;
     display: flex;
     width : 100%;
     background-color: #e7e7e7;
+    background:  ${props => props.cMode === 'light' ? "#e7e7e7" : "#252525"};
+
+    
 
     &:after {
         content: '';
@@ -143,13 +146,14 @@ const ScltonDiv = styled.div`
         left: 0;
         width: 80%;
         height: 100%;
-        background: linear-gradient(to right, #e7e7e7, #ccc, #e7e7e7);
+        background:  ${props => props.cMode === 'light' ? initColorValue.light.loadingGradient : initColorValue.dark.loadingGradient};
+        /* background: linear-gradient(to right, #e7e7e7, #ccc, #e7e7e7); */
         animation: loading 2s infinite linear;
     }
 
     @keyframes loading {
     0% {
-        transform: translateX(-50vw);
+        transform: translateX(-100vw);
     }
     50%,
     100% {
@@ -159,9 +163,8 @@ const ScltonDiv = styled.div`
 `
 const ItemWrap = styled.div<{ cMode: string }>`
     width : 100%;
-    /* background-color : #F9F9F9; */
     background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};;
-    padding-bottom: 150px;
+    padding-bottom: 210px;
 
 
     @media (min-width:561px) {
@@ -235,11 +238,10 @@ const ItemWrap = styled.div<{ cMode: string }>`
     .timepicker__wrap .inner__wrap {
         overflow: hidden;
         position: absolute;
-        /* top: 50%; */
         bottom: 24px;
         left: 50%;
         transform: translateX(-50%);
-        /* background-color: #fff; */
+        width: calc(100% - 64px);
         padding: 32px;
         border: 1px solid #ddd;
         border-radius: 12px;

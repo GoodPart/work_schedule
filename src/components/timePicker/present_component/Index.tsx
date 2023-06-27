@@ -4,13 +4,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale'; //한국어 설정
 import styled from "styled-components";
 
+
+
 import { updateData } from "../../../modules/calendar";
 
 import * as InputForm from '../../../components/styledComponents/InputStyled'
 import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 
 import { useDispatch } from "react-redux";
-import loadingGIF from "../../../loading.gif"
+
 
 
 import Toast from "../../Toast";
@@ -67,13 +69,20 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
         updateSchedule(form)
     }
 
-    if (!timeInfo) return <img style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} src={loadingGIF} />
+    if (!timeInfo) return <UpdateWrap>
+        <div className="loading">
+            <svg width="16px" height="12px">
+                <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+            </svg>
+        </div>
+    </UpdateWrap>
 
 
     return (
         <UpdateWrap>
             <InputForm.InputFormWrap check={'1'} cMode={colorMode}>
-                <input type="text" placeholder="날짜" style={{ backgroundColor: colorMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1 }} readOnly value={`${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${startDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
+                <input type="text" placeholder="날짜" style={{ backgroundColor: "transparent" }} readOnly value={`${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${startDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                 <label>날짜</label>
             </InputForm.InputFormWrap>
             <div className="insert__form">
@@ -102,7 +111,7 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
                 options={{
                     className: toastState.state && toastState.id === 0 ? 'toasting' : '',
                     width: '100%',
-                    height: '206px',
+                    height: '100%',
                     gap: '0',
                     theme: 'glass'
                 }}
@@ -132,7 +141,7 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
                 options={{
                     className: toastState.state && toastState.id === 2 ? 'toasting' : '',
                     width: '100%',
-                    height: '206px',
+                    height: '100%',
                     gap: '0',
                     theme: 'glass'
                 }}
@@ -205,17 +214,6 @@ const UpdateWrap = styled.div`
             border: none;
             overflow: hidden;
             border-radius: 12px;
-
-            /* &:after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left : 0;
-                width: 100%;
-                height: 8px;
-                background-color: #444;
-            } */
-            
         }
         .form__wrap ul li input {
            display: none;
@@ -239,6 +237,48 @@ const UpdateWrap = styled.div`
                 background-color: #0F9485;
             }
         }
+
+
+        .loading{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%) scale(4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        &:after {
+            display: none;
+        }
+
+        svg{
+            polyline{
+                fill: none;
+                stroke-width: 2;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                &#back {
+                    stroke: rgba(#6E7BF2,.3)
+                }
+                &#front{
+                    stroke: #6E7BF2;
+                    stroke-dasharray: 12, 36; //Dash 12 & Gap 36
+                    stroke-dashoffset: 48;
+                    animation: dash 1s linear infinite;
+                }
+            }
+        }
+    }
+@keyframes dash {
+    62.5% {
+        opacity: 0
+    }
+    100% {
+        stroke-dashoffset: 0
+    }
+
+}
     
 `
 

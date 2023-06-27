@@ -172,8 +172,15 @@ export default function Calendar({ modeColor }: any) {
 
     }, [stdDate, monthCount, authData, calendarData.loading])
 
-    // if (!nameValue) return <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: '100%', height: '100%', backgroundColor: modeColor === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1 }}>loading...</div>
-
+    if (!member) return <SettingWrap cMode={modeColor} style={{ height: "100%" }}>
+        <div className="loading">
+            <svg width="16px" height="12px">
+                <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+            </svg>
+        </div>
+    </SettingWrap>
+    {/* <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "48px" }}><img src="duck.gif" width={120} /><h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "bold", margin: "0", color: modeColor === 'light' ? "#333" : "#fff" }}>열심히 일하는 중</h2></div> */ }
     return (
         <SettingWrap cMode={modeColor}>
             <Toast
@@ -321,7 +328,7 @@ export default function Calendar({ modeColor }: any) {
                         </div>
                     </div>
 
-                    <div data-device='pc'>
+                    <div className="form__wrap" data-device='pc' >
                         <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc" cMode={modeColor}>
                             <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                             <label htmlFor={nameValue}>아이디</label>
@@ -372,8 +379,7 @@ export default function Calendar({ modeColor }: any) {
 
 
 const SettingWrap = styled.div<{ cMode: string }>`
-    width: 100%;
-    background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};;
+    background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
     width: calc(100% - 24px);
 
     .setting {
@@ -424,7 +430,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
         .ctl-wrap {
             height: 140px;
             padding: 8px;
-            border-radius: 24px;
+            border-radius: 4px;
             left: 50%;
             bottom: 24px;
             transform: translateX(-50%);
@@ -435,7 +441,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
         bottom: -200px;
     }
     .ctl-wrap.hide + div {
-        padding-bottom : 0
+        padding-bottom : 96px
     }
 
     .react-datepicker-wrapper {
@@ -455,10 +461,25 @@ const SettingWrap = styled.div<{ cMode: string }>`
         background-color: ${initColorValue.point1};
     }
 
-    
-
     .input__form {
         width:  120px;
+    }
+    .form__wrap {
+        display: flex;
+    }
+    .insert__form, .insert__form > ul {
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+    }
+    .insert__form > ul {
+        width : 100%;
+
+    }
+
+    .insert__form >ul li {
+        list-style: none;
+        width: 48%;
     }
 
     @media (min-width:561px) {
@@ -534,16 +555,6 @@ const SettingWrap = styled.div<{ cMode: string }>`
             width: 18%;
             height : 45%;
             border: none;
-
-            /* &:after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left : 0;
-                width: 100%;
-                height: 8px;
-                background-color: #444;
-            } */
             
         }
         .form__group .form__wrap ul li input {
@@ -614,6 +625,51 @@ const SettingWrap = styled.div<{ cMode: string }>`
         font-size : 18px
     }
 
+    .loading{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%) scale(4);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        /* &:after {
+            content: '로딩중';
+            margin-top: 4px;
+            display: inline-block;
+            font-size: 0.1rem;
+            color : ${props => props.cMode === 'light' ? initColorValue.light.text : initColorValue.dark.text}
+
+
+        } */
+        svg{
+            polyline{
+                fill: none;
+                stroke-width: 2;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                &#back {
+                    stroke: rgba(#6E7BF2,.3)
+                }
+                &#front{
+                    stroke: #6E7BF2;
+                    stroke-dasharray: 12, 36; //Dash 12 & Gap 36
+                    stroke-dashoffset: 48;
+                    animation: dash 1s linear infinite;
+                }
+            }
+        }
+    }
+@keyframes dash {
+    62.5% {
+        opacity: 0
+    }
+    100% {
+        stroke-dashoffset: 0
+    }
+
+}
     @media (max-width:560px) {
         .form--wrap {
             * + * {
