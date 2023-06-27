@@ -238,11 +238,10 @@ const ItemWrap = styled.div<{ cMode: string }>`
     .timepicker__wrap .inner__wrap {
         overflow: hidden;
         position: absolute;
-        /* top: 50%; */
         bottom: 24px;
         left: 50%;
         transform: translateX(-50%);
-        /* background-color: #fff; */
+        width: calc(100% - 64px);
         padding: 32px;
         border: 1px solid #ddd;
         border-radius: 12px;

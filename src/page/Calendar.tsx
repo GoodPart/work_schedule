@@ -170,8 +170,15 @@ export default function Calendar({ modeColor }: any) {
 
     }, [stdDate, monthCount, authData, calendarData.loading])
 
-    if (!member) return <SettingWrap cMode={modeColor} style={{ height: "100%" }}><div style={{ display: "flex", flexDirection: "column" }}><img src="duck.gif" /><h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "bold", margin: "0", color: modeColor === 'light' ? "#333" : "#fff" }}>열심히 일하는 중</h2></div></SettingWrap>
-
+    if (!member) return <SettingWrap cMode={modeColor} style={{ height: "100%" }}>
+        <div className="loading">
+            <svg width="16px" height="12px">
+                <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+            </svg>
+        </div>
+    </SettingWrap>
+    {/* <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "48px" }}><img src="duck.gif" width={120} /><h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "bold", margin: "0", color: modeColor === 'light' ? "#333" : "#fff" }}>열심히 일하는 중</h2></div> */ }
     return (
         <SettingWrap cMode={modeColor}>
             <Toast
@@ -458,6 +465,20 @@ const SettingWrap = styled.div<{ cMode: string }>`
     .form__wrap {
         display: flex;
     }
+    .insert__form, .insert__form > ul {
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+    }
+    .insert__form > ul {
+        width : 100%;
+
+    }
+
+    .insert__form >ul li {
+        list-style: none;
+        width: 48%;
+    }
 
     @media (min-width:561px) {
         *[data-device='mo'] {
@@ -532,16 +553,6 @@ const SettingWrap = styled.div<{ cMode: string }>`
             width: 18%;
             height : 45%;
             border: none;
-
-            /* &:after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left : 0;
-                width: 100%;
-                height: 8px;
-                background-color: #444;
-            } */
             
         }
         .form__group .form__wrap ul li input {
@@ -612,6 +623,51 @@ const SettingWrap = styled.div<{ cMode: string }>`
         font-size : 18px
     }
 
+    .loading{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%) scale(4);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        /* &:after {
+            content: '로딩중';
+            margin-top: 4px;
+            display: inline-block;
+            font-size: 0.1rem;
+            color : ${props => props.cMode === 'light' ? initColorValue.light.text : initColorValue.dark.text}
+
+
+        } */
+        svg{
+            polyline{
+                fill: none;
+                stroke-width: 2;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                &#back {
+                    stroke: rgba(#6E7BF2,.3)
+                }
+                &#front{
+                    stroke: #6E7BF2;
+                    stroke-dasharray: 12, 36; //Dash 12 & Gap 36
+                    stroke-dashoffset: 48;
+                    animation: dash 1s linear infinite;
+                }
+            }
+        }
+    }
+@keyframes dash {
+    62.5% {
+        opacity: 0
+    }
+    100% {
+        stroke-dashoffset: 0
+    }
+
+}
     @media (max-width:560px) {
         .form--wrap {
             * + * {
