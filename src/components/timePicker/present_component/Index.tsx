@@ -63,7 +63,8 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
             _id: timeInfo._id,
             data: {
                 state: workState,
-                work_time: [pushHH, pushMM]
+                // work_time: [pushHH, pushMM]
+                work_time: workState === '월차' ? [0, 0] : workState === '오전 반차' ? [1, 0] : workState === '외근' ? [2, 0] : [pushHH, pushMM]
             },
         }
         updateSchedule(form)
