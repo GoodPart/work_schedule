@@ -48,7 +48,7 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         }
-    }, [modeColor])
+    }, [modeColor, registData.loading, authData, toggle])
 
 
     const logout = useCallback(async () => {
@@ -66,8 +66,6 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
         // onBodyChange(false)
     }
 
-    useEffect(() => {
-    }, [registData.loading, authData])
     return (
         <Nav scroll={scrollV} cMode={modeColor}>
 
@@ -121,14 +119,6 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
 }
 
 //style
-const Logo = styled.div`
-    cursor : pointer;
-    display : flex;
-    width : 100px;
-    
-    span {
-    }
-`
 const Nav = styled.nav<{ scroll: any, cMode: String }>`
     z-index : 100;
     position : ${(props) => props.scroll ? "fixed" : "relative"};
