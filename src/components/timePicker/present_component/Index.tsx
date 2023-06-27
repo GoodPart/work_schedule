@@ -4,13 +4,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale'; //한국어 설정
 import styled from "styled-components";
 
+
+
 import { updateData } from "../../../modules/calendar";
 
 import * as InputForm from '../../../components/styledComponents/InputStyled'
 import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 
 import { useDispatch } from "react-redux";
-import loadingGIF from "../../../loading.gif"
+
 
 
 import Toast from "../../Toast";
@@ -67,13 +69,13 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
         updateSchedule(form)
     }
 
-    if (!timeInfo) return <img style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} src={loadingGIF} />
+    if (!timeInfo) return <div style={{ display: "flex", flexDirection: "column" }}><img src="duck.gif" /><h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "bold", margin: "0", color: colorMode === 'light' ? "#333" : "#fff" }}>열심히 일하는 중</h2></div>
 
 
     return (
         <UpdateWrap>
             <InputForm.InputFormWrap check={'1'} cMode={colorMode}>
-                <input type="text" placeholder="날짜" style={{ backgroundColor: colorMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1 }} readOnly value={`${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${startDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
+                <input type="text" placeholder="날짜" style={{ backgroundColor: "transparent" }} readOnly value={`${startDate.getFullYear()}년 ${startDate.getMonth() + 1}월 ${startDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                 <label>날짜</label>
             </InputForm.InputFormWrap>
             <div className="insert__form">
@@ -102,7 +104,7 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
                 options={{
                     className: toastState.state && toastState.id === 0 ? 'toasting' : '',
                     width: '100%',
-                    height: '206px',
+                    height: '100%',
                     gap: '0',
                     theme: 'glass'
                 }}
@@ -132,7 +134,7 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
                 options={{
                     className: toastState.state && toastState.id === 2 ? 'toasting' : '',
                     width: '100%',
-                    height: '206px',
+                    height: '100%',
                     gap: '0',
                     theme: 'glass'
                 }}

@@ -170,7 +170,7 @@ export default function Calendar({ modeColor }: any) {
 
     }, [stdDate, monthCount, authData, calendarData.loading])
 
-    // if (!nameValue) return <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: '100%', height: '100%', backgroundColor: modeColor === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1 }}>loading...</div>
+    if (!member) return <SettingWrap cMode={modeColor} style={{ height: "100%" }}><div style={{ display: "flex", flexDirection: "column" }}><img src="duck.gif" /><h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "bold", margin: "0", color: modeColor === 'light' ? "#333" : "#fff" }}>열심히 일하는 중</h2></div></SettingWrap>
 
     return (
         <SettingWrap cMode={modeColor}>
@@ -319,7 +319,7 @@ export default function Calendar({ modeColor }: any) {
                         </div>
                     </div>
 
-                    <div data-device='pc'>
+                    <div className="form__wrap" data-device='pc' >
                         <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc" cMode={modeColor}>
                             <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                             <label htmlFor={nameValue}>아이디</label>
@@ -370,8 +370,7 @@ export default function Calendar({ modeColor }: any) {
 
 
 const SettingWrap = styled.div<{ cMode: string }>`
-    width: 100%;
-    background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};;
+    background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
     width: calc(100% - 24px);
 
     .setting {
@@ -422,7 +421,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
         .ctl-wrap {
             height: 140px;
             padding: 8px;
-            border-radius: 24px;
+            border-radius: 4px;
             left: 50%;
             bottom: 24px;
             transform: translateX(-50%);
@@ -433,7 +432,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
         bottom: -200px;
     }
     .ctl-wrap.hide + div {
-        padding-bottom : 0
+        padding-bottom : 96px
     }
 
     .react-datepicker-wrapper {
@@ -453,10 +452,11 @@ const SettingWrap = styled.div<{ cMode: string }>`
         background-color: ${initColorValue.point1};
     }
 
-    
-
     .input__form {
         width:  120px;
+    }
+    .form__wrap {
+        display: flex;
     }
 
     @media (min-width:561px) {
