@@ -41,7 +41,7 @@ export function registeUpdate(newForm: any): any {
 
 
 
-        let data = await axios.post(`http://localhost:9999${REGISTE_UPDATE_URL}`, newForm, { withCredentials: true });
+        let data = await axios.post(`https://myworkday.pe.kr:8888${REGISTE_UPDATE_URL}`, newForm, { withCredentials: true });
 
         if (data.data.success) {
             dispatch({
