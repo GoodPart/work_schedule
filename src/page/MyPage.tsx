@@ -92,7 +92,7 @@ export default function MyPage({ modeColor }: any) {
                     <input type="text" id='user_name' name='user_name'
                         defaultValue={newForm.user_name}
                         // value={newForm.user_name}
-                        readOnly={modify}
+                        readOnly
                         onChange={(e: any) => onChange(e)}
                     />
                     <label htmlFor='user_name'>이름</label>
