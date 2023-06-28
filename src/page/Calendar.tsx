@@ -22,8 +22,7 @@ import { deleteData, insertData } from "../modules/calendar";
 
 //img
 import loading from '../loading.gif'
-const deployURL = "http://ec2-43-201-0-7.ap-northeast-2.compute.amazonaws.com"
-
+import swal from 'sweetalert';
 
 export default function Calendar({ modeColor }: any) {
 
@@ -138,20 +137,21 @@ export default function Calendar({ modeColor }: any) {
         createSchedule(form)
     }
     const createSchedule = useCallback(async (form: any) => {
-        await dispatch(insertData(form))
+        let result = await dispatch(insertData(form));
+        if (result) {
+            setCtlToggle(false)
+            swal("성공", "일정 등록을 완료했습니다..", "success");
+
+        }
     }, [dispatch])
 
     const deleteSchedule = useCallback(async (_id: any) => {
-        await dispatch(deleteData(_id)).then((res: any) => {
-            // console.log(res)
+        let result = await dispatch(deleteData(_id));
 
-            if (!res) {
-                console.log('넘에 것 입니다.')
-            } else {
-                console.log("정상적으로 삭제 되었습니다.")
-            }
-
-        })
+        if (result) {
+            setCtlToggle(false)
+            swal("성공", "일정 삭제를 완료했습니다..", "success");
+        }
     }, [dispatch]);
 
     const mySelf = useCallback((item_name: any) => {

@@ -135,7 +135,6 @@ app.post('/api/users/login', (req, res) => {
         .catch(err => {
             return res.status(400).send(err)
         })
-
 });
 
 //로그아웃
@@ -146,6 +145,31 @@ app.get('/api/users/logout', auth, (req, res) => {
             success: true
         })
     })
+})
+
+// 회원 정보 수정
+app.post('/api/users/modify', auth, (req, res) => {
+    const getData = req.body; // {이름 : '', 사무소 : '', 팀명 : '', 직급 : '', 이메일 : '', 전화번호 : '', 아이디 : ''};
+
+    User.findOneAndUpdate({ user_id: getData.user_id }, {
+        user_name: getData.user_name,
+        user_email: getData.user_email,
+        office_name: getData.office_name,
+        rank_title: getData.rank_title,
+        team_name: getData.team_name,
+        user_phn: getData.user_phn
+    }).then((result, err) => {
+        if (err) return res.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            message: '회원정보가 정상적으로 수정 되었습니다.',
+        })
+    })
+
+
 })
 
 

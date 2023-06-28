@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { initColorValue } from './CommonValue'
 
+
+
 export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
     position: relative;
     width : 100%;
@@ -84,7 +86,7 @@ export const InputFormWrapSelect = styled.div`
 `
 
 
-export const InputFormWrapToggle = styled.div<{ width: number, height: number, cMode: string }>`
+export const InputFormWrapColorToggle = styled.div<{ width: number, height: number, cMode: string }>`
     position: relative;
     display: flex;
     align-self: center;
@@ -134,8 +136,9 @@ export const InputFormWrapToggle = styled.div<{ width: number, height: number, c
 
     input[type='checkbox']:checked + label {
         &:after {
-            left : inherit;
-            left : calc(100% - ${props => props.height}px) 
+            left : calc(100% - ${props => props.height}px);
+            background-color: #0F9485;
+            
         }
         &:before {
             content: '';
@@ -148,5 +151,47 @@ export const InputFormWrapToggle = styled.div<{ width: number, height: number, c
             background-image: url('sun.png');
             background-size: cover;
         }
+    }
+`
+export const InputFormWrapToggle = styled.div<{ width: number, height: number, cMode: string }>`
+    position: relative;
+    display: flex;
+    align-self: center;
+    width: ${props => props.width}px;
+    height: ${props => props.height}px;
+    background-color: #c2c2c2;
+    border-radius:  24px;
+
+    input[type='checkbox'] {
+        display: none;
+
+        & + label {
+            display: block;
+            width : 100%;
+            height : 100%;
+        }
+    }
+
+    input[type='checkbox'] + label {
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left : 0;
+            width: ${props => props.height}px;
+            height: ${props => props.height}px;
+            background-color: #444;
+            border-radius: ${props => props.height}px;
+            transition: left .5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            
+        }
+    }
+
+    input[type='checkbox']:checked + label {
+        &:after {
+            left : calc(100% - ${props => props.height}px);
+            background-color: #0F9485;
+        }
+        
     }
 `

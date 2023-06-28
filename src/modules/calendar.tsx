@@ -47,6 +47,10 @@ export function insertData(form: any): any {
                     type: CALENDAR_STATE_SUCCESS
                 })
 
+                return (
+                    createData.data.success
+                )
+
             }
         } catch (err) {
             console.log(err)
@@ -71,6 +75,10 @@ export function deleteData(_id: any): any {
                     dispatch({
                         type: CALENDAR_STATE_SUCCESS
                     })
+
+                    return (
+                        deleteData.data.success
+                    )
                 }
 
             }

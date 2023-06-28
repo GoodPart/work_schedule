@@ -110,10 +110,10 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
                 </Hamberger>
             </div>
             {/* <button type="button" onClick={(e) => { e.preventDefault(); modeChangeToggle() }}>{modeColor}</button> */}
-            <InputForm.InputFormWrapToggle width={48} height={24} cMode={modeColor}>
+            <InputForm.InputFormWrapColorToggle width={48} height={24} cMode={modeColor}>
                 <input id="checkbox" type="checkbox" onChange={e => modeChangeToggle()} />
                 <label htmlFor="checkbox" ></label>
-            </InputForm.InputFormWrapToggle>
+            </InputForm.InputFormWrapColorToggle>
         </Nav>
     )
 }
