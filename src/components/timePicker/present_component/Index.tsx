@@ -18,6 +18,8 @@ import { useDispatch } from "react-redux";
 import Toast from "../../Toast";
 import { initColorValue } from "../../styledComponents/CommonValue";
 
+import swal from 'sweetalert';
+
 export default function Index({ timeInfo, tgc, colorMode }: any) {
 
     const dispatch = useDispatch();
@@ -35,8 +37,12 @@ export default function Index({ timeInfo, tgc, colorMode }: any) {
     });
 
     const updateSchedule = useCallback(async (form: any) => {
-        await dispatch(updateData(form));
-        tgc()
+        let result = await dispatch(updateData(form));
+
+        if (result) {
+            tgc()
+            swal("성공", "일정 수정을 완료했습니다..", "success");
+        }
     }, [dispatch])
 
     useEffect(() => {
