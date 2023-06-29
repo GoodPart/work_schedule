@@ -7,6 +7,8 @@ import Index from "../present_component/Index";
 import { useDispatch, useSelector } from 'react-redux';
 import { registerSignUp } from "../../../modules/register";
 
+import swal from 'sweetalert';
+
 export default function SignUp({ modeColor }: any) {
 
 
@@ -46,8 +48,14 @@ export default function SignUp({ modeColor }: any) {
     const submit = () => {
         dispatch(registerSignUp(form))
             .then((res: any) => {
-                // console.log(res)
-                res.payload && navigate('/');
+                console.log(res)
+                if (!res.payload) {
+                    swal("실패", "회원가입 실패", "error");
+                } else {
+                    navigate('/signin');
+                    swal("성공", "회원가입 완료되었습니다.", "success");
+                }
+                // res.payload && navigate('/');
             });
 
         setForm({

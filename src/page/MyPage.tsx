@@ -84,7 +84,7 @@ export default function MyPage({ modeColor }: any) {
                 <div className="header">
                     <h2>내정보</h2>
                     <InputForm.InputFormWrapToggle width={48} height={24} cMode={modeColor}>
-                        <input id="modify" type="checkbox" onChange={(e: any) => modifyToggle(e.target.checked)} />
+                        <input id="modify" type="checkbox" checked={!modify} onChange={(e: any) => modifyToggle(e.target.checked)} />
                         <label htmlFor="modify" ></label>
                     </InputForm.InputFormWrapToggle>
                 </div>
@@ -92,7 +92,7 @@ export default function MyPage({ modeColor }: any) {
                     <input type="text" id='user_name' name='user_name'
                         defaultValue={newForm.user_name}
                         // value={newForm.user_name}
-                        readOnly
+                        readOnly={modify}
                         onChange={(e: any) => onChange(e)}
                     />
                     <label htmlFor='user_name'>이름</label>

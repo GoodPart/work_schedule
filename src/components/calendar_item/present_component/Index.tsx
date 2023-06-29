@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ScrollRestoration } from "react-router-dom";
 import styled from "styled-components";
 import TimePicker from "../../timePicker/container_component/TimePicker";
 
@@ -9,6 +8,9 @@ import { initColorValue } from "../../styledComponents/CommonValue";
 import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
 
 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../modules";
+
 
 
 
@@ -17,10 +19,13 @@ import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
 export default function Index({ calendarProps, memberProps, deleteSchedule, loading, mySelf, getDayFunc, modeColor }: any) {
     const [toggle, setToggle] = useState(false);
     const [updateProps, setUpdateProps] = useState('');
+    const [simply, setSimply] = useState(false);
 
     const mapLength = calendarProps.last_date;
     const nowDate = calendarProps.now_date;
     const getMapArray = Array.from({ length: mapLength }, (value, index) => index + 1);
+
+    const getSystemStore = useSelector((state: RootState) => state.systemReducer)
 
 
     const offDay = (state: string, work_time: any) => {
@@ -51,7 +56,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
         setToggle(false)
     }
     useEffect(() => {
-
+        setSimply(getSystemStore.calendar_simple)
     }, [toggle])
 
 
@@ -62,8 +67,8 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                     return (
                         <div key={ele} className={ele === nowDate ? "day__wrap now" : "day__wrap"} >
                             <div className="day-desc"
-                                style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", minHeight: "60px", fontWeight: 700 }}>
-                                <span style={{ fontSize: '36px', color: modeColor === 'light' ? '#48484A' : "#fff", letterSpacing: "-0.05em" }}>{ele < 10 ? `0${ele}` : ele}</span><span className="desc-day" style={getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '토' || getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '일' ? { color: initColorValue.point1 } : { color: modeColor === 'light' ? '#48484A' : "#fff", letterSpacing: "-0.05em" }}>
+                                style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", fontWeight: 700 }}>
+                                <span style={{ color: modeColor === 'light' ? '#48484A' : "#fff", letterSpacing: "-0.05em" }}>{ele < 10 ? `0${ele}` : ele}</span><span className="desc-day" style={getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '토' || getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '일' ? { color: initColorValue.point1 } : { color: modeColor === 'light' ? '#48484A' : "#fff", letterSpacing: "-0.05em" }}>
                                     {getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay())}
                                 </span>
                             </div>
@@ -73,12 +78,12 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
                                     loading ? memberProps.sort((a: any, b: any) => a.data.work_time[0] - b.data.work_time[0]).map((m: any, index2: number) => {
                                         if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
-                                            return <CardWrap key={m.user._id} id={m.user._id} delay={index2} cMode={modeColor} className={mySelf(m.user.user_name) ? "your-calc" : ""} >
+                                            return <CardWrap key={m.user._id} id={m.user._id} delay={index2} cMode={modeColor} className={mySelf(m.user.user_name) ? `${simply ? `simple-data` : ""} your-calc` : `${simply && 'simple-data'}`} >
                                                 <div className="wrap">
                                                     <div className="card__section">
                                                         <div className="content">
                                                             <div className="name">
-                                                                {m.user.user_name}
+                                                                {m.user.user_name} {mySelf(m.user.user_name) ? <em>ME</em> : ""}
                                                             </div>
                                                             <div className="info">
                                                                 <div className="info--item">
@@ -169,6 +174,8 @@ const ItemWrap = styled.div<{ cMode: string }>`
 
     @media (min-width:561px) {
         padding-bottom: 96px;
+
+        
       
     }
 
@@ -207,12 +214,8 @@ const ItemWrap = styled.div<{ cMode: string }>`
     .calc-desc {
         display: flex;
         flex-wrap: wrap;
-        width : calc(100% - 70px);
-        /* background-color: #e7e7e7; */
+        width : calc(100% - 68px);
         background-color: ${props => props.cMode === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg};;
-        
-
-
     }
 
     .day-desc {
@@ -220,6 +223,10 @@ const ItemWrap = styled.div<{ cMode: string }>`
         
         span {
             font-family: 'NotoSansKR_Bold';
+        }
+        span:first-child {
+            font-size : 36px;
+
         }
     }
     .timepicker__wrap {
@@ -257,6 +264,19 @@ const ItemWrap = styled.div<{ cMode: string }>`
             width : 80%
         }
     }
+
+    @media (max-width : 560px) {
+        .calc-desc {
+            width : calc(100% - 56px);
+        }
+        .day-desc {
+           
+            span:first-child {
+                font-size : 28px;
+
+            }
+        }
+    }
 `
 
 const CardWrap = styled.div<{ delay: Number, cMode: string }>`
@@ -286,7 +306,6 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     animation-direction: normal;
 
     &.your-calc {
-        /* border : 2px solid ${initColorValue.state.color4} */
         &:after {
             content : 'ME';
             position: absolute;
@@ -303,7 +322,6 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     }
 
     &:hover {
-        /* transform: translateY(-4px); */
         box-shadow: 0px 10px 19px -12px rgba(0,0,0,0.75);
     }
     &.your-calc:hover {
@@ -314,6 +332,8 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
             
         }
     }
+
+    
 
     @media (max-width:741px){
         max-width: 100%;
@@ -329,7 +349,7 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     .wrap {
         position: relative;
 
-        &:after {
+        /* &:after {
             content: '';
             position: absolute;
             top: 50%;
@@ -337,9 +357,8 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
             transform: translateY(-50%);
             width : 1px;
             height: 80%;
-            /* background-color: #ddd; */
             background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};;
-        }
+        } */
 
         @media (max-width:741px){
             width : 100% !important;
@@ -366,6 +385,9 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
 
         @media (max-width:741px){
             display : flex;
+            .name {
+                margin-top : 0
+            }
             .content {
                 display : flex;
                 width: 100%;
@@ -386,10 +408,89 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
         margin-top : 8px;
         color: ${props => props.cMode === 'light' ? '##48484A' : "#fff"};
     }
+    &.your-calc .name em {
+            display : none
+        }
     //mobile
     @media (max-width: 560px) {
-        .name {
-            margin-top : 0
+        
+        
+        
+        
+
+        &.simple-data {
+            padding : 2px 8px;
+            min-height : inherit;
+
+            &.your-calc:hover {
+                padding : 2px 4px 2px 8px;
+            }
+            &.your-calc:hover .addon {
+                padding : 0 4px;
+                
+
+            }
+
+            &.your-calc .name {
+                display : flex;
+                align-items : center
+            }
+            
+            &.your-calc .name em {
+                display : inline-block;
+                padding : 2px 4px;
+                margin-left : 0.5rem;
+                font-size : 10px;
+                font-weight:700;
+                font-style : normal;
+                line-height : 10px;
+                background-color : ${initColorValue.state.color2};
+                color : #fff;
+                border-radius : 2px;
+            }
+
+            &:after {
+                display : none
+            }
+
+            .wrap {
+                width : inherit !important
+            }
+            .card__section {
+                width : inherit !important
+            }
+
+            .card__section .content {
+                width : inherit !important;
+            }
+            .card__section .content .name {
+                font-size : 16px;
+            }
+            .card__section .content .info {
+                display : none
+            }
+
+            .work-state {
+                width : 100%;
+                flex-direction : row;
+                justify-content : end;
+                p {
+                    margin : 0;
+                }
+                p + p {
+                    margin-left : 8px
+                }
+            }
+
+            .addon {
+                flex-direction : row-reverse;
+                align-items : center;
+
+                button {
+                    margin : 0 2px;
+                }
+            }
+
         }
     }
     .card__section .content .info  {
@@ -417,15 +518,13 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     .work-state p {
         text-align: center;
         margin : 0;
-        padding : 0
-    }
-    .work-state p {
+        padding : 0;
         font-size: 14px;
         font-weight: bold;
+        text-shadow: 0 0 black
+
     }
-    .work-state p:last-child {
-        /* font-size: 12px; */
-    }
+   
 
     .cancle-btn,
     .update-btn {
@@ -492,8 +591,8 @@ const WorkState = styled.div<{ state: String }>`
                 line-height: 16px;
             }
          }
-    p + p {
+    /* p + p {
         margin-top : 4px !important
-    }
+    } */
 
 `

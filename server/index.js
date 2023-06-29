@@ -159,18 +159,28 @@ app.post('/api/users/modify', auth, (req, res) => {
         team_name: getData.team_name,
         user_phn: getData.user_phn
     }).then((result, err) => {
-        if (err) return res.json({
-            success: false,
-            err
-        })
-        return res.status(200).json({
-            success: true,
-            message: '회원정보가 정상적으로 수정 되었습니다.',
+
+        //회원 정보 수정 후, 캘린더 테이블의 정보 수정
+        Calendar.updateMany({ "user.user_id": getData.user_id }, {
+            $set: {
+                "user.user_name": getData.user_name,
+                "user.rank_title": getData.rank_title,
+                "user.office_name": getData.office_name,
+                "user.team_name": getData.team_name
+            }
+        }).then((result, err) => {
+            if (err) res.json({
+                success: false,
+                err
+            })
+            return res.status(200).json({
+                success: true,
+                result
+            })
         })
     })
+});
 
-
-})
 
 
 //캘린더 일정 추가
