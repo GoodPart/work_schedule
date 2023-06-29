@@ -1,38 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import CalendarItem from "../components/calendar_item/container_component/CalendarItem";
 import CalendarWrap from "../components/calendar_wrap/container_component/CalendarWrap";
 import { initColorValue } from "../components/styledComponents/CommonValue";
 
 import styled from "styled-components";
 
-import * as InputForm from "../components/styledComponents/InputStyled"
+import * as InputForm from "../components/styledComponents/InputStyled";
+
+
+import { useDispatch, useSelector } from "react-redux";
+import { systemUpdateSimple } from "../modules/system";
+import { RootState } from "../modules";
+
+
 
 export default function Setting({ modeColor }: any) {
-
+    const dispatch = useDispatch();
+    const systemData = useSelector((state: RootState) => state.systemReducer);
     const [form, setForm] = useState({
-        simply: false,
-        modeColor: false,
+        simply: systemData.calendar_simple,
+        themeColor: {
+            checked: false
+        }
     })
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>): any => {
+
+
+    const onChangeSimple = (e: React.ChangeEvent<HTMLInputElement>): any => {
         const { name, checked } = e.target;
         setForm({
             ...form,
             [name]: checked
         })
-
+        changeSimply()
     };
+
+    const onChangeTheme = (e: React.ChangeEvent<HTMLInputElement>): any => {
+        const { name, checked } = e.target;
+        setForm({
+            ...form,
+            [name]: {
+                checked: checked
+            }
+        })
+        changetheme()
+    };
+
+    const changeSimply = useCallback(async () => {
+        let result = await dispatch(systemUpdateSimple())
+    }, [dispatch])
+    const changetheme = useCallback(async () => {
+        // let result = await dispatch(systemUpdateSimple())
+        // setForm({
+        //     ...form,
+        //     themeColor: {
+        //         checked: !form
+        //     }
+        // })
+    }, [dispatch])
 
     return (
         <InnerWrap cMode={modeColor}>
-            <h1>셋팅</h1>
+            <h1>환경설정</h1>
 
             <div className="setting">
                 <SettingWrap cMode={modeColor}>
                     <div className="content content--1">
                         <i className="ico ico__simpley"></i>
                         <InputForm.InputFormWrapToggle width={40} height={20} cMode={modeColor}>
-                            <input type="checkbox" id="simply" name="simply" checked={form.simply} onChange={(e: any) => onChange(e)} />
+                            <input type="checkbox" id="simply" name="simply" checked={form.simply} onChange={(e: any) => onChangeSimple(e)} />
                             <label htmlFor="simply"></label>
                         </InputForm.InputFormWrapToggle>
                     </div>
@@ -42,21 +78,21 @@ export default function Setting({ modeColor }: any) {
                     </div>
 
                 </SettingWrap>
-                {/* <SettingWrap cMode={modeColor}>
+                <SettingWrap cMode={modeColor} theme={form.themeColor.checked}>
                     <div className="content content--1">
-                        <i className="ico ico__simpley"></i>
+                        <i className="ico ico__theme" style={form.themeColor.checked ? { backgroundImage: `url('moon.png')` } : { backgroundImage: `url('sun.png')` }}></i>
                         <InputForm.InputFormWrapToggle width={40} height={20} cMode={modeColor}>
-                            <input type="checkbox" id="simply" name="simply" checked={form.simply} onChange={(e: any) => onChange(e)} />
-                            <label htmlFor="simply"></label>
+                            <input type="checkbox" id="themeColor" name="themeColor" checked={form.themeColor.checked} onChange={(e: any) => onChangeTheme(e)} />
+                            <label htmlFor="themeColor"></label>
                         </InputForm.InputFormWrapToggle>
                     </div>
                     <div className="content content--column">
-                        <h3 className="title">일정 간소화</h3>
-                        <p className="status">{form.simply ? 'ON' : "OFF"}</p>
+                        <h3 className="title">테마 색상 - (작업중)</h3>
+                        <p className="status">{form.themeColor.checked ? '다크 모드' : '기본 모드'}</p>
                     </div>
 
                 </SettingWrap>
-                <SettingWrap cMode={modeColor}>
+                {/*<SettingWrap cMode={modeColor}>
                     <div className="content content--1">
                         <i className="ico ico__simpley"></i>
                         <InputForm.InputFormWrapToggle width={40} height={20} cMode={modeColor}>
@@ -120,7 +156,7 @@ const InnerWrap = styled.div<{ cMode: string }>`
     
 `
 
-const SettingWrap = styled.div<{ cMode: string }>`
+const SettingWrap = styled.div<{ cMode: string, theme: boolean }>`
     padding : 24px;
     width: 120px;
     height: 120px;
@@ -154,7 +190,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
         }
 
     }
-    .ico__simpley {
+    .ico {
         display: block;
         width: 48px;
         height: 48px;
@@ -162,6 +198,12 @@ const SettingWrap = styled.div<{ cMode: string }>`
         background-image: url('simply-icon.png');
         background-repeat: no-repeat;
         background-size: contain;
-        filter :invert( ${props => props.cMode === 'light' ? "0" : "100%"} )
+        filter :invert( ${props => props.cMode === 'light' ? "30%" : "70%"} )
+    }
+    .ico__simpley {
+        background-image: url('simply-icon.png');
+    }
+    .ico__theme {
+        background-image:  url(${props => props.cMode === 'light' ? 'sun.png' : 'moon.png'});
     }
 `

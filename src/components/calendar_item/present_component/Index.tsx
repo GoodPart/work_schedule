@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ScrollRestoration } from "react-router-dom";
 import styled from "styled-components";
 import TimePicker from "../../timePicker/container_component/TimePicker";
 
@@ -9,6 +8,9 @@ import { initColorValue } from "../../styledComponents/CommonValue";
 import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
 
 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../modules";
+
 
 
 
@@ -17,11 +19,13 @@ import * as ButtonForm from "../../../components/styledComponents/ButtonStyled";
 export default function Index({ calendarProps, memberProps, deleteSchedule, loading, mySelf, getDayFunc, modeColor }: any) {
     const [toggle, setToggle] = useState(false);
     const [updateProps, setUpdateProps] = useState('');
-    const [simply, setSimply] = useState(true);
+    const [simply, setSimply] = useState(false);
 
     const mapLength = calendarProps.last_date;
     const nowDate = calendarProps.now_date;
     const getMapArray = Array.from({ length: mapLength }, (value, index) => index + 1);
+
+    const getSystemStore = useSelector((state: RootState) => state.systemReducer)
 
 
     const offDay = (state: string, work_time: any) => {
@@ -52,7 +56,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
         setToggle(false)
     }
     useEffect(() => {
-
+        setSimply(getSystemStore.calendar_simple)
     }, [toggle])
 
 
