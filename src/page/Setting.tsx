@@ -92,6 +92,8 @@ export default function Setting({ modeColor }: any) {
                     </div>
 
                 </SettingWrap>
+                <SettingWrap cMode={modeColor}></SettingWrap>
+                <SettingWrap cMode={modeColor}></SettingWrap>
                 {/*<SettingWrap cMode={modeColor}>
                     <div className="content content--1">
                         <i className="ico ico__simpley"></i>
@@ -151,6 +153,17 @@ const InnerWrap = styled.div<{ cMode: string }>`
 
         div {
             margin: 4px;
+        }
+    }
+
+    @media (max-width : 561px) {
+        .setting {
+            justify-content: space-evenly;
+
+            > div {
+                width: 115px;
+                height : 115px
+            }
         }
     }
     
