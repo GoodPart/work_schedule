@@ -6,16 +6,29 @@ import { initColorValue } from '../../../components/styledComponents/CommonValue
 import * as InputForm from '../../../components/styledComponents/InputStyled';
 import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 
+import swal from 'sweetalert';
 
 export default function Index({ handleChangeId, handleChangePw, submit, dataProps, modeColor }: any) {
+    const enterKeyUp = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            if (dataProps.userPw === '') {
+                swal('경고', "비밀번호를 입력해주세요.", "info")
+            } else if (dataProps.userId === '') {
+                swal('경고', "아이디를 입력해주세요.", "info")
+            } else {
+                submit()
+            }
+        }
+    }
     return (
         <InnerWrap cMode={modeColor}>
             <h2>로그인</h2>
             <form action="submit" onSubmit={submit}>
-                <InputForm.InputFormWrap check={dataProps.userId} cMode={modeColor}>
+                <InputForm.InputFormWrap check={dataProps.userId} cMode={modeColor} >
                     <input type="text" style={{ backgroundColor: "transparent" }} id='userId' name='userId'
                         onChange={handleChangeId}
                         value={dataProps.userId}
+                        onKeyUp={(e) => enterKeyUp(e)}
                     />
                     <label htmlFor='userId'>ID</label>
                 </InputForm.InputFormWrap>
@@ -25,6 +38,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
                     <input type="password" style={{ backgroundColor: "transparent" }} id='userPw' name='userPw'
                         onChange={handleChangePw}
                         value={dataProps.userPw}
+                        onKeyUp={(e) => enterKeyUp(e)}
                     />
                     <label htmlFor='userPw'>Password</label>
                 </InputForm.InputFormWrap>
@@ -32,7 +46,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
                 <ButtonForm.SubmitBtn type='button' onClick={submit}>로그인</ButtonForm.SubmitBtn>
             </form>
             <br />
-            <div>아직 회원이 아닌가요? <Link style={{ color: "#0F9485", textDecoration: "none", fontWeight: "bold" }} to={'/signup'}>회원가입</Link></div>
+            <div style={{ color: modeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite }}>아직 회원이 아닌가요? <Link style={{ color: "#0F9485", textDecoration: "none", fontWeight: "bold" }} to={'/signup'}>회원가입</Link></div>
         </InnerWrap>
     )
 }

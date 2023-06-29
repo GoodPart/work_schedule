@@ -39,6 +39,10 @@ export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
         /* transform : scale(.7); */
         color : #0F9485;
     }
+    input:focus + label em {
+        font-weight: bold;
+        color : ${initColorValue.point1};
+    }
     input + label {
         cursor: text;
         position: absolute;
@@ -52,6 +56,12 @@ export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
         font-size : ${props => props.check.length > 0 ? "10px" : "16px"};
         transition: scale .6s cubic-bezier(0.075, 0.82, 0.165, 1), top .6s cubic-bezier(0.075, 0.82, 0.165, 1) ;
     };
+    input + label em {
+        font-weight: bold;
+        line-height : 1.5rem;
+        font-size : 1.5rem;
+        color : ${initColorValue.point1};
+    }
    
     
     input:read-only + label {

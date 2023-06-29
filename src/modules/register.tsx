@@ -72,6 +72,10 @@ export function registerSignUp(form: any): any {
                 type: SIGN_UP,
                 payload: data.data.success
             }
+        } else {
+            return {
+                payload: data.data.success
+            }
         }
     }
 }

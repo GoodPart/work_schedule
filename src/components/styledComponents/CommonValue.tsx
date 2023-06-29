@@ -8,7 +8,10 @@ export const initColorValue = {
         calcDesc: '#dddd',
         border: '#ccc',
         white: "#fff",
-        loadingGradient: "linear-gradient(to right, #e7e7e7, #ccc, #e7e7e7);"
+        loadingGradient: "linear-gradient(to right, #e7e7e7, #ccc, #e7e7e7);",
+        setting: {
+            title: "#333"
+        }
     },
     dark: {
         bg: "#252525",
@@ -18,7 +21,10 @@ export const initColorValue = {
         textWhite: "#fff",
         hambergerToggle: '#333',
         textBlack: '#000',
-        loadingGradient: "linear-gradient(to right, #282828, #363636, #282828);"
+        loadingGradient: "linear-gradient(to right, #282828, #363636, #282828);",
+        setting: {
+            title: "#777"
+        }
 
     },
     point1: "#0F9485",

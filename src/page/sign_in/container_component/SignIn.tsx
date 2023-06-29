@@ -7,6 +7,8 @@ import Index from "../present_component/Index";
 import { useDispatch, useSelector } from 'react-redux';
 import { registerSignIn } from "../../../modules/register";
 
+import swal from 'sweetalert';
+
 export default function SignIn({ modeColor }: any) {
 
 
@@ -48,7 +50,12 @@ export default function SignIn({ modeColor }: any) {
             .then((res: any) => {
                 //     // res.data.success && navigate('/')
                 console.log(res)
-                res.payload.success && navigate('/');
+                if (!res.payload.success) {
+                    swal("실패", res.payload.message, "error");
+                } else {
+
+                    res.payload.success && navigate('/');
+                }
             });
 
         setUserId("")
