@@ -168,6 +168,7 @@ const InnerWrap = styled.div<{ cMode: string }>`
     /* padding-top: 24px; */
     background-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};
     height: 100%;
+   
     
     h2 {
         margin: 0;
@@ -186,6 +187,9 @@ const InnerWrap = styled.div<{ cMode: string }>`
     }
   
     @media (max-width: 561px) {
+        height: auto;
+        padding-bottom: 30%;
+        background-color: #252525;
         .device__wrap {
             width: 100%;
         }
