@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const SYSTEM_IU_SIMPLE = 'system/SYSTEM_IU_SIMPLE' as const;
+const SYSTEM_IU_THEMECOLOR = 'system/SYSTEM_IU_THEMECOLOR' as const;
 
 const LOADING = 'system/LOADING' as const;
 const ERROR = 'system/ERROR' as const;
@@ -8,6 +9,7 @@ const SUCCESS = 'system/SUCCESS' as const;
 
 const initState = {
     calendar_simple: false,
+    theme_color: false,
     loading: false,
     success: false,
 }
@@ -36,6 +38,28 @@ export function systemUpdateSimple(): any {
         }
     }
 }
+export function systemUpdateThemeColor(): any {
+    return async (dispatch: any, getState: any) => {
+        dispatch({
+            type: LOADING
+        })
+
+        let getTheme = getState().systemReducer.theme_color;
+
+        try {
+            dispatch({
+                type: SYSTEM_IU_THEMECOLOR,
+                payload: !getTheme
+            })
+
+            dispatch({
+                type: SUCCESS
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
 
 export function systemReducer(state = initState, action: any): any {
     switch (action.type) {
@@ -43,6 +67,11 @@ export function systemReducer(state = initState, action: any): any {
             return {
                 ...state,
                 calendar_simple: action.payload
+            }
+        case SYSTEM_IU_THEMECOLOR:
+            return {
+                ...state,
+                theme_color: action.payload
             }
         case LOADING:
             return {

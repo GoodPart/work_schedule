@@ -16,21 +16,19 @@ import { initColorValue } from './components/styledComponents/CommonValue';
 
 function App() {
 
-  const [modeColor, setModeColor] = useState('dark');
-  const modeChangeToggle = () => {
-    setModeColor(modeColor === 'light' ? 'dark' : 'light');
-  }
+  const systemData = useSelector((state: RootState) => state.systemReducer);
+  let themeColor = systemData.theme_color ? 'dark' : 'light'
 
-  // console.log(document.querySelector("#root"))
+  useEffect(() => {
 
+  }, [])
 
 
   return (
     <BrowserRouter>
-      <NavBar modeColor={modeColor} modeChangeToggle={modeChangeToggle} />
+      <NavBar modeColor={themeColor} />
 
-
-      <RouterArea modColor={modeColor} />
+      <RouterArea modColor={themeColor} />
     </BrowserRouter>
   );
 };

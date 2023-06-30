@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { authCheckToServer } from '../modules/auth';
 
-export default function (Component: any, option: any, modeColor: any) {
+export default function (Component: any, option: any, modeColor?: any) {
 
     function AuthenticationCheck(props: any) {
 
