@@ -178,6 +178,7 @@ const InnerWrap = styled.div<{ cMode: string }>`
     .device__wrap {
         margin :0 auto;
         width: 560px;
+        height: 100%;
     }
     .device__wrap .header {
         display: flex;
