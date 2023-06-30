@@ -367,7 +367,7 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
 
     .wrap, .work-state {
         display: flex;
-        width : 70%
+        width : 100%
     }
 
 
@@ -411,23 +411,18 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     &.your-calc .name em {
             display : none
         }
-    //mobile
-    @media (max-width: 560px) {
-        
-        
-        
-        
-
         &.simple-data {
             padding : 2px 8px;
             min-height : inherit;
 
+            
+
             &.your-calc:hover {
-                padding : 2px 4px 2px 8px;
+                /* padding : 2px 4px 2px 8px; */
             }
             &.your-calc:hover .addon {
                 padding : 0 4px;
-                
+
 
             }
 
@@ -435,7 +430,7 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
                 display : flex;
                 align-items : center
             }
-            
+
             &.your-calc .name em {
                 display : inline-block;
                 padding : 2px 4px;
@@ -453,9 +448,9 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
                 display : none
             }
 
-            .wrap {
+            /* .wrap {
                 width : inherit !important
-            }
+            } */
             .card__section {
                 width : inherit !important
             }
@@ -464,12 +459,14 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
                 width : inherit !important;
             }
             .card__section .content .name {
+                margin-top : 0;
                 font-size : 16px;
             }
             .card__section .content .info {
                 display : none
             }
 
+            
             .work-state {
                 width : 100%;
                 flex-direction : row;
@@ -492,6 +489,16 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
             }
 
         }
+    //mobile
+    @media (max-width: 560px) {
+        
+        
+        
+    .wrap {
+            width : inherit !important
+        }
+
+        
     }
     .card__section .content .info  {
         margin-top :8px;
@@ -573,7 +580,7 @@ const WorkState = styled.div<{ state: String }>`
         margin: 0 auto;
         padding: 2px 12px;
         border-radius: 4px;
-        max-width: 34%;
+        max-width: 40%;
         min-width: 30%;
         font-size : 14px;
         font-weight: bold;

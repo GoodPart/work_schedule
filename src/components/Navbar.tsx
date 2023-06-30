@@ -16,7 +16,7 @@ import * as InputForm from '../components/styledComponents/InputStyled'
 
 
 
-export default function NavBar({ modeColor, modeChangeToggle }: any) {
+export default function NavBar({ modeColor }: any) {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const authData = useSelector((state: RootState) => state.authCheckReducer.auth);
@@ -42,7 +42,7 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
     }, [])
 
     useEffect(() => {
-
+        // console.log(modeColor)
         window.addEventListener('scroll', handleScroll);
 
         return () => {
@@ -73,7 +73,7 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
                 <div className="title" style={{ textTransform: 'uppercase', fontSize: 22, fontWeight: 700, letterSpacing: '-0.05em', color: modeColor === 'light' ? initColorValue.light.text : initColorValue.dark.text }}>My Work Day</div>
                 <DefaultNav>
                     <NavItem cMode={modeColor}>
-                        <Link to='/'>Home</Link>
+                        <Link to='/'>메인</Link>
 
                         {
                             authData ? <button type="button" style={{ cursor: "pointer", display: "flex", marginLeft: "20px", fontSize: 14, color: "#666", backgroundColor: "transparent", border: "none", padding: 16 }} onClick={() => logout()}  >로그아웃</button> : <Link to='/signin'>로그인</Link>
@@ -85,14 +85,14 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
                         }
 
 
-                        <Link to='/calendar'>calendar</Link>
+                        <Link to='/calendar'>일정표</Link>
                         <Link to='/setting'>설정</Link>
                     </NavItem>
                 </DefaultNav>
                 <Hamberger cMode={modeColor}>
                     <div className={toggle ? 'wrap active' : 'wrap'}>
                         <NavItem className="ham-nav__item" cMode={modeColor}>
-                            <Link to='/' onClick={() => resetToggle()}>Home</Link>
+                            <Link to='/' onClick={() => resetToggle()}>메인</Link>
 
                             {
                                 authData ? <button type="button" style={{ cursor: "pointer", display: "flex", marginLeft: "20px", fontSize: 14, color: "#666", backgroundColor: "transparent", border: "none", padding: 16 }} onClick={() => logout()}  >로그아웃</button> : <Link to='/signin' onClick={() => resetToggle()}>로그인</Link>
@@ -101,7 +101,7 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
                                 authData ? <Link to='/my-page' onClick={() => resetToggle()}>내 정보</Link> : ""
                             }
 
-                            <Link to='/calendar' onClick={() => resetToggle()}>calendar</Link>
+                            <Link to='/calendar' onClick={() => resetToggle()}>일정표</Link>
 
                             <Link to='/setting' onClick={() => resetToggle()}>설정</Link>
                         </NavItem>
@@ -110,10 +110,10 @@ export default function NavBar({ modeColor, modeChangeToggle }: any) {
                 </Hamberger>
             </div>
             {/* <button type="button" onClick={(e) => { e.preventDefault(); modeChangeToggle() }}>{modeColor}</button> */}
-            <InputForm.InputFormWrapColorToggle width={48} height={24} cMode={modeColor}>
+            {/* <InputForm.InputFormWrapColorToggle width={48} height={24} cMode={modeColor}>
                 <input id="checkbox" type="checkbox" onChange={e => modeChangeToggle()} />
                 <label htmlFor="checkbox" ></label>
-            </InputForm.InputFormWrapColorToggle>
+            </InputForm.InputFormWrapColorToggle> */}
         </Nav>
     )
 }

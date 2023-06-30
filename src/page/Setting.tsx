@@ -1,6 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
-import CalendarItem from "../components/calendar_item/container_component/CalendarItem";
-import CalendarWrap from "../components/calendar_wrap/container_component/CalendarWrap";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { initColorValue } from "../components/styledComponents/CommonValue";
 
 import styled from "styled-components";
@@ -9,20 +7,21 @@ import * as InputForm from "../components/styledComponents/InputStyled";
 
 
 import { useDispatch, useSelector } from "react-redux";
-import { systemUpdateSimple } from "../modules/system";
+import { systemUpdateSimple, systemUpdateThemeColor } from "../modules/system";
 import { RootState } from "../modules";
 
 
 
-export default function Setting({ modeColor }: any) {
+export default function Setting() {
     const dispatch = useDispatch();
     const systemData = useSelector((state: RootState) => state.systemReducer);
+    let themeColor = systemData.theme_color ? 'dark' : 'light'
     const [form, setForm] = useState({
         simply: systemData.calendar_simple,
-        themeColor: {
-            checked: false
-        }
+        themeColor: systemData.theme_color
+
     })
+
 
 
 
@@ -39,35 +38,32 @@ export default function Setting({ modeColor }: any) {
         const { name, checked } = e.target;
         setForm({
             ...form,
-            [name]: {
-                checked: checked
-            }
+            [name]: checked ? 'dark' : 'light'
+
         })
         changetheme()
     };
 
+    useEffect(() => {
+        console.log('s')
+    }, [])
+
     const changeSimply = useCallback(async () => {
-        let result = await dispatch(systemUpdateSimple())
+        await dispatch(systemUpdateSimple())
     }, [dispatch])
     const changetheme = useCallback(async () => {
-        // let result = await dispatch(systemUpdateSimple())
-        // setForm({
-        //     ...form,
-        //     themeColor: {
-        //         checked: !form
-        //     }
-        // })
+        await dispatch(systemUpdateThemeColor())
     }, [dispatch])
 
     return (
-        <InnerWrap cMode={modeColor}>
+        <InnerWrap cMode={themeColor}>
             <h1>환경설정</h1>
 
             <div className="setting">
-                <SettingWrap cMode={modeColor}>
+                <SettingWrap theme={themeColor}>
                     <div className="content content--1">
                         <i className="ico ico__simpley"></i>
-                        <InputForm.InputFormWrapToggle width={40} height={20} cMode={modeColor}>
+                        <InputForm.InputFormWrapToggle width={40} height={20} cMode={themeColor}>
                             <input type="checkbox" id="simply" name="simply" checked={form.simply} onChange={(e: any) => onChangeSimple(e)} />
                             <label htmlFor="simply"></label>
                         </InputForm.InputFormWrapToggle>
@@ -78,50 +74,23 @@ export default function Setting({ modeColor }: any) {
                     </div>
 
                 </SettingWrap>
-                <SettingWrap cMode={modeColor} theme={form.themeColor.checked}>
+                <SettingWrap theme={themeColor} >
                     <div className="content content--1">
-                        <i className="ico ico__theme" style={form.themeColor.checked ? { backgroundImage: `url('moon.png')` } : { backgroundImage: `url('sun.png')` }}></i>
-                        <InputForm.InputFormWrapToggle width={40} height={20} cMode={modeColor}>
-                            <input type="checkbox" id="themeColor" name="themeColor" checked={form.themeColor.checked} onChange={(e: any) => onChangeTheme(e)} />
+                        <i className="ico ico__theme" style={!systemData.theme_color ? { backgroundImage: `url('sun.png')`, transition: '.6s ease' } : { backgroundImage: `url('moon.png')` }}></i>
+                        <InputForm.InputFormWrapToggle width={40} height={20} cMode={themeColor}>
+                            <input type="checkbox" id="themeColor" name="themeColor" checked={systemData.theme_color} onChange={(e: any) => onChangeTheme(e)} />
                             <label htmlFor="themeColor"></label>
                         </InputForm.InputFormWrapToggle>
                     </div>
                     <div className="content content--column">
-                        <h3 className="title">테마 색상 - (작업중)</h3>
-                        <p className="status">{form.themeColor.checked ? '다크 모드' : '기본 모드'}</p>
+                        <h3 className="title">테마 색상</h3>
+                        <p className="status">{systemData.theme_color ? '다크 모드' : '기본 모드'}</p>
                     </div>
 
                 </SettingWrap>
-                <SettingWrap cMode={modeColor}></SettingWrap>
-                <SettingWrap cMode={modeColor}></SettingWrap>
-                {/*<SettingWrap cMode={modeColor}>
-                    <div className="content content--1">
-                        <i className="ico ico__simpley"></i>
-                        <InputForm.InputFormWrapToggle width={40} height={20} cMode={modeColor}>
-                            <input type="checkbox" id="simply" name="simply" checked={form.simply} onChange={(e: any) => onChange(e)} />
-                            <label htmlFor="simply"></label>
-                        </InputForm.InputFormWrapToggle>
-                    </div>
-                    <div className="content content--column">
-                        <h3 className="title">일정 간소화</h3>
-                        <p className="status">{form.simply ? 'ON' : "OFF"}</p>
-                    </div>
+                <SettingWrap theme={themeColor}></SettingWrap>
+                <SettingWrap theme={themeColor} ></SettingWrap>
 
-                </SettingWrap>
-                <SettingWrap cMode={modeColor}>
-                    <div className="content content--1">
-                        <i className="ico ico__simpley"></i>
-                        <InputForm.InputFormWrapToggle width={40} height={20} cMode={modeColor}>
-                            <input type="checkbox" id="simply" name="simply" checked={form.simply} onChange={(e: any) => onChange(e)} />
-                            <label htmlFor="simply"></label>
-                        </InputForm.InputFormWrapToggle>
-                    </div>
-                    <div className="content content--column">
-                        <h3 className="title">일정 간소화</h3>
-                        <p className="status">{form.simply ? 'ON' : "OFF"}</p>
-                    </div>
-
-                </SettingWrap> */}
             </div>
 
 
@@ -169,11 +138,11 @@ const InnerWrap = styled.div<{ cMode: string }>`
     
 `
 
-const SettingWrap = styled.div<{ cMode: string, theme: boolean }>`
+const SettingWrap = styled.div<{ theme: string }>`
     padding : 24px;
     width: 120px;
     height: 120px;
-    background-color:${props => props.cMode === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg1};
+    background-color:${props => props.theme === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg1};
     border-radius: 4px;
 
     h3 {
@@ -194,7 +163,7 @@ const SettingWrap = styled.div<{ cMode: string, theme: boolean }>`
 
         .title {
             margin : 20px 0 4px;
-            color : ${props => props.cMode === 'light' ? initColorValue.light.setting.title : initColorValue.dark.setting.title};
+            color : ${props => props.theme === 'light' ? initColorValue.light.setting.title : initColorValue.dark.setting.title};
             font-size : 12px
         }
         .status {
@@ -211,12 +180,19 @@ const SettingWrap = styled.div<{ cMode: string, theme: boolean }>`
         background-image: url('simply-icon.png');
         background-repeat: no-repeat;
         background-size: contain;
-        filter :invert( ${props => props.cMode === 'light' ? "30%" : "70%"} )
+        filter :invert( ${props => props.theme === 'light' ? "30%" : "70%"} );
+        
     }
     .ico__simpley {
         background-image: url('simply-icon.png');
     }
-    .ico__theme {
-        background-image:  url(${props => props.cMode === 'light' ? 'sun.png' : 'moon.png'});
+    .ico__theme:not(.ico__simpley) {
+        background-image:  url(${props => props.theme === 'light' ? 'sun.png' : 'moon.png'});
+        animation-name: iconShowRotate;
+        animation-duration: 1s;
+        animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+        animation-fill-mode: forwards;
     }
+
+  
 `
