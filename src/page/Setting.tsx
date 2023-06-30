@@ -57,7 +57,7 @@ export default function Setting() {
 
     return (
         <InnerWrap cMode={themeColor}>
-            <h1>환경설정</h1>
+            <h3>환경설정</h3>
 
             <div className="setting">
                 <SettingWrap theme={themeColor}>
@@ -88,8 +88,34 @@ export default function Setting() {
                     </div>
 
                 </SettingWrap>
-                <SettingWrap theme={themeColor}></SettingWrap>
-                <SettingWrap theme={themeColor} ></SettingWrap>
+                <SettingWrapDouble className="double" theme={themeColor}>
+                    <div className="content--wrap" style={{ display: "flex" }}>
+                        <div className="content content--1">
+                            <i className="ico ico__simpley"></i>
+                            <input type="radio" id="1" name="setting-radio" defaultChecked />
+                            <label htmlFor="1">ALL</label>
+                        </div>
+                        <div className="content content--2">
+                            <i className="ico ico__simpley"></i>
+                            <input type="radio" id="2" name="setting-radio" />
+                            <label htmlFor="2">ME</label>
+                        </div>
+                        <div className="content content--3">
+                            <i className="ico ico__simpley"></i>
+                            <input type="radio" id="3" name="setting-radio" />
+                            <label htmlFor="3">OTHER</label>
+                        </div>
+                    </div>
+                    <div className="content--wrap">
+                        <div className="content content--4">
+                            <select name="" id="">
+                                <option value="사업기획실" selected>사업기획실</option>
+                                <option value="우주사업실">우주사업실</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </SettingWrapDouble>
 
             </div>
 
@@ -131,8 +157,12 @@ const InnerWrap = styled.div<{ cMode: string }>`
 
             > div {
                 width: 115px;
-                height : 115px
-            }
+                height : 115px;
+
+                &.double {
+                    width: 85%
+                }
+            };
         }
     }
     
@@ -194,5 +224,62 @@ const SettingWrap = styled.div<{ theme: string }>`
         animation-fill-mode: forwards;
     }
 
-  
+`
+
+const SettingWrapDouble = styled.div<{ theme: string }>`
+    padding : 24px;
+    width: 240px;
+    height: 240px;
+    background-color:${props => props.theme === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg1};
+    border-radius: 4px;
+
+    h3 {
+        padding: 0;
+    }
+
+    p {
+        padding: 0;
+        margin : 0;
+    }
+    .content {
+        display: flex;
+        justify-content: space-between;
+
+        &.content--column {
+            flex-direction: column;
+        }
+
+        .title {
+            margin : 20px 0 4px;
+            color : ${props => props.theme === 'light' ? initColorValue.light.setting.title : initColorValue.dark.setting.title};
+            font-size : 12px
+        }
+        .status {
+            font-weight: bold;
+
+        }
+
+    }
+    .ico {
+        display: block;
+        width: 48px;
+        height: 48px;
+        border-radius: 4px;
+        background-image: url('simply-icon.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        filter :invert( ${props => props.theme === 'light' ? "30%" : "70%"} );
+        
+    }
+    .ico__simpley {
+        background-image: url('simply-icon.png');
+    }
+    .ico__theme:not(.ico__simpley) {
+        background-image:  url(${props => props.theme === 'light' ? 'sun.png' : 'moon.png'});
+        animation-name: iconShowRotate;
+        animation-duration: 1s;
+        animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+        animation-fill-mode: forwards;
+    }
+
 `

@@ -4,6 +4,7 @@ const SIGN_IN_URL = '/api/users/login' as const;
 const SIGN_UP_URL = '/api/users/signup' as const;
 const SIGN_OUT_URL = 'api/users/logout' as const;
 const REGISTE_UPDATE_URL = '/api/users/modify' as const;
+const REGISTE_COLLECTION_READ_URL = '/api/collection/read' as const;
 
 //액션 타입
 const SIGN_IN = 'sign/SIGN_IN' as const;
@@ -26,7 +27,6 @@ const initState = {
 }
 
 export function registeUpdate(newForm: any): any {
-    console.log('inbound Form ->', newForm)
 
     return async (dispatch: any, getState: any) => {
         dispatch({
@@ -80,6 +80,26 @@ export function registerSignUp(form: any): any {
     }
 }
 
+export function collectionRead(number: any): any {
+    return async (dispatch: any) => {
+        dispatch({
+            type: LOADING
+        })
+        let getData = await axios.get(`http://localhost:9999${REGISTE_COLLECTION_READ_URL}/${number}`, { withCredentials: true });
+        try {
+            dispatch({
+                type: SUCCESS,
+                payload: getData.data
+            })
+            return {
+                payload: getData.data
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+}
 // 액션 함수
 export function registerSignIn(form: any): any {
     let data = axios.post(`http://localhost:9999${SIGN_IN_URL}`, form, { withCredentials: true });
@@ -164,6 +184,11 @@ export function registerReducer(state = initState, action: any): any {
                 ...state,
                 login: action.payload.success,
                 loading: false
+            }
+        case REGISTE_UPDATE:
+            return {
+                ...state,
+                payload: action.payload
             }
         case SIGN_UP:
             return {

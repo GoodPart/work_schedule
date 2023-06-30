@@ -75,6 +75,15 @@ export default function Index({ onChange, form, submit, modeColor }: any) {
                     <label htmlFor='userPw'>전화번호</label>
                 </InputForm.InputFormWrap>
                 <br />
+                <InputForm.InputFormWrapSelect>
+                    <select onChange={(e: any) => console.log("change")}>
+                        <option value="출근" >출근</option>
+                        <option value="오전 반차" >오전 반차</option>
+                        <option value="오후 반차">오후 반차</option>
+                        <option value="월차">월차</option>
+                        <option value="외근">외근</option>
+                    </select>
+                </InputForm.InputFormWrapSelect>
                 <InputForm.InputFormWrap check={form.office_name} cMode={modeColor}>
                     <input type="text" id='office_name' style={{ backgroundColor: "transparent" }} name='office_name'
                         onChange={onChange}

@@ -28,6 +28,8 @@ const mongoose = require('mongoose');
 const { User } = require('./models/User');
 // //dbid 스키마
 const { Calendar } = require('./models/Calendar');
+// collection 스키마
+const { Collection } = require('./models/Collection');
 
 
 
@@ -311,6 +313,35 @@ app.post('/api/calendar/updatebyid', auth, async (req, res) => {
         })
     })
 })
+
+// 콜렉션 조회 타입별
+app.get('/api/collection/read/:type', (req, res) => {
+    const getData = req.params.type;
+    Collection.find({
+        type: getData
+    }).then((match, err) => {
+        console.log(match)
+        if (err) req.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            match
+        })
+    })
+})
+// 콜렉션 추가
+app.post('/api/collection/create', (req, res) => {
+    const getData = req.body; // {shcema_name : '', add_name : ''};
+
+    const collection = new Collection(getData);
+
+    collection.save().then((ele, err) => {
+    })
+})
+
+// 콜렉션 제거
 
 
 

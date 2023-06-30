@@ -1,11 +1,11 @@
-import React, { useState, ChangeEvent, useCallback } from 'react';
+import React, { useState, ChangeEvent, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Index from "../present_component/Index";
 
 
 //redux
 import { useDispatch, useSelector } from 'react-redux';
-import { registerSignUp } from "../../../modules/register";
+import { registerSignUp, collectionRead } from "../../../modules/register";
 
 import swal from 'sweetalert';
 
@@ -29,6 +29,15 @@ export default function SignUp({ modeColor }: any) {
         user_age: '',
         token: ''
     })
+
+    useEffect(() => {
+        getCollection(100)
+    }, [])
+
+    const getCollection = useCallback(async (type: number) => {
+        let result = await dispatch(collectionRead(type))
+    }, [dispatch])
+
 
     const onChange = (e: ChangeEvent<HTMLInputElement>): any => {
         const { name, value } = e.target;
