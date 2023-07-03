@@ -91,9 +91,9 @@ export function collectionRead(number: any): any {
                 type: SUCCESS,
                 payload: getData.data
             })
-            return {
-                payload: getData.data
-            }
+            // console.log(getData)
+            return getData.data
+
         } catch (err) {
             console.log(err)
         }

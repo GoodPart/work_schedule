@@ -10,7 +10,7 @@ import * as ButtonForm from '../../../components/styledComponents/ButtonStyled'
 
 import swal from 'sweetalert';
 
-export default function Index({ onChange, form, submit, modeColor }: any) {
+export default function Index({ onChange, form, submit, modeColor, collections }: any) {
     const enterKeyUp = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
             if (form.user_name === '') {
@@ -77,11 +77,31 @@ export default function Index({ onChange, form, submit, modeColor }: any) {
                 <br />
                 <InputForm.InputFormWrapSelect>
                     <select onChange={(e: any) => console.log("change")}>
-                        <option value="출근" >출근</option>
-                        <option value="오전 반차" >오전 반차</option>
-                        <option value="오후 반차">오후 반차</option>
-                        <option value="월차">월차</option>
-                        <option value="외근">외근</option>
+                        {
+                            collections.collection_1.map((collection: any, index: number) => (
+                                <option value={collection.name}>{collection.name}</option>
+                            ))
+                        }
+                    </select>
+                </InputForm.InputFormWrapSelect>
+                <br />
+                <InputForm.InputFormWrapSelect>
+                    <select onChange={(e: any) => console.log("change")}>
+                        {
+                            collections.collection_2.map((collection: any, index: number) => (
+                                <option value={collection.name}>{collection.name}</option>
+                            ))
+                        }
+                    </select>
+                </InputForm.InputFormWrapSelect>
+                <br />
+                <InputForm.InputFormWrapSelect>
+                    <select onChange={(e: any) => console.log("change")}>
+                        {
+                            collections.collection_3.map((collection: any, index: number) => (
+                                <option value={collection.name}>{collection.name}</option>
+                            ))
+                        }
                     </select>
                 </InputForm.InputFormWrapSelect>
                 <InputForm.InputFormWrap check={form.office_name} cMode={modeColor}>

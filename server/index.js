@@ -331,6 +331,20 @@ app.get('/api/collection/read/:type', (req, res) => {
         })
     })
 })
+// 모든 콜렉션 조회
+app.get('/api/collection/read', (req, res) => {
+    Collection.find({}).then((find, err) => {
+        console.log(find)
+        if (err) req.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            match
+        })
+    })
+})
 // 콜렉션 추가
 app.post('/api/collection/create', (req, res) => {
     const getData = req.body; // {shcema_name : '', add_name : ''};

@@ -15,8 +15,12 @@ export default function SignUp({ modeColor }: any) {
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
-    // const [userId, setUserId] = useState('');
-    // const [userPw, setUserPw] = useState('');
+    const [collections, setCollections] = useState({
+        collection_1: [],
+        collection_2: [],
+        collection_3: []
+    })
+
     const [form, setForm] = useState({
         user_name: '',
         user_id: '',
@@ -31,11 +35,40 @@ export default function SignUp({ modeColor }: any) {
     })
 
     useEffect(() => {
-        getCollection(100)
+        getCollection_1(100);
+        getCollection_2(200);
+        getCollection_3(300);
     }, [])
 
-    const getCollection = useCallback(async (type: number) => {
+    const getCollection_1 = useCallback(async (type: number) => {
         let result = await dispatch(collectionRead(type))
+
+        if (result.success) {
+            setCollections({
+                ...collections,
+                collection_1: result.match
+            })
+        }
+    }, [dispatch])
+    const getCollection_2 = useCallback(async (type: number) => {
+        let result = await dispatch(collectionRead(type))
+
+        if (result.success) {
+            setCollections({
+                ...collections,
+                collection_2: result.match
+            })
+        }
+    }, [dispatch])
+    const getCollection_3 = useCallback(async (type: number) => {
+        let result = await dispatch(collectionRead(type))
+
+        if (result.success) {
+            setCollections({
+                ...collections,
+                collection_3: result.match
+            })
+        }
     }, [dispatch])
 
 
@@ -82,12 +115,15 @@ export default function SignUp({ modeColor }: any) {
 
     };
 
+    if (!collections.collection_1 && !collections.collection_2 && !collections.collection_3) return <>loading...</>
+
     return (
         <Index
             onChange={onChange}
             form={form}
             submit={submit}
             modeColor={modeColor}
+            collections={collections}
         />
     )
 }
