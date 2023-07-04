@@ -7,8 +7,10 @@ import * as InputForm from "../components/styledComponents/InputStyled";
 
 
 import { useDispatch, useSelector } from "react-redux";
-import { systemUpdateSimple, systemUpdateThemeColor } from "../modules/system";
+import { systemUpdateSimple, systemUpdateThemeColor, systemUpdateSort } from "../modules/system";
 import { RootState } from "../modules";
+import { registerSignUp, collectionRead } from "../modules/register";
+
 
 
 
@@ -19,7 +21,14 @@ export default function Setting() {
     const [form, setForm] = useState({
         simply: systemData.calendar_simple,
         themeColor: systemData.theme_color
+    })
+    const [collections, setCollections] = useState({
+        collection_1: [],
+    })
 
+    const [sortState, setSortState] = useState({
+        state: 'all',
+        value: false
     })
 
 
@@ -43,9 +52,29 @@ export default function Setting() {
         })
         changetheme()
     };
+    const onChangeSort = (e: React.ChangeEvent<HTMLInputElement>): any => {
+        const { id } = e.target;
+        setSortState({
+            state: id,
+            value: id === 'other' ? true : false
+        })
+        changeSort(id)
+    };
+
+    const getCollection_1 = useCallback(async (type: number) => {
+        let result = await dispatch(collectionRead(type))
+
+        if (result.success) {
+            setCollections({
+                ...collections,
+                collection_1: result.find
+            })
+        }
+    }, [dispatch])
+
 
     useEffect(() => {
-        console.log('s')
+        getCollection_1(100);
     }, [])
 
     const changeSimply = useCallback(async () => {
@@ -53,6 +82,9 @@ export default function Setting() {
     }, [dispatch])
     const changetheme = useCallback(async () => {
         await dispatch(systemUpdateThemeColor())
+    }, [dispatch])
+    const changeSort = useCallback(async (state: string,) => {
+        await dispatch(systemUpdateSort(state))
     }, [dispatch])
 
     return (
@@ -92,27 +124,35 @@ export default function Setting() {
                     <div className="content--wrap" style={{ display: "flex" }}>
                         <div className="content content--1">
                             <i className="ico ico__simpley"></i>
-                            <input type="radio" id="1" name="setting-radio" defaultChecked />
+                            <input type="radio" id="all" name="setting-radio" onChange={(e) => onChangeSort(e)} defaultChecked />
                             <label htmlFor="1">ALL</label>
                         </div>
                         <div className="content content--2">
                             <i className="ico ico__simpley"></i>
-                            <input type="radio" id="2" name="setting-radio" />
+                            <input type="radio" id="me" name="setting-radio" onChange={(e) => onChangeSort(e)} />
                             <label htmlFor="2">ME</label>
                         </div>
                         <div className="content content--3">
                             <i className="ico ico__simpley"></i>
-                            <input type="radio" id="3" name="setting-radio" />
+                            <input type="radio" id="other" name="setting-radio" onChange={(e) => onChangeSort(e)} />
                             <label htmlFor="3">OTHER</label>
                         </div>
                     </div>
                     <div className="content--wrap">
                         <div className="content content--4">
-                            <select name="" id="">
-                                <option value="사업기획실" selected>사업기획실</option>
-                                <option value="우주사업실">우주사업실</option>
+                            <InputForm.InputFormWrapSelect cMode={themeColor}>
+                                <select name='team_name' onChange={(e: any) => console.log('change')} disabled={!sortState.value}>
+                                    <option value="">팀을 선택하세요.</option>
+                                    {
+                                        collections.collection_1.map((collection: any, index: number) => {
+                                            // if (collection.type === 300) {
+                                            return <option value={collection.name}>{collection.name}</option>
+                                            // }
+                                        })
+                                    }
+                                </select>
+                            </InputForm.InputFormWrapSelect>
 
-                            </select>
                         </div>
                     </div>
                 </SettingWrapDouble>

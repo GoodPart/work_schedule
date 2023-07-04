@@ -41,6 +41,9 @@ const userSchema = mongoose.Schema({
     office_name: {
         type: String,
     },
+    office_room: {
+        type: String
+    },
     team_name: {
         type: String
     },

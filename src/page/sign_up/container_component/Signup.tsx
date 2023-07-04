@@ -17,8 +17,6 @@ export default function SignUp({ modeColor }: any) {
 
     const [collections, setCollections] = useState({
         collection_1: [],
-        collection_2: [],
-        collection_3: []
     })
 
     const [form, setForm] = useState({
@@ -29,6 +27,7 @@ export default function SignUp({ modeColor }: any) {
         user_phn: '',
         rank_title: '',
         office_name: '',
+        office_room: '',
         team_name: '',
         user_age: '',
         token: ''
@@ -36,8 +35,8 @@ export default function SignUp({ modeColor }: any) {
 
     useEffect(() => {
         getCollection_1(100);
-        getCollection_2(200);
-        getCollection_3(300);
+        // getCollection_2(200);
+        // getCollection_3(300);
     }, [])
 
     const getCollection_1 = useCallback(async (type: number) => {
@@ -46,27 +45,7 @@ export default function SignUp({ modeColor }: any) {
         if (result.success) {
             setCollections({
                 ...collections,
-                collection_1: result.match
-            })
-        }
-    }, [dispatch])
-    const getCollection_2 = useCallback(async (type: number) => {
-        let result = await dispatch(collectionRead(type))
-
-        if (result.success) {
-            setCollections({
-                ...collections,
-                collection_2: result.match
-            })
-        }
-    }, [dispatch])
-    const getCollection_3 = useCallback(async (type: number) => {
-        let result = await dispatch(collectionRead(type))
-
-        if (result.success) {
-            setCollections({
-                ...collections,
-                collection_3: result.match
+                collection_1: result.find
             })
         }
     }, [dispatch])
@@ -80,6 +59,17 @@ export default function SignUp({ modeColor }: any) {
         })
 
     };
+    const onChangeSelect = (e: ChangeEvent<HTMLInputElement>): any => {
+        const { name, value } = e.target;
+
+        // if (value === '') {
+        //     console.log("nono")
+        // }
+        setForm({
+            ...form,
+            [name]: value
+        })
+    }
 
     const submit2 = useCallback(() => {
         let result = dispatch(registerSignUp(form))
@@ -88,6 +78,7 @@ export default function SignUp({ modeColor }: any) {
 
     }, [dispatch])
     const submit = () => {
+        console.log(form)
         dispatch(registerSignUp(form))
             .then((res: any) => {
                 console.log(res)
@@ -108,6 +99,7 @@ export default function SignUp({ modeColor }: any) {
             user_phn: '',
             rank_title: '',
             office_name: '',
+            office_room: '',
             team_name: '',
             user_age: '',
             token: ''
@@ -115,11 +107,12 @@ export default function SignUp({ modeColor }: any) {
 
     };
 
-    if (!collections.collection_1 && !collections.collection_2 && !collections.collection_3) return <>loading...</>
+    if (!collections.collection_1) return <>loading...</>
 
     return (
         <Index
             onChange={onChange}
+            onChangeSelect={onChangeSelect}
             form={form}
             submit={submit}
             modeColor={modeColor}
