@@ -4,6 +4,8 @@ const SYSTEM_IU_SIMPLE = 'system/SYSTEM_IU_SIMPLE' as const;
 const SYSTEM_IU_THEMECOLOR = 'system/SYSTEM_IU_THEMECOLOR' as const;
 const SYSTEM_IU_SORT = 'system/SYSTEM_IU_SORT' as const;
 
+const SYSTEM_IU_OTHERSORT = 'system/SYSTEM_IU_OTHERSORT' as const;
+
 const LOADING = 'system/LOADING' as const;
 const ERROR = 'system/ERROR' as const;
 const SUCCESS = 'system/SUCCESS' as const;
@@ -65,15 +67,45 @@ export function systemUpdateThemeColor(): any {
         }
     }
 }
-export function systemUpdateSort(state: string, value: string): any {
+export function systemUpdateSort(state: string): any {
     return async (dispatch: any, getState: any) => {
         dispatch({
             type: LOADING
         })
+        const _getState = getState().systemReducer.sortState;
         try {
             dispatch({
                 type: SYSTEM_IU_SORT,
-                payload: state
+                payload: {
+                    type: state,
+                    value: _getState.value
+                }
+            })
+
+            dispatch({
+                type: SUCCESS
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
+
+export function systemUpdateOtherSort(value: string): any {
+    return async (dispatch: any, getState: any) => {
+        dispatch({
+            type: LOADING
+        })
+
+        const _getState = getState().systemReducer.sortState;
+        try {
+            dispatch({
+                type: SYSTEM_IU_OTHERSORT,
+                payload: {
+                    type: _getState.type,
+                    value: value
+                }
+
             })
 
             dispatch({
@@ -101,7 +133,16 @@ export function systemReducer(state = initState, action: any): any {
             return {
                 ...state,
                 sortState: {
-                    type: action.payload
+                    type: action.payload.type,
+                    value: action.payload.value
+                }
+            }
+        case SYSTEM_IU_OTHERSORT:
+            return {
+                ...state,
+                sortState: {
+                    type: action.payload.type,
+                    value: action.payload.value
                 }
             }
         case LOADING:

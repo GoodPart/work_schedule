@@ -94,6 +94,10 @@ export const InputFormWrapSelect = styled.div<{ cMode: string }>`
         font-size : 16px;
         border-width: 1px;
         border-style: solid;
+
+        &:disabled {
+            color : ${props => props.cMode === 'light' ? "#ddd" : "#555"};
+        }
     }
 `
 
