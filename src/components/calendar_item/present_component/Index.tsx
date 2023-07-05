@@ -52,6 +52,31 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
     };
 
+    const filterCheck = (member: any, systemStroe: any, authStore: any) => {
+        if (systemStroe.sortState.type === 'me' || systemStroe.sortState.type === 'all') {
+            if (systemStroe.sortState.type === 'me') {
+                //나
+                return member.user.user_name === authStore.auth.user_name
+            } else {
+                return true
+            }
+        } else {
+            //other
+            if (getSystemStore.sortState.value.includes('사무소')) {
+                console.log('사무소')
+                return member.user.office_name.trim() === systemStroe.sortState.value.trim()
+            } else {
+                if (getSystemStore.sortState.value.includes('실')) {
+                    console.log('실')
+                    // return return member.user.office_name === systemStroe.sortState.value
+                } else {
+                    console.log('팀')
+                    return member.user.team_name.trim() === systemStroe.sortState.value.trim()
+                }
+            }
+        }
+    }
+
 
     const toggleClose = () => {
         setToggle(false)
@@ -79,7 +104,9 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                                     //정렬 기능 추가 부분
                                     loading ? memberProps.sort((a: any, b: any) => a.data.work_time[0] - b.data.work_time[0]).map((m: any, index2: number) => {
                                         // m.date_at && m.date_at[2] && m.date_at[2] === ele && m.user.team_name === '수정팀'
-                                        if (m.date_at && m.date_at[2] && m.date_at[2] === ele && (getSystemStore.sortState.type === 'me' ? m.user.user_name === getAuthStore.auth.user_name : getSystemStore.sortState.type === 'all' ? true : true)) {
+                                        // if (m.date_at && m.date_at[2] && m.date_at[2] === ele && (getSystemStore.sortState.type === 'me' ? m.user.user_name === getAuthStore.auth.user_name : getSystemStore.sortState.type === 'all' ? true : true)) {
+                                        // 
+                                        if (m.date_at && m.date_at[2] && m.date_at[2] === ele && filterCheck(m, getSystemStore, getAuthStore)) {
                                             return <CardWrap key={m.user._id} id={m.user._id} delay={index2} cMode={modeColor} className={mySelf(m.user.user_name) ? `${simply ? `simple-data` : ""} your-calc` : `${simply && 'simple-data'}`} >
                                                 <div className="wrap">
                                                     <div className="card__section">

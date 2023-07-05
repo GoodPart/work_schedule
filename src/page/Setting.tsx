@@ -7,7 +7,7 @@ import * as InputForm from "../components/styledComponents/InputStyled";
 
 
 import { useDispatch, useSelector } from "react-redux";
-import { systemUpdateSimple, systemUpdateThemeColor, systemUpdateSort } from "../modules/system";
+import { systemUpdateSimple, systemUpdateThemeColor, systemUpdateSort, systemUpdateOtherSort } from "../modules/system";
 import { RootState } from "../modules";
 import { registerSignUp, collectionRead } from "../modules/register";
 
@@ -17,6 +17,7 @@ import { registerSignUp, collectionRead } from "../modules/register";
 export default function Setting() {
     const dispatch = useDispatch();
     const systemData = useSelector((state: RootState) => state.systemReducer);
+    const authStore = useSelector((state: RootState) => state.authCheckReducer.auth);
     let themeColor = systemData.theme_color ? 'dark' : 'light'
     const [form, setForm] = useState({
         simply: systemData.calendar_simple,
@@ -26,7 +27,7 @@ export default function Setting() {
         collection_1: [],
     })
 
-    const [sortOtherState, setSortOtherState] = useState('');
+    const [sortOtherState, setSortOtherState] = useState('other');
 
 
 
@@ -50,14 +51,15 @@ export default function Setting() {
         changetheme()
     };
     const onChangeSort = (e: React.ChangeEvent<HTMLInputElement>): any => {
-        const { id, value } = e.target;
-        // setSortState({
-        //     state: value,
-        //     value: value === 'other' ? true : false
-        // })
-        // console.log(value, sortState.state, value === sortState.state)
-        changeSort(value, sortOtherState)
+        const { id, value, checked } = e.target;
+
+        changeSort(value)
     };
+    const onChangeOtherSelect = (e: React.ChangeEvent<HTMLInputElement>): any => {
+        const { value } = e.target;
+        changeOtherSort(value)
+
+    }
 
     const getCollection_1 = useCallback(async (type: number) => {
         let result = await dispatch(collectionRead(type))
@@ -81,8 +83,11 @@ export default function Setting() {
     const changetheme = useCallback(async () => {
         await dispatch(systemUpdateThemeColor())
     }, [dispatch])
-    const changeSort = useCallback(async (state: string, value: string) => {
-        await dispatch(systemUpdateSort(state, value))
+    const changeSort = useCallback(async (state: string) => {
+        await dispatch(systemUpdateSort(state))
+    }, [dispatch])
+    const changeOtherSort = useCallback(async (state: string) => {
+        await dispatch(systemUpdateOtherSort(state))
     }, [dispatch])
 
 
@@ -129,12 +134,12 @@ export default function Setting() {
                                 <div className="icon-area"><i className="ico ico__all"></i><span>모두</span></div>
                             </div>
                             <div className="content content--2">
-                                <input type="radio" id="me" name="setRadio" value="me" onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "me"} />
+                                <input type="radio" id="me" name="setRadio" value="me" disabled={authStore ? false : true} onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "me"} />
                                 <label htmlFor="me"></label>
                                 <div className="icon-area"><i className="ico ico__solo"></i><span>나</span></div>
                             </div>
                             <div className="content content--3">
-                                <input type="radio" id="other" name="setRadio" value="other" disabled onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "other"} />
+                                <input type="radio" id="other" name="setRadio" value="other" onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "other"} />
                                 <label htmlFor="other"></label>
                                 <div className="icon-area"><i className="ico ico__other"></i><span>기타 설정</span></div>
                             </div>
@@ -143,11 +148,12 @@ export default function Setting() {
                     <div className="content--wrap" style={{ marginTop: 16 }}>
                         <div className="content content--4">
                             <InputForm.InputFormWrapSelect cMode={themeColor}>
-                                <select name='team_name' onChange={(e: any) => setSortOtherState(e.target.value)} disabled={systemData.sortState.type === 'other' ? false : true}>
+                                <select name='team_name' onChange={(e: any) => onChangeOtherSelect(e)} disabled={systemData.sortState.type === 'other' ? false : true}>
+                                    <option value='' >필터를 선택하세요</option>
                                     {
                                         collections.collection_1.map((collection: any, index: number) => {
                                             // if (collection.type === 300) {
-                                            return <option value={collection.name} >{collection.name}</option>
+                                            return <option value={collection.name} selected={systemData.sortState.value === collection.name}>{collection.name}</option>
                                             // }
                                         })
                                     }
