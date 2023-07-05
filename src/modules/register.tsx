@@ -86,7 +86,7 @@ export function collectionRead(number: any): any {
         dispatch({
             type: LOADING
         })
-        let getData = await axios.get(`http://localhost:8888${REGISTE_COLLECTION_READ_URL}`, { withCredentials: true });
+        let getData = await axios.get(`https://myworkday.pe.kr:8888${REGISTE_COLLECTION_READ_URL}`, { withCredentials: true });
         try {
             dispatch({
                 type: SUCCESS,
