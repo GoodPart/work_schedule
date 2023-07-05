@@ -26,10 +26,7 @@ export default function Setting() {
         collection_1: [],
     })
 
-    const [sortState, setSortState] = useState({
-        state: 'all',
-        value: false
-    })
+    const [sortOtherState, setSortOtherState] = useState('');
 
 
 
@@ -53,12 +50,13 @@ export default function Setting() {
         changetheme()
     };
     const onChangeSort = (e: React.ChangeEvent<HTMLInputElement>): any => {
-        const { id } = e.target;
-        setSortState({
-            state: id,
-            value: id === 'other' ? true : false
-        })
-        changeSort(id)
+        const { id, value } = e.target;
+        // setSortState({
+        //     state: value,
+        //     value: value === 'other' ? true : false
+        // })
+        // console.log(value, sortState.state, value === sortState.state)
+        changeSort(value, sortOtherState)
     };
 
     const getCollection_1 = useCallback(async (type: number) => {
@@ -75,7 +73,7 @@ export default function Setting() {
 
     useEffect(() => {
         getCollection_1(100);
-    }, [])
+    }, [systemData.loading, systemData.sortState.state, sortOtherState])
 
     const changeSimply = useCallback(async () => {
         await dispatch(systemUpdateSimple())
@@ -83,9 +81,10 @@ export default function Setting() {
     const changetheme = useCallback(async () => {
         await dispatch(systemUpdateThemeColor())
     }, [dispatch])
-    const changeSort = useCallback(async (state: string,) => {
-        await dispatch(systemUpdateSort(state))
+    const changeSort = useCallback(async (state: string, value: string) => {
+        await dispatch(systemUpdateSort(state, value))
     }, [dispatch])
+
 
     return (
         <InnerWrap cMode={themeColor}>
@@ -121,32 +120,34 @@ export default function Setting() {
 
                 </SettingWrap>
                 <SettingWrapDouble className="double" theme={themeColor}>
+                    <div className="content--title">일정 편집</div>
                     <div className="content--wrap" style={{ display: "flex" }}>
-                        <div className="content content--1">
-                            <i className="ico ico__simpley"></i>
-                            <input type="radio" id="all" name="setting-radio" onChange={(e) => onChangeSort(e)} defaultChecked />
-                            <label htmlFor="1">ALL</label>
-                        </div>
-                        <div className="content content--2">
-                            <i className="ico ico__simpley"></i>
-                            <input type="radio" id="me" name="setting-radio" onChange={(e) => onChangeSort(e)} />
-                            <label htmlFor="2">ME</label>
-                        </div>
-                        <div className="content content--3">
-                            <i className="ico ico__simpley"></i>
-                            <input type="radio" id="other" name="setting-radio" onChange={(e) => onChangeSort(e)} />
-                            <label htmlFor="3">OTHER</label>
-                        </div>
+                        <InputForm.InputFormRowToggle width={'100%'} height={'auto'} cMode={themeColor}>
+                            <div className="content content--1">
+                                <input type="radio" id="all" name="setRadio" value="all" onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "all"} />
+                                <label htmlFor="all"></label>
+                                <div className="icon-area"><i className="ico ico__all"></i><span>모두</span></div>
+                            </div>
+                            <div className="content content--2">
+                                <input type="radio" id="me" name="setRadio" value="me" onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "me"} />
+                                <label htmlFor="me"></label>
+                                <div className="icon-area"><i className="ico ico__solo"></i><span>나</span></div>
+                            </div>
+                            <div className="content content--3">
+                                <input type="radio" id="other" name="setRadio" value="other" disabled onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "other"} />
+                                <label htmlFor="other"></label>
+                                <div className="icon-area"><i className="ico ico__other"></i><span>기타 설정</span></div>
+                            </div>
+                        </InputForm.InputFormRowToggle>
                     </div>
-                    <div className="content--wrap">
+                    <div className="content--wrap" style={{ marginTop: 16 }}>
                         <div className="content content--4">
                             <InputForm.InputFormWrapSelect cMode={themeColor}>
-                                <select name='team_name' onChange={(e: any) => console.log('change')} disabled={!sortState.value}>
-                                    <option value="">팀을 선택하세요.</option>
+                                <select name='team_name' onChange={(e: any) => setSortOtherState(e.target.value)} disabled={systemData.sortState.type === 'other' ? false : true}>
                                     {
                                         collections.collection_1.map((collection: any, index: number) => {
                                             // if (collection.type === 300) {
-                                            return <option value={collection.name}>{collection.name}</option>
+                                            return <option value={collection.name} >{collection.name}</option>
                                             // }
                                         })
                                     }
@@ -191,13 +192,18 @@ const InnerWrap = styled.div<{ cMode: string }>`
         }
     }
 
+    .content--title {
+        font-weight: 700;
+        color: ${props => props.cMode === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
+    }
+
     @media (max-width : 561px) {
         .setting {
-            justify-content: space-evenly;
+            justify-content: space-between;
 
             > div {
-                width: 115px;
-                height : 115px;
+                width: 119px;
+                /* height : 115px; */
 
                 &.double {
                     width: 85%
@@ -247,7 +253,6 @@ const SettingWrap = styled.div<{ theme: string }>`
         width: 48px;
         height: 48px;
         border-radius: 4px;
-        background-image: url('simply-icon.png');
         background-repeat: no-repeat;
         background-size: contain;
         filter :invert( ${props => props.theme === 'light' ? "30%" : "70%"} );
@@ -263,13 +268,14 @@ const SettingWrap = styled.div<{ theme: string }>`
         animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
         animation-fill-mode: forwards;
     }
+    
 
 `
 
 const SettingWrapDouble = styled.div<{ theme: string }>`
     padding : 24px;
     width: 240px;
-    height: 240px;
+    height: auto;
     background-color:${props => props.theme === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg1};
     border-radius: 4px;
 
@@ -282,8 +288,8 @@ const SettingWrapDouble = styled.div<{ theme: string }>`
         margin : 0;
     }
     .content {
-        display: flex;
-        justify-content: space-between;
+        /* display: flex;
+        justify-content: space-between; */
 
         &.content--column {
             flex-direction: column;
@@ -297,6 +303,15 @@ const SettingWrapDouble = styled.div<{ theme: string }>`
         .status {
             font-weight: bold;
 
+        }
+        .icon-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            span {
+               color: ${props => props.theme === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
+            }
         }
 
     }
@@ -320,6 +335,15 @@ const SettingWrapDouble = styled.div<{ theme: string }>`
         animation-duration: 1s;
         animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
         animation-fill-mode: forwards;
+    }
+    .ico__solo {
+        background-image: url('solo.png');
+    }
+    .ico__all {
+        background-image: url('all.png');
+    }
+    .ico__other {
+        background-image: url('other.png');
     }
 
 `

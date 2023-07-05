@@ -65,21 +65,15 @@ export function systemUpdateThemeColor(): any {
         }
     }
 }
-export function systemUpdateSort(state: string): any {
+export function systemUpdateSort(state: string, value: string): any {
     return async (dispatch: any, getState: any) => {
         dispatch({
             type: LOADING
         })
-
-        // let getSort = getState().systemReducer.sortState;
-
-
         try {
             dispatch({
                 type: SYSTEM_IU_SORT,
-                payload: {
-                    state: state,
-                }
+                payload: state
             })
 
             dispatch({
@@ -107,7 +101,7 @@ export function systemReducer(state = initState, action: any): any {
             return {
                 ...state,
                 sortState: {
-                    state: action.payload.state,
+                    type: action.payload
                 }
             }
         case LOADING:

@@ -207,3 +207,65 @@ export const InputFormWrapToggle = styled.div<{ width: number, height: number, c
         
     }
 `
+
+export const InputFormRowToggle = styled.div<{ width: any, height: any, cMode: string }>`
+    position: relative;
+    display: table;
+    width: ${props => props.width};
+    height: ${props => props.height};
+
+
+    >div {
+        position: relative;
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    input[type='radio'] {
+        display: none;
+    }
+    input[type='radio'] + label {
+        /* width  */
+        z-index : 10;
+        position: absolute;
+        top: 0;
+        left:  0;
+        width : 100%;
+        height: 100%;
+        overflow: hidden;
+        /* transition: position .6s ease-in-out; */
+        
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left : 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background-color: #0F9485;
+            border-radius: 12px;
+        }
+    }
+    input[type='radio']:checked +label{
+
+        &:after {
+            animation-name: selectSort;
+            animation-duration: .6s;
+            animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+            animation-fill-mode: forwards;
+        }
+    }
+    input[type='radio']:disabled ~ .icon-area {
+        opacity: .2
+    }
+
+    @keyframes selectSort {
+        0% {
+            width : 0
+        }
+        100% {
+            width : 100%
+        }
+    }
+`
