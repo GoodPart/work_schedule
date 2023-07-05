@@ -55,7 +55,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
 const InnerWrap = styled.div<{ cMode: string }>`
     /* padding-top: 24px; */
     background-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};
-    height: 100%;
+    height: 100% !important;
     h2 {
         margin: 0;
         padding: 12px 0;
