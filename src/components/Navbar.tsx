@@ -74,7 +74,7 @@ export default function NavBar({ modeColor }: any) {
                 <DefaultNav>
                     <NavItem cMode={modeColor}>
                         <Link to='/'>메인</Link>
-
+                        <Link to='/calendar'>일정표</Link>
                         {
                             authData ? <button type="button" style={{ cursor: "pointer", display: "flex", marginLeft: "20px", fontSize: 14, color: "#666", backgroundColor: "transparent", border: "none", padding: 16 }} onClick={() => logout()}  >로그아웃</button> : <Link to='/signin'>로그인</Link>
                         }
@@ -85,7 +85,7 @@ export default function NavBar({ modeColor }: any) {
                         }
 
 
-                        <Link to='/calendar'>일정표</Link>
+
                         <Link to='/setting'>설정</Link>
                     </NavItem>
                 </DefaultNav>
@@ -93,6 +93,8 @@ export default function NavBar({ modeColor }: any) {
                     <div className={toggle ? 'wrap active' : 'wrap'}>
                         <NavItem className="ham-nav__item" cMode={modeColor}>
                             <Link to='/' onClick={() => resetToggle()}>메인</Link>
+                            <Link to='/calendar' onClick={() => resetToggle()}>일정표</Link>
+
 
                             {
                                 authData ? <button type="button" style={{ cursor: "pointer", display: "flex", marginLeft: "20px", fontSize: 14, color: "#666", backgroundColor: "transparent", border: "none", padding: 16 }} onClick={() => logout()}  >로그아웃</button> : <Link to='/signin' onClick={() => resetToggle()}>로그인</Link>
@@ -101,7 +103,6 @@ export default function NavBar({ modeColor }: any) {
                                 authData ? <Link to='/my-page' onClick={() => resetToggle()}>내 정보</Link> : ""
                             }
 
-                            <Link to='/calendar' onClick={() => resetToggle()}>일정표</Link>
 
                             <Link to='/setting' onClick={() => resetToggle()}>설정</Link>
                         </NavItem>

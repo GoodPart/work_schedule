@@ -334,7 +334,7 @@ export default function Calendar({ modeColor }: any) {
                             <label htmlFor={nameValue}>아이디</label>
                         </InputForm.InputFormWrap>
                         <div className="form--wrap">
-                            <InputForm.InputFormWrapSelect>
+                            <InputForm.InputFormWrapSelect cMode={modeColor}>
                                 <select onChange={(e: any) => setWorkState(e.target.value)} key={workState} defaultValue={workState}>
                                     <option value="출근" >출근</option>
                                     <option value="오전 반차" >오전 반차</option>

@@ -13,7 +13,7 @@ export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
         width: 100%;
         padding: 24px 16px 16px 16px;
         /* color : #48484A; */
-        color: ${props => props.cMode === 'light' ? '##fff' : "#48484A"};;
+        color: ${props => props.cMode === 'light' ? '##48484A' : "#fff"};;
         font-size : 16px;
         border-width: 1px;
         border-style: solid;
@@ -21,11 +21,12 @@ export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
         border-radius: 4px;
         font-weight : bold;
         box-sizing: border-box;
-        /* background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1}; */
+        background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
     }
 
     input:read-only {
         /* background-color: #ddd */
+        color: ${props => props.cMode === 'light' ? '#fff' : "#48484A"};;
         background-color: ${props => props.cMode === 'light' ? "#ddd" : "#2f2f33"};
     }
 
@@ -78,7 +79,7 @@ export const InputFormWrap = styled.div<{ check: any, cMode: any }>`
     
 `
 
-export const InputFormWrapSelect = styled.div`
+export const InputFormWrapSelect = styled.div<{ cMode: string }>`
     position: relative;
     width : 100%;
     z-index : 0;
@@ -87,8 +88,9 @@ export const InputFormWrapSelect = styled.div`
         width: calc(100%);
         padding: 8px;
         border-radius: 4px;
-        border-color: #eee;
-        color : #48484A;
+        border-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
+        background-color: ${props => props.cMode === 'light' ? "#fff" : "#2f2f33"};
+        color : ${props => props.cMode === 'light' ? "#2f2f33" : "#ddd"};
         font-size : 16px;
         border-width: 1px;
         border-style: solid;
@@ -203,5 +205,67 @@ export const InputFormWrapToggle = styled.div<{ width: number, height: number, c
             background-color: #0F9485;
         }
         
+    }
+`
+
+export const InputFormRowToggle = styled.div<{ width: any, height: any, cMode: string }>`
+    position: relative;
+    display: table;
+    width: ${props => props.width};
+    height: ${props => props.height};
+
+
+    >div {
+        position: relative;
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    input[type='radio'] {
+        display: none;
+    }
+    input[type='radio'] + label {
+        /* width  */
+        z-index : 10;
+        position: absolute;
+        top: 0;
+        left:  0;
+        width : 100%;
+        height: 100%;
+        overflow: hidden;
+        /* transition: position .6s ease-in-out; */
+        
+        &:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left : 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background-color: #0F9485;
+            border-radius: 12px;
+        }
+    }
+    input[type='radio']:checked +label{
+
+        &:after {
+            animation-name: selectSort;
+            animation-duration: .6s;
+            animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+            animation-fill-mode: forwards;
+        }
+    }
+    input[type='radio']:disabled ~ .icon-area {
+        opacity: .2
+    }
+
+    @keyframes selectSort {
+        0% {
+            width : 0
+        }
+        100% {
+            width : 100%
+        }
     }
 `

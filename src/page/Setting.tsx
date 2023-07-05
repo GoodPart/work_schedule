@@ -7,8 +7,10 @@ import * as InputForm from "../components/styledComponents/InputStyled";
 
 
 import { useDispatch, useSelector } from "react-redux";
-import { systemUpdateSimple, systemUpdateThemeColor } from "../modules/system";
+import { systemUpdateSimple, systemUpdateThemeColor, systemUpdateSort } from "../modules/system";
 import { RootState } from "../modules";
+import { registerSignUp, collectionRead } from "../modules/register";
+
 
 
 
@@ -19,8 +21,12 @@ export default function Setting() {
     const [form, setForm] = useState({
         simply: systemData.calendar_simple,
         themeColor: systemData.theme_color
-
     })
+    const [collections, setCollections] = useState({
+        collection_1: [],
+    })
+
+    const [sortOtherState, setSortOtherState] = useState('');
 
 
 
@@ -43,10 +49,31 @@ export default function Setting() {
         })
         changetheme()
     };
+    const onChangeSort = (e: React.ChangeEvent<HTMLInputElement>): any => {
+        const { id, value } = e.target;
+        // setSortState({
+        //     state: value,
+        //     value: value === 'other' ? true : false
+        // })
+        // console.log(value, sortState.state, value === sortState.state)
+        changeSort(value, sortOtherState)
+    };
+
+    const getCollection_1 = useCallback(async (type: number) => {
+        let result = await dispatch(collectionRead(type))
+
+        if (result.success) {
+            setCollections({
+                ...collections,
+                collection_1: result.find
+            })
+        }
+    }, [dispatch])
+
 
     useEffect(() => {
-        console.log('s')
-    }, [])
+        getCollection_1(100);
+    }, [systemData.loading, systemData.sortState.state, sortOtherState])
 
     const changeSimply = useCallback(async () => {
         await dispatch(systemUpdateSimple())
@@ -54,10 +81,14 @@ export default function Setting() {
     const changetheme = useCallback(async () => {
         await dispatch(systemUpdateThemeColor())
     }, [dispatch])
+    const changeSort = useCallback(async (state: string, value: string) => {
+        await dispatch(systemUpdateSort(state, value))
+    }, [dispatch])
+
 
     return (
         <InnerWrap cMode={themeColor}>
-            <h1>환경설정</h1>
+            <h3>환경설정</h3>
 
             <div className="setting">
                 <SettingWrap theme={themeColor}>
@@ -88,8 +119,44 @@ export default function Setting() {
                     </div>
 
                 </SettingWrap>
-                <SettingWrap theme={themeColor}></SettingWrap>
-                <SettingWrap theme={themeColor} ></SettingWrap>
+                <SettingWrapDouble className="double" theme={themeColor}>
+                    <div className="content--title">일정 편집</div>
+                    <div className="content--wrap" style={{ display: "flex" }}>
+                        <InputForm.InputFormRowToggle width={'100%'} height={'auto'} cMode={themeColor}>
+                            <div className="content content--1">
+                                <input type="radio" id="all" name="setRadio" value="all" onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "all"} />
+                                <label htmlFor="all"></label>
+                                <div className="icon-area"><i className="ico ico__all"></i><span>모두</span></div>
+                            </div>
+                            <div className="content content--2">
+                                <input type="radio" id="me" name="setRadio" value="me" onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "me"} />
+                                <label htmlFor="me"></label>
+                                <div className="icon-area"><i className="ico ico__solo"></i><span>나</span></div>
+                            </div>
+                            <div className="content content--3">
+                                <input type="radio" id="other" name="setRadio" value="other" disabled onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === "other"} />
+                                <label htmlFor="other"></label>
+                                <div className="icon-area"><i className="ico ico__other"></i><span>기타 설정</span></div>
+                            </div>
+                        </InputForm.InputFormRowToggle>
+                    </div>
+                    <div className="content--wrap" style={{ marginTop: 16 }}>
+                        <div className="content content--4">
+                            <InputForm.InputFormWrapSelect cMode={themeColor}>
+                                <select name='team_name' onChange={(e: any) => setSortOtherState(e.target.value)} disabled={systemData.sortState.type === 'other' ? false : true}>
+                                    {
+                                        collections.collection_1.map((collection: any, index: number) => {
+                                            // if (collection.type === 300) {
+                                            return <option value={collection.name} >{collection.name}</option>
+                                            // }
+                                        })
+                                    }
+                                </select>
+                            </InputForm.InputFormWrapSelect>
+
+                        </div>
+                    </div>
+                </SettingWrapDouble>
 
             </div>
 
@@ -125,14 +192,23 @@ const InnerWrap = styled.div<{ cMode: string }>`
         }
     }
 
+    .content--title {
+        font-weight: 700;
+        color: ${props => props.cMode === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
+    }
+
     @media (max-width : 561px) {
         .setting {
-            justify-content: space-evenly;
+            justify-content: space-between;
 
             > div {
-                width: 115px;
-                height : 115px
-            }
+                width: 119px;
+                /* height : 115px; */
+
+                &.double {
+                    width: 85%
+                }
+            };
         }
     }
     
@@ -177,6 +253,73 @@ const SettingWrap = styled.div<{ theme: string }>`
         width: 48px;
         height: 48px;
         border-radius: 4px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        filter :invert( ${props => props.theme === 'light' ? "30%" : "70%"} );
+        
+    }
+    .ico__simpley {
+        background-image: url('simply-icon.png');
+    }
+    .ico__theme:not(.ico__simpley) {
+        background-image:  url(${props => props.theme === 'light' ? 'sun.png' : 'moon.png'});
+        animation-name: iconShowRotate;
+        animation-duration: 1s;
+        animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+        animation-fill-mode: forwards;
+    }
+    
+
+`
+
+const SettingWrapDouble = styled.div<{ theme: string }>`
+    padding : 24px;
+    width: 240px;
+    height: auto;
+    background-color:${props => props.theme === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg1};
+    border-radius: 4px;
+
+    h3 {
+        padding: 0;
+    }
+
+    p {
+        padding: 0;
+        margin : 0;
+    }
+    .content {
+        /* display: flex;
+        justify-content: space-between; */
+
+        &.content--column {
+            flex-direction: column;
+        }
+
+        .title {
+            margin : 20px 0 4px;
+            color : ${props => props.theme === 'light' ? initColorValue.light.setting.title : initColorValue.dark.setting.title};
+            font-size : 12px
+        }
+        .status {
+            font-weight: bold;
+
+        }
+        .icon-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            span {
+               color: ${props => props.theme === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
+            }
+        }
+
+    }
+    .ico {
+        display: block;
+        width: 48px;
+        height: 48px;
+        border-radius: 4px;
         background-image: url('simply-icon.png');
         background-repeat: no-repeat;
         background-size: contain;
@@ -193,6 +336,14 @@ const SettingWrap = styled.div<{ theme: string }>`
         animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
         animation-fill-mode: forwards;
     }
+    .ico__solo {
+        background-image: url('solo.png');
+    }
+    .ico__all {
+        background-image: url('all.png');
+    }
+    .ico__other {
+        background-image: url('other.png');
+    }
 
-  
 `

@@ -26,6 +26,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
     const getMapArray = Array.from({ length: mapLength }, (value, index) => index + 1);
 
     const getSystemStore = useSelector((state: RootState) => state.systemReducer)
+    const getAuthStore = useSelector((state: RootState) => state.authCheckReducer)
 
 
     const offDay = (state: string, work_time: any) => {
@@ -57,7 +58,7 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
     }
     useEffect(() => {
         setSimply(getSystemStore.calendar_simple)
-    }, [toggle])
+    }, [toggle, getSystemStore, getAuthStore])
 
 
     return (
@@ -75,9 +76,10 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
 
                             <div className="calc-desc" >
                                 {
-
+                                    //정렬 기능 추가 부분
                                     loading ? memberProps.sort((a: any, b: any) => a.data.work_time[0] - b.data.work_time[0]).map((m: any, index2: number) => {
-                                        if (m.date_at && m.date_at[2] && m.date_at[2] === ele) {
+                                        // m.date_at && m.date_at[2] && m.date_at[2] === ele && m.user.team_name === '수정팀'
+                                        if (m.date_at && m.date_at[2] && m.date_at[2] === ele && (getSystemStore.sortState.type === 'me' ? m.user.user_name === getAuthStore.auth.user_name : getSystemStore.sortState.type === 'all' ? true : true)) {
                                             return <CardWrap key={m.user._id} id={m.user._id} delay={index2} cMode={modeColor} className={mySelf(m.user.user_name) ? `${simply ? `simple-data` : ""} your-calc` : `${simply && 'simple-data'}`} >
                                                 <div className="wrap">
                                                     <div className="card__section">
@@ -197,7 +199,7 @@ const ItemWrap = styled.div<{ cMode: string }>`
         position: relative;
         display: flex;
         justify-content: space-between;
-        padding: 2px 0;
+        padding: 8px 0;
         border-radius: 4px;
         /* margin: 4px 0; */
 
@@ -215,6 +217,7 @@ const ItemWrap = styled.div<{ cMode: string }>`
         display: flex;
         flex-wrap: wrap;
         width : calc(100% - 68px);
+        padding: 2px 0;
         background-color: ${props => props.cMode === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg};;
     }
 
@@ -225,7 +228,7 @@ const ItemWrap = styled.div<{ cMode: string }>`
             font-family: 'NotoSansKR_Bold';
         }
         span:first-child {
-            font-size : 36px;
+            font-size : 24px;
 
         }
     }
@@ -282,8 +285,8 @@ const ItemWrap = styled.div<{ cMode: string }>`
 const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     position: relative;
     opacity :0;
-    margin: 6px 4px;
-    padding: 8px;
+    margin: 2px 4px;
+    padding: 4px;
     display: flex;
     justify-content: space-between;
     max-width: 320px;
@@ -501,7 +504,7 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
         
     }
     .card__section .content .info  {
-        margin-top :8px;
+        margin-top :1px;
         letter-spacing : -0.05em;
         color: ${props => props.cMode === 'light' ? '##48484A' : "#ccc"};
 

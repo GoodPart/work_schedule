@@ -1,11 +1,11 @@
-import React, { useState, ChangeEvent, useCallback } from 'react';
+import React, { useState, ChangeEvent, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Index from "../present_component/Index";
 
 
 //redux
 import { useDispatch, useSelector } from 'react-redux';
-import { registerSignUp } from "../../../modules/register";
+import { registerSignUp, collectionRead } from "../../../modules/register";
 
 import swal from 'sweetalert';
 
@@ -15,8 +15,10 @@ export default function SignUp({ modeColor }: any) {
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
-    // const [userId, setUserId] = useState('');
-    // const [userPw, setUserPw] = useState('');
+    const [collections, setCollections] = useState({
+        collection_1: [],
+    })
+
     const [form, setForm] = useState({
         user_name: '',
         user_id: '',
@@ -25,10 +27,29 @@ export default function SignUp({ modeColor }: any) {
         user_phn: '',
         rank_title: '',
         office_name: '',
+        office_room: '',
         team_name: '',
         user_age: '',
         token: ''
     })
+
+    useEffect(() => {
+        getCollection_1(100);
+        // getCollection_2(200);
+        // getCollection_3(300);
+    }, [])
+
+    const getCollection_1 = useCallback(async (type: number) => {
+        let result = await dispatch(collectionRead(type))
+
+        if (result.success) {
+            setCollections({
+                ...collections,
+                collection_1: result.find
+            })
+        }
+    }, [dispatch])
+
 
     const onChange = (e: ChangeEvent<HTMLInputElement>): any => {
         const { name, value } = e.target;
@@ -38,6 +59,17 @@ export default function SignUp({ modeColor }: any) {
         })
 
     };
+    const onChangeSelect = (e: ChangeEvent<HTMLInputElement>): any => {
+        const { name, value } = e.target;
+
+        // if (value === '') {
+        //     console.log("nono")
+        // }
+        setForm({
+            ...form,
+            [name]: value
+        })
+    }
 
     const submit2 = useCallback(() => {
         let result = dispatch(registerSignUp(form))
@@ -46,6 +78,7 @@ export default function SignUp({ modeColor }: any) {
 
     }, [dispatch])
     const submit = () => {
+        console.log(form)
         dispatch(registerSignUp(form))
             .then((res: any) => {
                 console.log(res)
@@ -66,6 +99,7 @@ export default function SignUp({ modeColor }: any) {
             user_phn: '',
             rank_title: '',
             office_name: '',
+            office_room: '',
             team_name: '',
             user_age: '',
             token: ''
@@ -73,12 +107,16 @@ export default function SignUp({ modeColor }: any) {
 
     };
 
+    if (!collections.collection_1) return <>loading...</>
+
     return (
         <Index
             onChange={onChange}
+            onChangeSelect={onChangeSelect}
             form={form}
             submit={submit}
             modeColor={modeColor}
+            collections={collections}
         />
     )
 }
