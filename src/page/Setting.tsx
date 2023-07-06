@@ -15,6 +15,7 @@ import { registerSignUp, collectionRead } from "../modules/register";
 
 
 export default function Setting() {
+    const selectRef = useRef();
     const dispatch = useDispatch();
     const systemData = useSelector((state: RootState) => state.systemReducer);
     const authStore = useSelector((state: RootState) => state.authCheckReducer.auth);
@@ -61,8 +62,8 @@ export default function Setting() {
 
     }
 
-    const getCollection_1 = useCallback(async (type: number) => {
-        let result = await dispatch(collectionRead(type))
+    const getCollection_1 = useCallback(async () => {
+        let result = await dispatch(collectionRead())
 
         if (result.success) {
             setCollections({
@@ -74,7 +75,7 @@ export default function Setting() {
 
 
     useEffect(() => {
-        getCollection_1(100);
+        getCollection_1();
     }, [systemData.loading, systemData.sortState.state, sortOtherState])
 
     const changeSimply = useCallback(async () => {

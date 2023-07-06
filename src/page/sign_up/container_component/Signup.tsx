@@ -34,13 +34,11 @@ export default function SignUp({ modeColor }: any) {
     })
 
     useEffect(() => {
-        getCollection_1(100);
-        // getCollection_2(200);
-        // getCollection_3(300);
+        getCollection_1();
     }, [])
 
-    const getCollection_1 = useCallback(async (type: number) => {
-        let result = await dispatch(collectionRead(type))
+    const getCollection_1 = useCallback(async () => {
+        let result = await dispatch(collectionRead())
 
         if (result.success) {
             setCollections({
@@ -61,10 +59,6 @@ export default function SignUp({ modeColor }: any) {
     };
     const onChangeSelect = (e: ChangeEvent<HTMLInputElement>): any => {
         const { name, value } = e.target;
-
-        // if (value === '') {
-        //     console.log("nono")
-        // }
         setForm({
             ...form,
             [name]: value
@@ -78,7 +72,6 @@ export default function SignUp({ modeColor }: any) {
 
     }, [dispatch])
     const submit = () => {
-        console.log(form)
         dispatch(registerSignUp(form))
             .then((res: any) => {
                 console.log(res)

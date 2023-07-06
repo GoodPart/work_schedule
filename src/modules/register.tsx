@@ -81,18 +81,17 @@ export function registerSignUp(form: any): any {
     }
 }
 
-export function collectionRead(number: any): any {
+export function collectionRead(): any {
     return async (dispatch: any) => {
         dispatch({
             type: LOADING
         })
-        let getData = await axios.get(`https://myworkday.pe.kr:8888${REGISTE_COLLECTION_READ_URL}`, { withCredentials: true });
+        const getData = await axios.get(`https://myworkday.pe.kr:8888${REGISTE_COLLECTION_READ_URL}`, { withCredentials: true });
         try {
             dispatch({
                 type: SUCCESS,
                 payload: getData.data
             })
-            // console.log(getData)
             return getData.data
 
         } catch (err) {

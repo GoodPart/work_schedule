@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import Main from '../page/Main';
 import SignIn from '../page/sign_in/container_component/SignIn';
 import SignUp from '../page/sign_up/container_component/Signup';
-import MyPage from '../page/MyPage';
+import MyPage from '../page/mypage/container_component/MyPage';
 import Setting from '../page/Setting';
 
 import Calendar from '../page/Calendar';
