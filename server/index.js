@@ -315,26 +315,26 @@ app.post('/api/calendar/updatebyid', auth, async (req, res) => {
 })
 
 // 콜렉션 조회 타입별
-app.get('/api/collection/read/:type', (req, res) => {
-    const getData = req.params.type;
-    Collection.find({
-        type: getData
-    }).then((match, err) => {
-        console.log(match)
-        if (err) req.json({
-            success: false,
-            err
-        })
-        return res.status(200).json({
-            success: true,
-            match
-        })
-    })
-})
+// app.get('/api/collection/read/:type', (req, res) => {
+//     const getData = req.params.type;
+//     Collection.find({
+//         type: getData
+//     }).then((match, err) => {
+//         console.log(match)
+//         if (err) req.json({
+//             success: false,
+//             err
+//         })
+//         return res.status(200).json({
+//             success: true,
+//             match
+//         })
+//     })
+// })
 // 모든 콜렉션 조회
 app.get('/api/collection/read', (req, res) => {
     Collection.find({}).then((find, err) => {
-        if (err) req.json({
+        if (err) return req.json({
             success: false,
             err
         })

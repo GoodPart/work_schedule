@@ -25,7 +25,6 @@ export default function Index({ onChange, onChangeSelect, form, submit, modeColo
 
         }
     }
-    // console.log(collections)
     return (
 
         <InnerWrap cMode={modeColor}>

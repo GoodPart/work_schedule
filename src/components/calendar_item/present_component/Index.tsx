@@ -70,8 +70,12 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
                     console.log('실')
                     // return return member.user.office_name === systemStroe.sortState.value
                 } else {
-                    console.log('팀')
-                    return member.user.team_name.trim() === systemStroe.sortState.value.trim()
+                    if (getSystemStore.sortState.value.includes('팀')) {
+                        console.log('팀')
+                        return member.user.team_name.trim() === systemStroe.sortState.value.trim()
+                    } else {
+                        return true
+                    }
                 }
             }
         }
