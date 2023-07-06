@@ -25,7 +25,7 @@ const ToastWrap = styled.div<{ options: any, cMode: string }>`
     width: ${props => props.options.width} ;
     height : ${props => props.options.height};
     border-radius: 16px;
-    transition: bottom 1s .1s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: bottom .4s .1s cubic-bezier(0.16, 1, 0.3, 1);
     /* border: ${props => props.options.theme === 'glass' ? '1px solid #ddd' : ''}; */
     backdrop-filter: ${props => props.options.theme === 'glass' ? 'saturate(180%) blur(5px)' : ''};
     -webkit-backdrop-filter: ${props => props.options.theme === 'glass' ? 'saturate(180%) blur(5px)' : ''};
