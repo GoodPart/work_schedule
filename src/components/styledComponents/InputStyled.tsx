@@ -86,7 +86,7 @@ export const InputFormWrapSelect = styled.div<{ cMode: string }>`
 
     select {
         width: calc(100%);
-        padding: 8px;
+        padding: 19px;
         border-radius: 4px;
         border-color:${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
         background-color: ${props => props.cMode === 'light' ? "#fff" : "#2f2f33"};
