@@ -133,18 +133,18 @@ const InnerWrap = styled.div<{ cMode: string }>`
     height: 100%;
     
         
-        h2 {
+    h2 {
         margin: 0;
         padding: 12px 0;
         color: ${props => props.cMode === 'light' ? '##48484A' : initColorValue.dark.textWhite};;
     }
         
-        .device__wrap {
+    .device__wrap {
         margin: 0 auto;
         width: 560px;
         height: 100%;
     }
-        .device__wrap.header {
+    .device__wrap .header {
         display: flex;
         justify-content: space-between;
     }

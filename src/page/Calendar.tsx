@@ -416,7 +416,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
         padding: 16px 24px;
         width : calc(100% - 48px);
         min-width: 350px;
-        transition: bottom 1s .1s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: bottom .4s .1s cubic-bezier(0.16, 1, 0.3, 1);
         
         backdrop-filter: saturate(180%) blur(5px);
         -webkit-backdrop-filter: saturate(180%) blur(5px);
