@@ -220,9 +220,9 @@ export default function Calendar({ modeColor }: any) {
                 <ButtonForm.SubmitBtn style={{ position: 'absolute', bottom: '10px', right: '20px', width: '20%' }} onClick={() => setToastState({ state: false, id: 0 })}>등록</ButtonForm.SubmitBtn>
 
             </Toast>
-            <div style={{ zIndex: 100, position: "fixed", bottom: ctlToggle ? '194px' : '36px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff', transition: 'bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1) ' }}>
+            <div className="add-calendar" style={{ bottom: ctlToggle ? '194px' : '36px', border: `2px solid ${initColorValue.point1}`, backgroundColor: initColorValue.point1 }}>
                 <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
-                <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /></label>
+                <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="일정추가" /></label>
             </div>
             <div className={ctlToggle ? 'ctl-wrap' : 'ctl-wrap hide'} >
 
@@ -381,6 +381,22 @@ export default function Calendar({ modeColor }: any) {
 const SettingWrap = styled.div<{ cMode: string }>`
     background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
     width: calc(100% - 24px);
+
+    .add-calendar {
+        z-index: 100;
+        position: fixed;
+        right: 40px;
+        display: flex;
+        padding: 12px;
+        border-radius: 100px;
+        transition: bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0px 4px 6px 1px rgba(0,0,0,0.38);
+        
+        img {
+        width: 20px;
+          filter : invert(100)
+        }
+    }
 
     .setting {
         display: flex;

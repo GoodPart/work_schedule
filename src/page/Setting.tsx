@@ -11,6 +11,8 @@ import { systemUpdateSimple, systemUpdateThemeColor, systemUpdateSort, systemUpd
 import { RootState } from "../modules";
 import { registerSignUp, collectionRead } from "../modules/register";
 
+import ExportCsv from "./ExportCsv";
+
 
 
 
@@ -164,6 +166,10 @@ export default function Setting() {
                         </div>
                     </div>
                 </SettingWrapDouble>
+                <SettingWrap>
+                    <div className="content--title">엑셀 파일 내보내기</div>
+                    <ExportCsv />
+                </SettingWrap>
 
             </div>
 
