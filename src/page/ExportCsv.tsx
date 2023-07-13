@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import writeXlsxFile from "write-excel-file";
 import axios from "axios";
+import e from 'cors';
 
 
 
@@ -8,30 +9,17 @@ import axios from "axios";
 
 
 export default function App() {
-    const [allUser, setAllUser] = useState(null);
+    let rows_wrap: any[] = [];
+    const [exportState, setExrpotState] = useState(new Date().getMonth() + 1);
 
-
-
-
-    const readUsers = async () => {
-        let getData = await axios.post('http://localhost:9999/api/calendar/read', { month: 7 }, { withCredentials: true })
+    const readUsers = async (exState: number) => {
+        let getData = await axios.post('http://localhost:9999/api/calendar/read', { month: exState }, { withCredentials: true })
         let getUser = await axios.get('http://localhost:9999/api/users/read', { withCredentials: true });
 
-        let header_row = [
-            {
-                value: 'date',
-            }
-        ];
-        let data_row_1 = [
-            {
-                type: Number,
-                value: ''
-            }
-        ]
 
         const getMonthDays = {
-            first_day: new Date(2023, 7, 1).getDate(),
-            last_day: new Date(2023, 7, 0).getDate()
+            first_day: new Date(2023, exState, 1).getDate(),
+            last_day: new Date(2023, exState, 0).getDate()
         }
         const getMapArray = Array.from({ length: getMonthDays.last_day }, (value, index) => index + 1);
 
@@ -48,59 +36,129 @@ export default function App() {
         //     return 0;
         // });
 
-
-        // console.log(schema, objects)
-
-        getMapArray.map((ele: any, index: number) => {
-
-            // console.log(getUser.data.result[index])
-            header_row = [...header_row, {
-                value: getUser.data.result[index] ? getUser.data.result[index].user_name : '',
-            }];
-            data_row_1 = [...data_row_1, {
-                type: Number,
-                value: getData.data.result[index] && getData.data.result[index].date_at[2] === ele ? '여기' : ''
-            }]
-
-            console.log(getData.data.result[index] && getData.data.result[index].date_at[2], ele)
+        const mkDataRow = (dayLength: any, calendarData: any, usersData: any) => {
+            const scheduleData = calendarData.data.result;
 
 
-        })
-
-        let data = [
-            header_row, data_row_1
-        ]
-
-        // 컬럼당 추가 하는 함수
+            function schduleChec(user: any, day: number) {
+                const userName = user.user_name;
+                let result = '';
+                result = scheduleData.map((sch: any) => {
+                    if (userName === sch.user.user_name && day - 1 === sch.date_at[2]) {
+                        return sch.data.state
+                    } else {
+                    }
+                }).filter((x: any) => x !== undefined ? '-' : x)
+                return result[0]
+            }
 
 
 
+            //월의 일 갯수 만큼 31
+            dayLength.map((day: number) => {
+                let data_rows = [{}];
+
+                // 인원수 만큼 loop - 8
+                usersData.data.result.map((user: any, index2: number) => {
+                    //첫번째 행에는 무조건 날짜
+                    if (index2 % usersData.data.result.length === 0) {
+                        data_rows = [{
+                            value: new Date(2023, exState - 1, day + 1),
+                            format: 'yyyy년mm월dd일',
+                            align: 'center',
+                            rightBorderStyle: "thick",
+                            leftBorderStyle: "thick",
+                            bottomBorderStyle: "thick",
+                            bottomBorderColor: "#aaaaaa",
+                            rightBorderColor: "#aaaaaa",
+                            leftBorderColor: "#aaaaaa"
+                        }]
+                    } else {
+                        //나머지 각 인원의 출근 시간 영역
+                        data_rows = [...data_rows, {
+                            value: schduleChec(user, day + 1),
+                            align: 'center',
+                            rightBorderStyle: "thick",
+                            leftBorderStyle: "thick",
+                            bottomBorderStyle: "thick",
+                            bottomBorderColor: "#aaaaaa",
+                            rightBorderColor: "#aaaaaa",
+                            leftBorderColor: "#aaaaaa"
+                        }]
+
+                    }
+                })
+                rows_wrap.push(data_rows)
+            })
 
 
-        //csv 파일 작성
-        // writeXlsxFile(data, {
-        //     fileName: 'test.xlsx'
-        // })
+            //해더 추가
+            let header_row: any[] = [];
+            usersData.data.result.map((user: any, index2: number) => {
+                if (index2 === 0) {
+                    //Date
+                    header_row = [{
+                        value: 'Date',
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                        backgroundColor: "#DADADA",
+                        align: 'center',
+                        rightBorderStyle: "thick",
+                        leftBorderStyle: "thick",
+                        bottomBorderStyle: "thick",
+                        bottomBorderColor: "#aaaaaa",
+                        rightBorderColor: "#aaaaaa",
+                        leftBorderColor: "#aaaaaa"
+                    }]
+                } else {
+                    if (index2 < usersData.data.result.length) {
+                        header_row = [...header_row, {
+                            value: user.user_name,
+                            fontWeight: 'bold',
+                            fontSize: 14,
+                            backgroundColor: "#DADADA",
+                            align: 'center',
+                            rightBorderStyle: "thick",
+                            leftBorderStyle: "thick",
+                            bottomBorderStyle: "thick",
+                            bottomBorderColor: "#aaaaaa",
+                            rightBorderColor: "#aaaaaa",
+                            leftBorderColor: "#aaaaaa"
+                        }]
+                    }
+                }
+            })
 
+            rows_wrap.unshift(header_row);
+        }
 
-
+        mkDataRow(getMapArray, getData, getUser)
     }
 
 
 
-    const exportSheet = () => {
+    const exportSheet = (exState: number) => {
 
-        readUsers();
+        readUsers(exState);
+        const columns = [
+            { width: 18 },
+        ]
 
-        // writeXlsxFile(objects, {
-        //     schema,
-        //     fileName: "file.xlsx"
-        // });
+        setTimeout(() => {
+            writeXlsxFile(rows_wrap, {
+                sheet: `${exState}월`,
+                columns,
+                fileName: `${exState}월_가산_사무실_출결표.xlsx`
+            })
+        }, 1000)
+
+
 
     };
     return (
         <div className="App">
-            <button onClick={exportSheet}>Click to export</button>
+            <input type="text" value={exportState} onChange={(e: any) => setExrpotState(e.target.value)} />
+            <button onClick={() => exportSheet(exportState)}>Click to export</button>
         </div>
     );
 }

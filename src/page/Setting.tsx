@@ -166,7 +166,7 @@ export default function Setting() {
                         </div>
                     </div>
                 </SettingWrapDouble>
-                <SettingWrap>
+                <SettingWrap theme={themeColor}>
                     <div className="content--title">엑셀 파일 내보내기</div>
                     <ExportCsv />
                 </SettingWrap>
