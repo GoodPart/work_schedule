@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import writeXlsxFile from "write-excel-file";
 import axios from "axios";
-import e from 'cors';
+import * as ButtonForm from "../components/styledComponents/ButtonStyled";
+import { initColorValue } from '../components/styledComponents/CommonValue';
 
-
-
-
-
-
-export default function App() {
+export default function ExportCsv({ exportState, auth }: any) {
     let rows_wrap: any[] = [];
-    const [exportState, setExrpotState] = useState(new Date().getMonth() + 1);
 
     const readUsers = async (exState: number) => {
         let getData = await axios.post('http://localhost:9999/api/calendar/read', { month: exState }, { withCredentials: true })
@@ -45,7 +40,12 @@ export default function App() {
                 let result = '';
                 result = scheduleData.map((sch: any) => {
                     if (userName === sch.user.user_name && day - 1 === sch.date_at[2]) {
-                        return sch.data.state
+                        let h = Number(sch.data.work_time[0]);
+                        let m = Number(sch.data.work_time[1]);
+                        let newH = h > 10 ? '0' + h : h;
+                        let newM = m == 0 ? '0' + m : m;
+                        console.log(typeof h)
+                        return sch.data.state == '출근' ? `${newH}:${newM}` : sch.data.state == '오전 반차' ? `14:00` : sch.data.state == '오후 반차' ? `${newH}:${newM}` : sch.data.state == '월차' ? sch.data.state : sch.data.state == '외근' ? sch.data.state : ''
                     } else {
                     }
                 }).filter((x: any) => x !== undefined ? '-' : x)
@@ -156,9 +156,8 @@ export default function App() {
 
     };
     return (
-        <div className="App">
-            <input type="text" value={exportState} onChange={(e: any) => setExrpotState(e.target.value)} />
-            <button onClick={() => exportSheet(exportState)}>Click to export</button>
+        <div className="ExportCsv">
+            <ButtonForm.defaultBtn style={{ width: "100%", padding: 8, backgroundColor: initColorValue.point1, borderColor: "transparent", verticalAlign: "middle" }} disabled={auth ? false : true} onClick={() => exportSheet(exportState)}>제출</ButtonForm.defaultBtn>
         </div>
     );
 }

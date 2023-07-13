@@ -21,6 +21,9 @@ export default function Setting() {
     const dispatch = useDispatch();
     const systemData = useSelector((state: RootState) => state.systemReducer);
     const authStore = useSelector((state: RootState) => state.authCheckReducer.auth);
+
+    const [exportState, setExrpotState] = useState(new Date().getMonth() + 1);
+
     let themeColor = systemData.theme_color ? 'dark' : 'light'
     const [form, setForm] = useState({
         simply: systemData.calendar_simple,
@@ -34,6 +37,9 @@ export default function Setting() {
 
 
 
+    const onChangeMonth = (e: any) => {
+        setExrpotState(e.target.value)
+    }
 
     const onChangeSimple = (e: React.ChangeEvent<HTMLInputElement>): any => {
         const { name, checked } = e.target;
@@ -167,8 +173,14 @@ export default function Setting() {
                     </div>
                 </SettingWrapDouble>
                 <SettingWrap theme={themeColor}>
-                    <div className="content--title">엑셀 파일 내보내기</div>
-                    <ExportCsv />
+                    <div className="content--title">내보내기</div>
+                    <div className="content" style={{ alignItems: "center" }}>
+                        <i className="ico ico__csv"></i>
+                        <div>
+                            <input type="text" style={{ width: 12, textAlign: "center", border: "none", backgroundColor: themeColor === 'light' ? initColorValue.light.glass : initColorValue.dark.bg1, color: themeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite, fontSize: "16px" }} value={exportState} onChange={(e: any) => onChangeMonth(e)} /><label style={{ color: themeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite }}>월</label>
+                        </div>
+                    </div>
+                    <ExportCsv exportState={exportState} auth={authStore} />
                 </SettingWrap>
 
             </div>
@@ -280,6 +292,10 @@ const SettingWrap = styled.div<{ theme: string }>`
         animation-duration: 1s;
         animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
         animation-fill-mode: forwards;
+    }
+
+    .ico__csv {
+         background-image: url('csv.png');
     }
     
 
