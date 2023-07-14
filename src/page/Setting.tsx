@@ -177,7 +177,7 @@ export default function Setting() {
                     <div className="content" style={{ alignItems: "center" }}>
                         <i className="ico ico__csv"></i>
                         <div>
-                            <input type="text" style={{ width: 12, textAlign: "center", border: "none", backgroundColor: themeColor === 'light' ? initColorValue.light.glass : initColorValue.dark.bg1, color: themeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite, fontSize: "16px" }} value={exportState} onChange={(e: any) => onChangeMonth(e)} /><label style={{ color: themeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite }}>월</label>
+                            <input type="text" style={{ width: 12, textAlign: "center", border: `1px solid ${themeColor === 'light' ? initColorValue.light.border : initColorValue.dark.bg}`, backgroundColor: themeColor === 'light' ? initColorValue.light.glass : initColorValue.dark.bg1, color: themeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite, fontSize: "16px" }} value={exportState} onChange={(e: any) => onChangeMonth(e)} /><label style={{ color: themeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite, marginLeft: "4px" }}>월</label>
                         </div>
                     </div>
                     <ExportCsv exportState={exportState} auth={authStore} />

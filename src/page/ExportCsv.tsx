@@ -44,7 +44,6 @@ export default function ExportCsv({ exportState, auth }: any) {
                         let m = Number(sch.data.work_time[1]);
                         let newH = h > 10 ? '0' + h : h;
                         let newM = m == 0 ? '0' + m : m;
-                        console.log(typeof h)
                         return sch.data.state == '출근' ? `${newH}:${newM}` : sch.data.state == '오전 반차' ? `14:00` : sch.data.state == '오후 반차' ? `${newH}:${newM}` : sch.data.state == '월차' ? sch.data.state : sch.data.state == '외근' ? sch.data.state : ''
                     } else {
                     }
@@ -157,7 +156,7 @@ export default function ExportCsv({ exportState, auth }: any) {
     };
     return (
         <div className="ExportCsv">
-            <ButtonForm.defaultBtn style={{ width: "100%", padding: 8, backgroundColor: initColorValue.point1, borderColor: "transparent", verticalAlign: "middle" }} disabled={auth ? false : true} onClick={() => exportSheet(exportState)}>제출</ButtonForm.defaultBtn>
+            <ButtonForm.defaultBtn style={{ width: "100%", padding: 8, backgroundColor: initColorValue.point1, borderColor: "transparent", verticalAlign: "middle" }} disabled={auth ? false : true} onClick={() => exportSheet(exportState)}>다운로드</ButtonForm.defaultBtn>
         </div>
     );
 }

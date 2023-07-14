@@ -246,7 +246,18 @@ const ItemWrap = styled.div<{ cMode: string }>`
         flex-wrap: wrap;
         width : calc(100% - 68px);
         padding: 2px 0;
-        background-color: ${props => props.cMode === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg};;
+        background-color: ${props => props.cMode === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg};
+
+
+        > div:hover{
+            .wrap {
+                width: 70%;
+            }
+            .card__section,
+            .card__section .card__section .content{
+                width: auto !important;
+            }
+        }
     }
 
     .day-desc {
@@ -281,6 +292,7 @@ const ItemWrap = styled.div<{ cMode: string }>`
         transform: translateX(-50%);
         width: calc(100% - 64px);
         padding: 32px;
+        width: 40%;
         border: 1px solid #ddd;
         border-radius: 12px;
         cursor : default;
@@ -308,6 +320,8 @@ const ItemWrap = styled.div<{ cMode: string }>`
             }
         }
     }
+
+    
 `
 
 const CardWrap = styled.div<{ delay: Number, cMode: string }>`
@@ -380,16 +394,6 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     .wrap {
         position: relative;
 
-        /* &:after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right : 0;
-            transform: translateY(-50%);
-            width : 1px;
-            height: 80%;
-            background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg};;
-        } */
 
         @media (max-width:741px){
             width : 100% !important;
@@ -400,6 +404,7 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
         display: flex;
         width : 100%
     }
+    
 
 
     .card__section {

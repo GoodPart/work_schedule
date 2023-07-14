@@ -231,6 +231,7 @@ app.post('/api/calendar/read', async (req, res) => {
         data_month: getData.month
     }).then((result, err) => {
 
+        console.log('search')
         if (err) return res.json({
             success: false,
             message: err
