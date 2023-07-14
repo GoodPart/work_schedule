@@ -112,7 +112,6 @@ export default function Index({ modeColor, modify, modifyToggle, newForm, onChan
                         <option value="">팀을 선택하세요.</option>
                         {
                             collections.collection_1.map((collection: any, index: number) => {
-                                console.log(newForm.team_name, collection.name)
                                 if (collection.type === 300) {
                                     return <option value={collection.name} selected={collection.name === newForm.team_name.replace(/(\s*)/g, "")}>{collection.name}</option>
                                 }
