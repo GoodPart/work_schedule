@@ -26,7 +26,7 @@ export default function Index({ handleChangeId, handleChangePw, submit, dataProp
                 <h2>로그인</h2>
                 <form action="submit" onSubmit={submit}>
                     <InputForm.InputFormWrap check={dataProps.userId} cMode={modeColor} >
-                        <input type="text" style={{ backgroundColor: "transparent" }} id='userId' name='userId'
+                        <input type="text" autoFocus style={{ backgroundColor: "transparent" }} id='userId' name='userId'
                             onChange={handleChangeId}
                             value={dataProps.userId}
                             onKeyUp={(e) => enterKeyUp(e)}

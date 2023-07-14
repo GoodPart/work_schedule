@@ -65,7 +65,10 @@ export default function Calendar({ modeColor }: any) {
     }, {
         withCredentials: true
     }).then((res => {
+        console.log('start')
+
         if (res.data.success) {
+            console.log('getData')
             setMember(res.data.result)
         }
     }))
@@ -220,16 +223,16 @@ export default function Calendar({ modeColor }: any) {
                 <ButtonForm.SubmitBtn style={{ position: 'absolute', bottom: '10px', right: '20px', width: '20%' }} onClick={() => setToastState({ state: false, id: 0 })}>등록</ButtonForm.SubmitBtn>
 
             </Toast>
-            <div style={{ zIndex: 100, position: "fixed", bottom: ctlToggle ? '194px' : '36px', right: 40, display: "flex", padding: 4, border: `2px solid ${initColorValue.point1}`, borderRadius: 100, backgroundColor: '#fff', transition: 'bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1) ' }}>
+            <div className="add-calendar" style={{ bottom: ctlToggle ? '194px' : '36px', border: `2px solid ${initColorValue.point1}`, backgroundColor: initColorValue.point1 }}>
                 <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
-                <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="" /></label>
+                <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="일정추가" /></label>
             </div>
             <div className={ctlToggle ? 'ctl-wrap' : 'ctl-wrap hide'} >
 
 
                 <div style={{ display: "flex", flexDirection: "column", alignSelf: "center" }}>
                     <div data-device="pc">
-                        <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em' }}>{stdDate.y}년 {stdDate.m}월</h2>
+                        <h2 style={{ padding: 0, margin: "8px 0 0 ", letterSpacing: '-0.05em', color: modeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite }}>{stdDate.y}년 {stdDate.m}월</h2>
                         <button onClick={() => deCrease()}>{stdDate.m - 1}월</button> <button onClick={() => todaySet()}>오늘</button> <button onClick={() => inCrease()}>{stdDate.m + 1}월</button><br />
                     </div>
 
@@ -328,7 +331,7 @@ export default function Calendar({ modeColor }: any) {
                         </div>
                     </div>
 
-                    <div className="form__wrap" data-device='pc' >
+                    <div className="form__wrap" data-device='pc'>
                         <InputForm.InputFormWrap check={nameValue ? nameValue : '미 로그인'} className="input__form" data-device="pc" cMode={modeColor}>
                             <input id={nameValue} style={{ border: "none", fontWeight: "bold" }} type="text" value={!nameValue ? '미 로그인' : nameValue} readOnly onChange={(e: any) => setNameValue(e.target.value)} />
                             <label htmlFor={nameValue}>아이디</label>
@@ -352,9 +355,10 @@ export default function Calendar({ modeColor }: any) {
                                 dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
                                 locale={ko}
                                 disabledKeyboardNavigation
+                                popperPlacement="top-start"
                             />
                         </div>
-                        <ButtonForm.SubmitBtn className="submit" style={{ width: "inherit" }} onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
+                        <ButtonForm.SubmitBtn className="submit" style={{ width: "100px" }} onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
 
                     </div>
 
@@ -382,6 +386,26 @@ const SettingWrap = styled.div<{ cMode: string }>`
     background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
     width: calc(100% - 24px);
 
+    .add-calendar {
+        z-index: 100;
+        position: fixed;
+        right: 40px;
+        display: flex;
+        border-radius: 100px;
+        transition: bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0px 4px 6px 1px rgba(0,0,0,0.38);
+        
+        label {
+        padding: 12px;
+
+        }
+        img {
+            width: 20px;
+            filter : invert(100)
+        }
+
+    }
+
     .setting {
         display: flex;
         justify-content: space-around;
@@ -395,7 +419,12 @@ const SettingWrap = styled.div<{ cMode: string }>`
             font-size: 12px;
             background-color: transparent;
             color: ${props => props.cMode === 'light' ? '#48484A' : "#fff"};
+            transition: all .4s .1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
+        button:hover {
+            background-color: #0F9485;
+            color: #fff;
         }
 
         button.today {
@@ -405,7 +434,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
     }
 
     .ctl-wrap {
-        overflow: hidden;
+        /* overflow: hidden; */
         z-index : 90;
         position: fixed;
         bottom: 0;
@@ -415,22 +444,22 @@ const SettingWrap = styled.div<{ cMode: string }>`
         justify-content: space-between;
         padding: 16px 24px;
         width : calc(100% - 48px);
-        min-width: 350px;
+        min-width: 758px;
         transition: bottom .4s .1s cubic-bezier(0.16, 1, 0.3, 1);
-        
         backdrop-filter: saturate(180%) blur(5px);
         -webkit-backdrop-filter: saturate(180%) blur(5px);
         background: ${props => props.cMode === 'light' ? initColorValue.light.glass : initColorValue.dark.glass};;
-        /* background: hsla(0,0%,100%,.4); */
-        /* ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1}; */
+        box-shadow: 0px 4px 6px 1px rgba(0,0,0,0.38);
         
     }
 
     @media (max-width: 560px) {
         .ctl-wrap {
+            overflow: hidden;
             height: 140px;
             padding: 8px;
             border-radius: 4px;
+            min-width: 350px;
             left: 50%;
             bottom: 24px;
             transform: translateX(-50%);
@@ -444,11 +473,26 @@ const SettingWrap = styled.div<{ cMode: string }>`
         padding-bottom : 96px
     }
 
+    .react-datepicker, .react-datepicker__header, .react-datepicker__time-container, .react-datepicker__time, .react-datepicker-time__header {
+        background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
+        color : ${props => props.cMode === 'light' ? initColorValue.dark.textBlack : initColorValue.light.white}
+    }
+
     .react-datepicker-wrapper {
         width: auto;
+        height: 100%;
+    }
+    .react-datepicker-wrapper .react-datepicker__input-container{
+        height: 64px;
     }
     .react-datepicker-wrapper input {
+        padding: 0 18px;
         width: auto;
+        height: 64px;
+        outline: none;
+        border: none;
+        background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
+        color : ${props => props.cMode === 'light' ? initColorValue.dark.textBlack : initColorValue.light.white}
     }
     .react-datepicker-wrapper + button {
         width: 20%;
@@ -460,6 +504,9 @@ const SettingWrap = styled.div<{ cMode: string }>`
     .react-datepicker__day:hover {
         background-color: ${initColorValue.point1};
     }
+    .react-datepicker-popper {
+        z-index : 1000000
+    }
 
     .input__form {
         width:  120px;
@@ -467,6 +514,18 @@ const SettingWrap = styled.div<{ cMode: string }>`
     .form__wrap {
         display: flex;
     }
+
+    .form__wrap[data-device='pc'] .form--wrap{
+        display: flex;
+
+        > * {
+            margin-left: 12px;
+        }
+    }
+
+    
+
+
     .insert__form, .insert__form > ul {
         display: flex;
         justify-content: space-between;
@@ -621,8 +680,10 @@ const SettingWrap = styled.div<{ cMode: string }>`
 
     .submit {
         padding: 4px;
+        margin-left: 12px;
         width: inherit;
         font-size : 18px
+        
     }
 
     .loading{
@@ -661,15 +722,15 @@ const SettingWrap = styled.div<{ cMode: string }>`
             }
         }
     }
-@keyframes dash {
-    62.5% {
-        opacity: 0
-    }
-    100% {
-        stroke-dashoffset: 0
-    }
+    @keyframes dash {
+        62.5% {
+            opacity: 0
+        }
+        100% {
+            stroke-dashoffset: 0
+        }
 
-}
+    }
     @media (max-width:560px) {
         .form--wrap {
             * + * {
@@ -692,26 +753,5 @@ const SettingWrap = styled.div<{ cMode: string }>`
             transform: scale(1)
 
         }
-    }
-`
-
-const InputGroup = styled.div`
-    display:  flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 12px 0;
-
-    input {
-        display: none;
-    }
-    input + label {
-        padding: 4px 8px;
-        background-color: #ccc;
-        box-sizing: border-box;
-        border: 1px solid #aaa;
-    }
-    input:checked + label {
-        background-color: #444;
-        color: #fff;
     }
 `

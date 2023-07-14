@@ -183,6 +183,31 @@ app.post('/api/users/modify', auth, (req, res) => {
     })
 });
 
+// 모든 유저 검색(오름차순)
+app.get('/api/users/read', (req, res) => {
+    User.find({}).then((find, err) => {
+        if (err) return res.json({
+            success: false,
+            err
+        })
+        let result = find.sort(function (f, s) {
+            const nameF = f.user_name;
+            const nameS = s.user_name;
+            if (nameF < nameS) { // nameF is greater than nameS by some ordering criterion
+                return -1;
+            }
+            if (nameF > nameS) { // nameF is less than nameS by some ordering criterion
+                return 1;
+            }
+            return 0; // nameF must be equal to nameS
+        });
+        return res.status(200).json({
+            success: true,
+            result
+        })
+    })
+})
+
 
 
 //캘린더 일정 추가
@@ -210,6 +235,7 @@ app.post('/api/calendar/read', async (req, res) => {
         data_month: getData.month
     }).then((result, err) => {
 
+        console.log('search')
         if (err) return res.json({
             success: false,
             message: err
