@@ -23,21 +23,6 @@ export default function MyPage({ modeColor }: any) {
     const registerLoading = useSelector((state: RootState) => state.registerReducer.loading)
     const [modify, setModify] = useState(true);
 
-    // const [collections, setCollections] = useState({
-    //     collection_1: [],
-    // })
-
-    // const getCollection_1 = useCallback(async () => {
-    //     const result = await dispatch(collectionRead())
-
-    //     if (result.success) {
-    //         setCollections({
-    //             ...collections,
-    //             collection_1: result.find
-    //         })
-
-    //     }
-    // }, [dispatch, collections])
 
     const [newForm, setNewForm] = useState({
         user_name: '',
@@ -93,9 +78,9 @@ export default function MyPage({ modeColor }: any) {
         }
         // getCollection_1()
 
-    }, [authData,])
+    }, [authData])
 
-    if (newForm.user_name == '') return <>loading...</>
+    // if (newForm.user_name == '') return <>loading...</>
     return (
         <Index
             modeColor={modeColor}
