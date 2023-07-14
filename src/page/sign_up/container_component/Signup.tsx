@@ -74,7 +74,7 @@ export default function SignUp({ modeColor }: any) {
     const submit = () => {
         dispatch(registerSignUp(form))
             .then((res: any) => {
-                console.log(res)
+                // console.log(res)
                 if (!res.payload) {
                     swal("실패", "회원가입 실패", "error");
                 } else {

@@ -235,7 +235,7 @@ app.post('/api/calendar/read', async (req, res) => {
         data_month: getData.month
     }).then((result, err) => {
 
-        console.log('search')
+        // console.log('search')
         if (err) return res.json({
             success: false,
             message: err
@@ -311,7 +311,7 @@ app.post('/api/calendar/deleteallbydatamonth', async (req, res) => {
     Calendar.find({
         data_month: getData.data_month
     }).then((match, err) => {
-        console.log(match)
+        // console.log(match)
         match.map((item, index) => {
             item.deleteOne(item)
         })

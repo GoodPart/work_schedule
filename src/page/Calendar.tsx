@@ -65,10 +65,10 @@ export default function Calendar({ modeColor }: any) {
     }, {
         withCredentials: true
     }).then((res => {
-        console.log('start')
+        // console.log('start')
 
         if (res.data.success) {
-            console.log('getData')
+            // console.log('getData')
             setMember(res.data.result)
         }
     }))

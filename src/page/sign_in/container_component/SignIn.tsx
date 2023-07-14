@@ -49,7 +49,7 @@ export default function SignIn({ modeColor }: any) {
         dispatch(registerSignIn(form))
             .then((res: any) => {
                 //     // res.data.success && navigate('/')
-                console.log(res)
+                // console.log(res)
                 if (!res.payload.success) {
                     swal("실패", res.payload.message, "error");
                 } else {

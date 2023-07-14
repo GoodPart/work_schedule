@@ -8,8 +8,8 @@ export default function ExportCsv({ exportState, auth }: any) {
     let rows_wrap: any[] = [];
 
     const readUsers = async (exState: number) => {
-        let getData = await axios.post('http://localhost:9999/api/calendar/read', { month: exState }, { withCredentials: true })
-        let getUser = await axios.get('http://localhost:9999/api/users/read', { withCredentials: true });
+        let getData = await axios.post('https://myworkday.pe.kr:8888/api/calendar/read', { month: exState }, { withCredentials: true })
+        let getUser = await axios.get('https://myworkday.pe.kr:8888/api/users/read', { withCredentials: true });
 
 
         const getMonthDays = {

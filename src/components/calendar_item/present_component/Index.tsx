@@ -63,15 +63,15 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
         } else {
             //other
             if (getSystemStore.sortState.value.includes('사무소')) {
-                console.log('사무소')
+                // console.log('사무소')
                 return member.user.office_name.trim() === systemStroe.sortState.value.trim()
             } else {
                 if (getSystemStore.sortState.value.includes('실')) {
-                    console.log('실')
+                    // console.log('실')
                     // return return member.user.office_name === systemStroe.sortState.value
                 } else {
                     if (getSystemStore.sortState.value.includes('팀')) {
-                        console.log('팀')
+                        // console.log('팀')
                         return member.user.team_name.trim() === systemStroe.sortState.value.trim()
                     } else {
                         return true
