@@ -441,7 +441,7 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
         font-weight : bold;
         font-size: 20px;
         letter-spacing : -0.05em;
-        margin-top : 8px;
+        margin-top : 22px;
         color: ${props => props.cMode === 'light' ? '##48484A' : "#fff"};
     }
     &.your-calc .name em {

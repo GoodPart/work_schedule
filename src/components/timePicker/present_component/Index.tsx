@@ -213,19 +213,21 @@ const UpdateWrap = styled.div`
     }
     .form__wrap ul{
         display: flex;
+        margin: 0 auto;
+        padding: 0;
         width : 100%;
         align-items: center;
         justify-content: space-evenly;
-        margin: 0 auto;
         
     }
     .form__wrap ul li{
+        overflow: hidden;
         position: relative;
         width: 18%;
         height : 35%;
         border: none;
-        overflow: hidden;
         border-radius: 12px;
+        list-style: none;
     }
     .form__wrap ul li input {
         display: none;
