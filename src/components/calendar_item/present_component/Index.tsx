@@ -249,7 +249,7 @@ const ItemWrap = styled.div<{ cMode: string }>`
         background-color: ${props => props.cMode === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg};
 
 
-        > div:hover{
+        > div.your-calc:hover{
             .wrap {
                 width: 70%;
             }
@@ -351,11 +351,35 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
     animation-direction: normal;
 
     &.your-calc {
-        &:after {
+        /* &:after {
             content : 'ME';
             position: absolute;
             top : 4px;
             left : 4px;
+            padding : 2px 4px;
+            font-size : 10px;
+            font-weight:700;
+            line-height : 10px;
+            background-color : ${initColorValue.state.color2};
+            color : #fff;
+            border-radius : 2px;
+        } */
+        @media (max-width : 560px) {
+            &:after {
+                content : 'ME';
+            position: absolute;
+            top : 4px;
+            left : 4px;
+            padding : 2px 4px;
+            font-size : 10px;
+            font-weight:700;
+            line-height : 10px;
+            background-color : ${initColorValue.state.color2};
+            color : #fff;
+            border-radius : 2px;
+            }
+        }
+        em {
             padding : 2px 4px;
             font-size : 10px;
             font-weight:700;
@@ -437,15 +461,22 @@ const CardWrap = styled.div<{ delay: Number, cMode: string }>`
         }
     }
     .name { 
+        display : flex;
+        align-items : center;
         font-family: 'NotoSansKR_Bold';
         font-weight : bold;
         font-size: 20px;
         letter-spacing : -0.05em;
-        margin-top : 22px;
         color: ${props => props.cMode === 'light' ? '##48484A' : "#fff"};
     }
     &.your-calc .name em {
-            display : none
+            /* display : none */
+            font-style : inherit;
+            margin-left : 4px;
+
+            @media (max-width:560px) {
+                display : none
+            }
         }
         &.simple-data {
             padding : 2px 8px;
