@@ -30,6 +30,8 @@ const { User } = require('./models/User');
 const { Calendar } = require('./models/Calendar');
 // collection 스키마
 const { Collection } = require('./models/Collection');
+// company_auth 스키마
+const { CompanyAuth } = require('./models/Company_auth');
 
 
 
@@ -44,6 +46,49 @@ mongoose.connect(config.mongoURI, {
 
 app.get('/', (req, res) => {
     res.send('hi too')
+})
+
+app.post('/api/company_auth/check', (req, res) => {
+    const getData = req.body;
+
+    CompanyAuth.find({
+        company_pw: getData.company_pw
+    }).then((match, err) => {
+        if (err) return res.json({
+            success: false,
+            err
+        })
+        if (!match) {
+            return res.status(200).json({
+                success: false,
+                message: "비밀번호가 맞지 않습니다."
+
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            message: "확인되었습니다."
+
+        })
+
+    })
+})
+app.post('/api/company_auth/push', (req, res) => {
+    const getData = req.body;
+    const company_auth = new CompanyAuth(getData.company_pw);
+
+    console.log('---->', getData)
+
+    company_auth.save().then((ele, err) => {
+        if (err) res.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            ele
+        })
+    })
 })
 
 // auth 체크

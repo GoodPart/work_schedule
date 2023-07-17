@@ -84,8 +84,7 @@ export default function NavBar({ modeColor }: any) {
                             authData ? <button type="button" style={{ cursor: "pointer", display: "flex", marginLeft: "20px", fontSize: 14, color: "#666", backgroundColor: "transparent", border: "none", padding: 16 }} onClick={() => logout()}  >로그아웃</button> : <Link to='/signin'>로그인</Link>
                         }
 
-
-
+                        <Link to='/poll'>투표방</Link>
                         <Link to='/setting'>설정</Link>
                     </NavItem>
                 </DefaultNav>
@@ -103,7 +102,7 @@ export default function NavBar({ modeColor }: any) {
                             {
                                 authData ? <button type="button" style={{ cursor: "pointer", display: "flex", marginLeft: "20px", fontSize: 14, color: "#666", backgroundColor: "transparent", border: "none", padding: 16 }} onClick={() => logout()}  >로그아웃</button> : <Link to='/signin' onClick={() => resetToggle()}>로그인</Link>
                             }
-
+                            <Link to='/poll' onClick={() => resetToggle()}>투표방</Link>
                             <Link to='/setting' onClick={() => resetToggle()}>설정</Link>
                         </NavItem>
                     </div>

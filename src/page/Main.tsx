@@ -5,14 +5,15 @@ export default function Main({ modeColor }: any) {
     return (
         <InnerWrap cMode={modeColor}>
             <h1 style={{ margin: 0 }}>개요</h1>
+            <em className="footnote--accent">(설정 : 테마를 다크모드로 설정하면 눈이 안아파요)</em>
             <p>출근 및 퇴근 캘린더입니다.</p>
-            <p>편의 사항 개선중에 있습니다.</p>
+            <p>편의 사항 개선 및 추가 중 입니다.</p>
 
 
             <img src="duck.gif" alt="duck" width="300" />
 
             <hr />
-            <h3>사용방법</h3>
+            <h3>사용자 가이드</h3>
             <p>
                 <ol>
                     <li>
@@ -90,12 +91,23 @@ export default function Main({ modeColor }: any) {
                         <hr />
                     </li>
                     <li>
+                        <span className="title" style={{ color: initColorValue.state.color2 }}>추가 기능 작업 예정</span>
+                        <h4 className="title-desc">
+                            # 추가 기능 예정 내용 입니다.<br />
+                        </h4>
+                        <div className="desc">
+                            - 투표소<br />
+                            - 공지방 <br />
+                        </div>
+                        <hr />
+                    </li>
+                    <li>
                         <span className="title">버그 및 기타</span>
                         <h4 className="title-desc">
                             # 수정 사항 및 개선 사항은 추후 업데이트 예정입니다.<br />
                         </h4>
                         <div className="desc">
-                            - 설명 페이지 작성 - <em>23.07.17</em> : 일정표 UI 개선<br />
+                            - 설명 페이지 작성 - <em>23.07.17</em> : 일정표 UI 개선 및 버그 및 기타/추가 기능 작업 예정 업데이트<br />
                             - 설명 페이지 작성 - <em>23.07.10</em> : 일정 엑셀파일로 내보내기 기능 개발 완료.
                         </div>
                         <hr />

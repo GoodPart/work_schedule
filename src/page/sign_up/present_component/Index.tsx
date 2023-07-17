@@ -125,6 +125,16 @@ export default function Index({ onChange, onChangeSelect, form, submit, modeColo
                     </InputForm.InputFormWrap>
                     <br />
 
+                    {/* <InputForm.InputFormWrap check={form.company_pw} cMode={modeColor}>
+                        <input type="text" id='company_pw' style={{ backgroundColor: "transparent" }} name='company_pw'
+                            onChange={onChange}
+                            value={form.company_pw}
+                            onKeyUp={(e) => enterKeyUp(e)}
+                        />
+                        <label htmlFor='company_pw'>자사 확인 비밀번호</label>
+                    </InputForm.InputFormWrap>
+                    <br /> */}
+
 
                     <br />
                     <ButtonForm.SubmitBtn type='button' disabled={form.user_name !== '' && form.user_id !== '' && form.user_pw !== '' ? false : true} onClick={() => submit()} >회원가입</ButtonForm.SubmitBtn>

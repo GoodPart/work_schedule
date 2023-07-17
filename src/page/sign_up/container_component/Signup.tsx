@@ -30,7 +30,8 @@ export default function SignUp({ modeColor }: any) {
         office_room: '',
         team_name: '',
         user_age: '',
-        token: ''
+        token: '',
+        company_pw: ''
     })
 
     useEffect(() => {
@@ -95,7 +96,8 @@ export default function SignUp({ modeColor }: any) {
             office_room: '',
             team_name: '',
             user_age: '',
-            token: ''
+            token: '',
+            company_pw: ''
         })
 
     };
