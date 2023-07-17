@@ -22,7 +22,6 @@ export default function Index({ onChange, onChangeSelect, form, submit, modeColo
             } else {
                 submit()
             }
-
         }
     }
     return (
@@ -115,23 +114,6 @@ export default function Index({ onChange, onChangeSelect, form, submit, modeColo
                         </select>
                     </InputForm.InputFormWrapSelect>
 
-                    {/* <InputForm.InputFormWrap check={form.office_name} cMode={modeColor}>
-                        <input type="text" id='office_name' style={{ backgroundColor: "transparent" }} name='office_name'
-                            onChange={onChange}
-                            value={form.office_name}
-                            onKeyUp={(e) => enterKeyUp(e)}
-                        />
-                        <label htmlFor='office_name'>사무소</label>
-                    </InputForm.InputFormWrap>
-                    <br />
-                    <InputForm.InputFormWrap check={form.team_name} cMode={modeColor}>
-                        <input type="text" id='team_name' style={{ backgroundColor: "transparent" }} name='team_name'
-                            onChange={onChange}
-                            value={form.team_name}
-                            onKeyUp={(e) => enterKeyUp(e)}
-                        />
-                        <label htmlFor='userPw'>팀 명</label>
-                    </InputForm.InputFormWrap> */}
                     <br />
                     <InputForm.InputFormWrap check={form.rank_title} cMode={modeColor}>
                         <input type="text" id='rank_title' style={{ backgroundColor: "transparent" }} name='rank_title'
@@ -145,7 +127,7 @@ export default function Index({ onChange, onChangeSelect, form, submit, modeColo
 
 
                     <br />
-                    <ButtonForm.SubmitBtn type='button' onClick={() => submit()} >회원가입</ButtonForm.SubmitBtn>
+                    <ButtonForm.SubmitBtn type='button' disabled={form.user_name !== '' && form.user_id !== '' && form.user_pw !== '' ? false : true} onClick={() => submit()} >회원가입</ButtonForm.SubmitBtn>
                 </form>
                 <br />
                 <div style={{ color: modeColor === 'light' ? initColorValue.light.textBlack : initColorValue.dark.textWhite, paddingBottom: "20%" }}>이미 회원인가요 <Link style={{ color: "#0F9485", textDecoration: "none", fontWeight: "bold" }} to={'/signin'}>로그인</Link></div>
