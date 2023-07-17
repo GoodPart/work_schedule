@@ -22,11 +22,17 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
     const [simply, setSimply] = useState(false);
 
     const mapLength = calendarProps.last_date;
+
+    const localMonth = calendarProps.dateM;
+
+    const nowYear = calendarProps.dateY
     const nowDate = calendarProps.now_date;
+    const nowMonth = calendarProps.now_month;
     const getMapArray = Array.from({ length: mapLength }, (value, index) => index + 1);
 
     const getSystemStore = useSelector((state: RootState) => state.systemReducer)
     const getAuthStore = useSelector((state: RootState) => state.authCheckReducer)
+
 
 
     const offDay = (state: string, work_time: any) => {
@@ -86,20 +92,25 @@ export default function Index({ calendarProps, memberProps, deleteSchedule, load
         setToggle(false)
     }
     useEffect(() => {
-        setSimply(getSystemStore.calendar_simple)
-    }, [toggle, getSystemStore, getAuthStore])
+        setSimply(getSystemStore.calendar_simple);
 
+        // const yo = document.querySelector(`#day_${calendarProps.now_date}`)
+        // const yoLocationY = yo?.getBoundingClientRect().top;
+        // if (yo && yoLocationY !== undefined) {
+        //     // console.log(calendarProps)
+        // }
+    }, [toggle, getSystemStore, getAuthStore])
 
     return (
         <ItemWrap cMode={modeColor}>
             {
                 getMapArray.map((ele, index1) => {
                     return (
-                        <div key={ele} className={ele === nowDate ? "day__wrap now" : "day__wrap"} >
+                        <div key={`${nowYear}_${nowMonth}_${ele}`} className={`${localMonth}_${ele}` === `${nowMonth}_${nowDate}` ? "day__wrap now" : "day__wrap"} id={`day_${ele}`}>
                             <div className="day-desc"
                                 style={{ display: "flex", alignItems: "top", justifyContent: "center", width: "auto", fontWeight: 700 }}>
                                 <span style={{ color: modeColor === 'light' ? '#48484A' : "#fff", letterSpacing: "-0.05em" }}>{ele < 10 ? `0${ele}` : ele}</span><span className="desc-day" style={getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '토' || getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay()) === '일' ? { color: initColorValue.point1 } : { color: modeColor === 'light' ? '#48484A' : "#fff", letterSpacing: "-0.05em" }}>
-                                    {getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay())}
+                                    ({getDayFunc(new Date(calendarProps.dateY, calendarProps.dateM - 1, ele).getDay())})
                                 </span>
                             </div>
 
@@ -244,8 +255,9 @@ const ItemWrap = styled.div<{ cMode: string }>`
     .calc-desc {
         display: flex;
         flex-wrap: wrap;
-        width : calc(100% - 68px);
+        width : calc(100% - 58px);
         padding: 2px 0;
+        border-radius: 4px;
         background-color: ${props => props.cMode === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg};
 
 
@@ -310,7 +322,7 @@ const ItemWrap = styled.div<{ cMode: string }>`
 
     @media (max-width : 560px) {
         .calc-desc {
-            width : calc(100% - 56px);
+            width : calc(100% - 64px);
         }
         .day-desc {
            
