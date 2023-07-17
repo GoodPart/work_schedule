@@ -392,8 +392,12 @@ const SettingWrap = styled.div<{ cMode: string }>`
         right: 40px;
         display: flex;
         border-radius: 100px;
-        transition: bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: bottom 1s .3s cubic-bezier(0.16, 1, 0.3, 1), transform .3s cubic-bezier(0.16, 1, 0.3, 1);
         box-shadow: 0px 4px 6px 1px rgba(0,0,0,0.38);
+
+        &:hover {
+            transform: scale(1.2);
+        }
         
         label {
         padding: 12px;
