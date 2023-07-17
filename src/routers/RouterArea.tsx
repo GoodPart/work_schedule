@@ -5,6 +5,7 @@ import Main from '../page/Main';
 import SignIn from '../page/sign_in/container_component/SignIn';
 import SignUp from '../page/sign_up/container_component/Signup';
 import MyPage from '../page/mypage/container_component/MyPage';
+import Poll from '../page/poll/container_component/Poll';
 import Setting from '../page/Setting';
 
 import Calendar from '../page/Calendar';
@@ -19,6 +20,7 @@ export default function RouterArea(modeColor: any) {
     const CalendarPage: React.FunctionComponent = Auth(Calendar, null, _modeColor);
     const SettingPage: React.FunctionComponent = Auth(Setting, null);
     const SignUpPage: React.FunctionComponent = Auth(SignUp, false, _modeColor);
+    const PollPage: React.FunctionComponent = Auth(Poll, null, _modeColor);
 
     return (
         <Routes>
@@ -27,6 +29,7 @@ export default function RouterArea(modeColor: any) {
             <Route path='/signup' element={<SignUpPage />} />
             <Route path='/calendar' element={<CalendarPage />} />
             <Route path='/my-page' element={<UserPage />} />
+            <Route path='/poll' element={<PollPage />} />
             <Route path='/setting' element={<SettingPage />} />
         </Routes>
     );
