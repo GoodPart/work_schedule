@@ -84,7 +84,8 @@ export default function Main({ modeColor }: any) {
                         </h4>
                         <div className="desc">
                             - 일정표의 일정 등록시 중복 등록 불가 기능.<br />
-                            - 일정표의 오늘 날짜로 스크롤 이동 기능.
+                            - 일정표의 오늘 날짜로 스크롤 이동 기능.<br />
+                            - 외부유저<strong>(사내 외)</strong> 회원 가입 방지 기능. <em className="footnote--accent">(고유 비밀번호 설정)</em>
                         </div>
                         <hr />
                     </li>
