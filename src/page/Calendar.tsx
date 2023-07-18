@@ -18,7 +18,7 @@ import { initColorValue } from "../components/styledComponents/CommonValue";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../modules";
-import { deleteData, insertData } from "../modules/calendar";
+import { deleteData, insertData, insertDataMany } from "../modules/calendar";
 
 //img
 import loading from '../loading.gif'
@@ -27,6 +27,14 @@ import swal from 'sweetalert';
 export default function Calendar({ modeColor }: any) {
 
     const dispatch = useDispatch();
+
+    //달력 범위 값
+    const [dateRange, setDateRange] = useState([new Date, new Date]);
+    const [startDate, endDate] = dateRange;
+    //시간 값
+    const [dateTime, setDateTime] = useState(new Date());
+
+    const [insertMode, setInsertMode] = useState(true);
 
     //redux store
     let authData = useSelector((state: RootState) => state.authCheckReducer);
@@ -65,10 +73,10 @@ export default function Calendar({ modeColor }: any) {
     }, {
         withCredentials: true
     }).then((res => {
-        console.log('start')
+        // console.log('start')
 
         if (res.data.success) {
-            console.log('getData')
+            // console.log('getData')
             setMember(res.data.result)
         }
     }))
@@ -130,17 +138,91 @@ export default function Calendar({ modeColor }: any) {
             date_at: [pushY, pushM, pushD],
             data: {
                 state: workState,
-                // work_time: [pushHH, pushMM]
                 work_time: workState === '월차' ? [0, 0] : workState === '오전 반차' ? [1, 0] : workState === '외근' ? [2, 0] : [pushHH, pushMM]
             },
             data_month: pushM
         }
-        // console.log('form-check->', form)
 
         createSchedule(form)
     }
+    const onSubmitMany = () => {
+
+        // console.log(startDate, endDate)
+        // console.log(dateTime.getHours(), dateTime.getMinutes())
+
+        let _year = new Date(startDate).getFullYear()
+        let _month = new Date(startDate).getMonth() + 1; // 월 + 1;
+        let _startD = new Date(startDate).getDate();// 시작일
+        // let _endD = new Date(endDate).getDate(); // 마지막 일
+
+        const oldDate = new Date(startDate);
+        const newDate = new Date(endDate);
+
+        //날짜 사이 일수
+        let diff = Math.abs(newDate.getTime() - oldDate.getTime());
+        diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+        let form: any = [];
+
+        for (let i = 0; i < diff + 1; i++) {
+
+
+            let innerForm = {
+                user: {
+                    user_id: "",
+                    user_name: nameValue,
+                    rank_title: "",
+                    office_name: "",
+                    team_name: ""
+                },
+                date_at: [_year, _month, _startD + i],
+                data: {
+                    state: workState,
+                    work_time: workState === '월차' ? [0, 0] : workState === '오전 반차' ? [1, 0] : workState === '외근' ? [2, 0] : [dateTime.getHours(), dateTime.getMinutes()]
+                },
+                data_month: _month,
+            }
+            form.push(innerForm)
+        }
+
+        // console.log(form)
+
+        // let pushY = new Date(inputDate).getFullYear();
+        // let pushM = new Date(inputDate).getMonth() + 1;
+        // let pushD = new Date(inputDate).getDate();
+
+        // let pushHH = timeState.th;
+        // let pushMM = timeState.tm;
+
+        // let form = {
+        //     user: {
+        //         user_id: "",
+        //         user_name: nameValue,
+        //         rank_title: "",
+        //         office_name: "",
+        //         team_name: ""
+        //     },
+        //     date_at: [pushY, pushM, pushD],
+        //     data: {
+        //         state: workState,
+        //         work_time: workState === '월차' ? [0, 0] : workState === '오전 반차' ? [1, 0] : workState === '외근' ? [2, 0] : [pushHH, pushMM]
+        //     },
+        //     data_month: pushM
+        // }
+        // console.log(form)
+
+        createScheduleMany(form)
+    }
     const createSchedule = useCallback(async (form: any) => {
         let result = await dispatch(insertData(form));
+        if (result) {
+            setCtlToggle(false)
+            swal("성공", "일정 등록을 완료했습니다..", "success");
+
+        }
+    }, [dispatch])
+    const createScheduleMany = useCallback(async (form: any) => {
+        let result = await dispatch(insertDataMany(form));
         if (result) {
             setCtlToggle(false)
             swal("성공", "일정 등록을 완료했습니다..", "success");
@@ -248,10 +330,10 @@ export default function Calendar({ modeColor }: any) {
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
-                                <InputForm.InputFormWrap check={'1'} cMode={modeColor}>
+                                {/* <InputForm.InputFormWrap check={'1'} cMode={modeColor}>
                                     <input type="text" placeholder="날짜" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                                     <label>날짜</label>
-                                </InputForm.InputFormWrap>
+                                </InputForm.InputFormWrap> */}
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={workState} cMode={modeColor}>
@@ -346,19 +428,51 @@ export default function Calendar({ modeColor }: any) {
                                     <option value="외근">외근</option>
                                 </select>
                             </InputForm.InputFormWrapSelect>
-                            <DatePicker
-                                selected={inputDate}
-                                onChange={(date: any) => setInputDate(date)}
-                                showTimeSelect
-                                timeIntervals={30}
-                                timeCaption="time"
-                                dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
-                                locale={ko}
-                                disabledKeyboardNavigation
-                                popperPlacement="top-start"
-                            />
+                            <div style={{ display: "flex" }}>
+                                <input type="checkbox" id="setting1" checked={insertMode} onChange={(e) => setInsertMode(e.target.checked)} /><label htmlFor="setting1">{insertMode ? "다수" : "단일"} 모드</label>
+                                <div style={{ display: !insertMode ? "block" : "none" }}>
+                                    <DatePicker
+                                        selected={inputDate}
+                                        onChange={(date: any) => setInputDate(date)}
+                                        showTimeSelect
+                                        timeIntervals={30}
+                                        timeCaption="time"
+                                        dateFormat="yyyy년 MMMM dd일,  hh:mm aa"
+                                        locale={ko}
+                                        disabledKeyboardNavigation
+                                        popperPlacement="top-start"
+                                    />
+                                </div>
+                                <div style={{ display: insertMode ? "block" : "none" }}>
+                                    <DatePicker
+                                        selectsRange={true}
+                                        onChange={(date: any) => setDateRange(date)}
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        dateFormat="yyyy년 MMMM dd일"
+                                        locale={ko}
+                                        disabledKeyboardNavigation
+                                        popperPlacement="top-start"
+                                    />
+                                    <DatePicker
+                                        selected={dateTime}
+                                        onChange={(date: any) => setDateTime(date)}
+                                        showTimeSelect
+                                        showTimeSelectOnly
+                                        timeIntervals={30}
+                                        timeCaption="Time"
+                                        dateFormat="hh시 mm분"
+                                        locale={ko}
+                                        disabledKeyboardNavigation
+                                        popperPlacement="top-start"
+                                    />
+                                </div>
+                            </div>
+
+
+
                         </div>
-                        <ButtonForm.SubmitBtn className="submit" style={{ width: "100px" }} onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
+                        <ButtonForm.SubmitBtn className="submit" style={{ width: "100px" }} onClick={() => insertMode ? onSubmitMany() : onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
 
                     </div>
 

@@ -57,6 +57,42 @@ export function insertData(form: any): any {
     }
 }
 
+export function insertDataMany(form: any): any {
+    return async (dispatch: any, getState: any) => {
+        // console.log(form)
+        dispatch({
+            type: CALENDAR_STATE_LOADING
+        });
+
+        let getAuthData = getState().authCheckReducer.auth;
+
+        form.map((ele: any) => {
+            ele.user.user_id = getAuthData.user_id;
+            ele.user.rank_title = getAuthData.rank_title
+            ele.user.office_name = getAuthData.office_name
+            ele.user.team_name = getAuthData.team_name
+        })
+
+
+
+        try {
+            const createData = await axios.post("http://localhost:9999/api/calendar/createmany", { form }, { withCredentials: true })
+
+            if (createData.data.success) {
+                dispatch({
+                    type: CALENDAR_STATE_SUCCESS
+                })
+
+                return (
+                    createData.data.success
+                )
+
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
 export function deleteData(_id: any): any {
     return async (dispatch: any, getState: any) => {
 
