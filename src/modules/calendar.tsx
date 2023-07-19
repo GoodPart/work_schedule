@@ -77,7 +77,7 @@ export function insertDataMany(form: any): any {
 
 
         try {
-            const createData = await axios.post("http://localhost:9999/api/calendar/createmany", { form }, { withCredentials: true })
+            const createData = await axios.post("https://myworkday.pe.kr:8888/api/calendar/createmany", { form }, { withCredentials: true })
 
             if (createData.data.success) {
                 dispatch({
