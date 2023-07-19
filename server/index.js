@@ -273,6 +273,35 @@ app.post('/api/calendar/create', auth, async (req, res) => {
             })
         })
 });
+// 캘린더 일정 추가(다수)
+app.post('/api/calendar/createmany', auth, (req, res) => {
+    const getData = req.body.form;
+    let getDataLength = req.body.form.length
+
+    getData.map((clac, index) => {
+        const calendar = new Calendar(clac);
+
+        calendar.save()
+            .then((ele, err) => {
+                if (err) return res.json({
+                    success: false,
+                    err
+                })
+
+                if (getDataLength === index + 1) {
+                    //마지막 일정
+                    return res.status(200).json({
+                        success: true,
+                        message: "정상적으로 등록 되었습니다."
+                    })
+                }
+
+
+            })
+    })
+
+
+});
 // 캘린더 월별 일정 조회
 app.post('/api/calendar/read', async (req, res) => {
     const getData = req.body;

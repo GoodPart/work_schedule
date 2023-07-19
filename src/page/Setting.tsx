@@ -134,7 +134,7 @@ export default function Setting() {
 
                 </SettingWrap>
                 <SettingWrapDouble className="double" theme={themeColor}>
-                    <div className="content--title">일정 편집</div>
+                    <div className="content--title">일정표 필터</div>
                     <div className="content--wrap" style={{ display: "flex" }}>
                         <InputForm.InputFormRowToggle width={'100%'} height={'auto'} cMode={themeColor}>
                             <div className="content content--1">
