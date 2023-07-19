@@ -35,9 +35,11 @@ export default function Main({ modeColor }: any) {
                         <hr />
                         <div className="desc">
                             2-1. 일정 추가, 수정 및 제거 가능합니다. <em className="footnote--accent">(로그인 필요)</em><br />
-                            2-2. 하단 우측 버튼<strong>(연필 아이콘)</strong>을 통해 일정 추가 가능. <em className="footnote--accent">(로그인 필요)</em><br />
-                            2-3. 로그인시 자신의 일정은 구분을 위해 이름 옆 <em className="accent">ME</em> 심볼이 표기됩니다. <br />
-                            2-4. 자신의 일정에 마우스 호버<strong>(모바일 Click)</strong> 시 수정 및 제거 기능이 제공됩니다.<em className="footnote--accent">(버튼)</em><br />
+                            2-2. 하단 우측 버튼 <strong>(연필 아이콘)</strong>을 통해 일정 추가 가능. <em className="footnote--accent">(로그인 필요)</em><br />
+                            2-3. 일정 추가란에 <strong>(다수 아이콘)</strong>을 선택하면 일정 추가 모드가 변경됩니다. <em className="footnote--accent">(범위 or 단일)</em><br />
+                            2-4. 하단 우측 버튼 <strong>(ALL 아이콘)</strong>을 통해 캘린더의 필터 기능을 사용 가능합니다. <em className="footnote--accent">(ALL[모두] or ME[나])</em><br />
+                            2-5. 로그인시 자신의 일정은 구분을 위해 이름 옆 <em className="accent">ME</em> 심볼이 표기됩니다. <br />
+                            2-6. 자신의 일정에 마우스 호버<strong>(모바일 Click)</strong> 시 수정 및 제거 기능이 제공됩니다.<em className="footnote--accent">(버튼)</em><br />
                             <div className="footnot">(수정은 해당 날짜의 출근 상태 및 시간만 가능하며, 날짜 변경은 제거 후 일정을 재등록 해야합니다.)</div>
                         </div>
                         <hr />
@@ -65,7 +67,7 @@ export default function Main({ modeColor }: any) {
                         <div className="desc">
                             4-1. <strong>일정 간소화</strong> = 일정표의 정보를 간략하게 보여주는 기능입니다.<br />
                             4-2. <strong>테마 색상</strong> = 다크모드 및 기본 모드로 변경 기능입니다.<br />
-                            4-3. <strong>일정 편집</strong> = 일정표의 필터 기능입니다. <br />
+                            4-3. <strong>일정표 필터</strong> = 일정표의 필터 기능입니다. (일정표 페이지에서 간단하게 수정 할 수 있도록 기능 추가)<br />
                             <strong>모두</strong>(모든 일정), <strong>나</strong><em className="footnote--accent">(로그인 필요)</em>, <strong>기타 설정</strong>(사무소, 실 및 팀 단위 - 활성화 후 하단 셀렉트 매뉴에서 사용가능)<br />
                             4-4. <strong>내보내기</strong> - 해당 월의 일정을 <strong>엑셀 파일</strong>로 내보낼 수 있습니다.
                         </div>
@@ -107,6 +109,7 @@ export default function Main({ modeColor }: any) {
                             # 수정 사항 및 개선 사항은 추후 업데이트 예정입니다.<br />
                         </h4>
                         <div className="desc">
+                            - 설명 페이지 작성 - <em>23.07.18</em> : 일정표에 일정 다수 및 단일 추가 기능 및 보기 옵션 추가 업데이트<br />
                             - 설명 페이지 작성 - <em>23.07.17</em> : 일정표 UI 개선 및 버그 및 기타/추가 기능 작업 예정 업데이트<br />
                             - 설명 페이지 작성 - <em>23.07.10</em> : 일정 엑셀파일로 내보내기 기능 개발 완료.
                         </div>

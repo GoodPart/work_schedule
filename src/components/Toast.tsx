@@ -17,7 +17,7 @@ export default Toast;
 const ToastWrap = styled.div<{ options: any, cMode: string }>`
     z-index : 1000;
     position: fixed;
-    bottom: calc(-10px - ${props => props.options.height});
+    bottom: calc(-30px - ${props => props.options.height});
     left : 50%;
     transform: translateX(-50%);
     display: flex;

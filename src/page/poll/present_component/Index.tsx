@@ -16,19 +16,33 @@ function Poll({ pollData, toastToggle }: any) {
 
 
     return (
-        <div onClick={(e) => toastToggle(true, pollData.id)}>
+        <PollWrap onClick={(e: any) => toastToggle(true, pollData.id)}>
             <div className='head'>
-                {pollData.title} - ({pollData.state ? '진행중' : '종료'})
+                주제 : {pollData.title} - ({pollData.state ? '진행중' : '종료'})
             </div>
+            <hr />
             <div className="content">
                 콘텐츠
             </div>
+            <hr />
             <div className="footer">
-                푸터
+                참여 인원 : 김철수, 나영미<br />
+                남은 시간 : 09:10
             </div>
-        </div>
+        </PollWrap>
     )
 }
+
+const PollWrap = styled.div`
+    /* padding-top: 24px; */
+
+    &:hover {
+        outline : 2px solid ${initColorValue.point1}
+    }
+    
+   
+    
+`
 
 
 
@@ -53,13 +67,18 @@ export default function Index({ modeColor, pollData }: any) {
     return (
         <InnerWrap cMode={modeColor}>
             <div className="device__wrap">
-                <h2>투표방</h2>
+                <h2>투표방 - (작업중)</h2>
+                <SettingWrap theme={modeColor} style={{ width: "calc(100% - 32px)", padding: 16 }}>
+                    <p>작업 이유</p>
+                    <p>- 사내 의견을 종합 해야 하는 상황에 매번, 참여율이 저조함 및 선택장애</p>
+                    <p>- 일정 시간 동안 투표를 받음. 시간 종료후, 5분뒤 자동 말소</p>
+                </SettingWrap>
 
                 <div className="wrap" style={{ display: "flex", justifyContent: "space-between" }}>
                     {
                         pollData.map((poll: any, index: number) => {
                             return (
-                                <SettingWrap theme={modeColor} >
+                                <SettingWrap theme={modeColor} style={{ padding: 8 }}  >
                                     <Poll pollData={poll} toastToggle={toastToggle} />
 
                                     <Toast
@@ -79,8 +98,8 @@ export default function Index({ modeColor, pollData }: any) {
                                                         poll.select_list.map((item: any, index2: number) => {
                                                             return (
                                                                 <>
-                                                                    <input type="radio" id={item.id} name={`id_${index}`} />
-                                                                    <label htmlFor={item.id}>{item.topic}</label>
+                                                                    <input type="radio" id={item.topic} name={`id_${index}`} />
+                                                                    <label htmlFor={item.topic}>{item.topic}</label>
                                                                 </>
                                                             )
                                                         })
@@ -135,14 +154,12 @@ const InnerWrap = styled.div<{ cMode: string }>`
         .device__wrap {
             width: 100%;
         }
-    }
-
-    
+    }    
 `
 const SettingWrap = styled.div<{ theme: string }>`
     position: relative;
     padding : 24px;
-    width: 48%;
+    width: 46%;
     background-color:${props => props.theme === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg1};
     border-radius: 4px;
     

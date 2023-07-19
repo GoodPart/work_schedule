@@ -19,10 +19,12 @@ import { initColorValue } from "../components/styledComponents/CommonValue";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../modules";
 import { deleteData, insertData, insertDataMany } from "../modules/calendar";
+import { systemUpdateSort } from "../modules/system";
 
 //img
 import loading from '../loading.gif'
 import swal from 'sweetalert';
+import { check } from "yargs";
 
 export default function Calendar({ modeColor }: any) {
 
@@ -34,11 +36,12 @@ export default function Calendar({ modeColor }: any) {
     //시간 값
     const [dateTime, setDateTime] = useState(new Date());
 
-    const [insertMode, setInsertMode] = useState(true);
+    const [insertMode, setInsertMode] = useState(false);
 
     //redux store
     let authData = useSelector((state: RootState) => state.authCheckReducer);
     const calendarData = useSelector((state: RootState) => state.calendarReducer)
+    const systemData = useSelector((state: RootState) => state.systemReducer);
 
     const [inputDate, setInputDate] = useState(new Date());
     let [nameValue, setNameValue] = useState(authData.auth.user_name);
@@ -67,6 +70,7 @@ export default function Calendar({ modeColor }: any) {
 
     let monthCount = useRef(0);
 
+    const [sortV, setSortV] = useState(false);
 
     const getSchedule = (month: any) => axios.post("http://localhost:9999/api/calendar/read", {
         month: month
@@ -138,22 +142,18 @@ export default function Calendar({ modeColor }: any) {
             date_at: [pushY, pushM, pushD],
             data: {
                 state: workState,
-                work_time: workState === '월차' ? [0, 0] : workState === '오전 반차' ? [1, 0] : workState === '외근' ? [2, 0] : [pushHH, pushMM]
+                work_time: workState === '월차' ? [0, 0] : workState === '오전 반차' ? [1, 0] : workState === '외근' ? [2, 0] : [dateTime.getHours(), dateTime.getMinutes()]
             },
             data_month: pushM
         }
 
         createSchedule(form)
+        setInputDate(new Date)// init
     }
     const onSubmitMany = () => {
-
-        // console.log(startDate, endDate)
-        // console.log(dateTime.getHours(), dateTime.getMinutes())
-
         let _year = new Date(startDate).getFullYear()
         let _month = new Date(startDate).getMonth() + 1; // 월 + 1;
         let _startD = new Date(startDate).getDate();// 시작일
-        // let _endD = new Date(endDate).getDate(); // 마지막 일
 
         const oldDate = new Date(startDate);
         const newDate = new Date(endDate);
@@ -185,33 +185,8 @@ export default function Calendar({ modeColor }: any) {
             form.push(innerForm)
         }
 
-        // console.log(form)
-
-        // let pushY = new Date(inputDate).getFullYear();
-        // let pushM = new Date(inputDate).getMonth() + 1;
-        // let pushD = new Date(inputDate).getDate();
-
-        // let pushHH = timeState.th;
-        // let pushMM = timeState.tm;
-
-        // let form = {
-        //     user: {
-        //         user_id: "",
-        //         user_name: nameValue,
-        //         rank_title: "",
-        //         office_name: "",
-        //         team_name: ""
-        //     },
-        //     date_at: [pushY, pushM, pushD],
-        //     data: {
-        //         state: workState,
-        //         work_time: workState === '월차' ? [0, 0] : workState === '오전 반차' ? [1, 0] : workState === '외근' ? [2, 0] : [pushHH, pushMM]
-        //     },
-        //     data_month: pushM
-        // }
-        // console.log(form)
-
         createScheduleMany(form)
+        setDateRange([new Date, new Date]); // init
     }
     const createSchedule = useCallback(async (form: any) => {
         let result = await dispatch(insertData(form));
@@ -249,13 +224,25 @@ export default function Calendar({ modeColor }: any) {
 
     }, [nameValue])
 
+    const onChangeSort = (e: React.ChangeEvent<HTMLInputElement>): any => {
+        const { id, value, checked } = e.target;
+        console.log(checked)
+
+        let result = checked ? 'me' : 'all';
+        changeSort(result)
+        setSortV(!sortV)
+    };
+
+    const changeSort = useCallback(async (state: string) => {
+        await dispatch(systemUpdateSort(state))
+    }, [dispatch])
 
     useEffect(() => {
         getSchedule(stdDate.m);
         setNameValue(authData.auth.user_name)
 
 
-    }, [stdDate, monthCount, authData, calendarData.loading])
+    }, [stdDate, monthCount, authData, calendarData.loading, systemData.loading])
 
     if (!member) return <SettingWrap cMode={modeColor} style={{ height: "100%" }}>
         <div className="loading">
@@ -294,20 +281,42 @@ export default function Calendar({ modeColor }: any) {
                 cMode={modeColor}
             >
                 <ButtonForm.SubmitBtn style={{ position: "absolute", top: 4, right: 4, width: "fit-content", padding: 9, fontSize: '0.6rem', }} type="button" onClick={() => setToastState({ state: false, id: 0 })}>X</ButtonForm.SubmitBtn>
-                <DatePicker
-                    selected={inputDate}
-                    onChange={(date: any) => setInputDate(date)}
-                    dateFormat="yyyy년 MMMM dd일"
-                    locale={ko}
-                    inline
-                    disabledKeyboardNavigation
-                />
-                <ButtonForm.SubmitBtn style={{ position: 'absolute', bottom: '10px', right: '20px', width: '20%' }} onClick={() => setToastState({ state: false, id: 0 })}>등록</ButtonForm.SubmitBtn>
+
+                <div>
+                    <div style={{ display: !insertMode ? "flex" : "none" }}>
+                        <DatePicker
+                            selected={inputDate}
+                            onChange={(date: any) => setInputDate(date)}
+                            dateFormat="yyyy년 MMMM dd일"
+                            locale={ko}
+                            inline
+                            disabledKeyboardNavigation
+                        />
+                    </div>
+                    <div style={{ display: insertMode ? "flex" : "none" }}>
+                        <DatePicker
+                            selectsRange={true}
+                            onChange={(date: any) => setDateRange(date)}
+                            startDate={startDate}
+                            endDate={endDate}
+                            dateFormat="yyyy년 MMMM dd일"
+                            locale={ko}
+                            inline
+                            disabledKeyboardNavigation
+                        />
+
+                    </div>
+                </div>
+                <ButtonForm.SubmitBtn style={{ position: 'absolute', bottom: '10px', right: '20px', width: '20%' }} disabled={endDate ? false : true} onClick={() => setToastState({ state: false, id: 0 })}>등록</ButtonForm.SubmitBtn>
 
             </Toast>
             <div className="add-calendar" style={{ bottom: ctlToggle ? '194px' : '36px', border: `2px solid ${initColorValue.point1}`, backgroundColor: initColorValue.point1 }}>
                 <input id="check" type="checkbox" onChange={(e) => setCtlToggle(e.target.checked)} checked={ctlToggle} style={{ display: "none" }} />
                 <label htmlFor="check" style={{ display: "flex" }}><img src="update.png" width={24} style={{ objectFit: "contain" }} alt="일정추가" /></label>
+            </div>
+            <div className="change-sort" style={{ bottom: ctlToggle ? '260px' : '96px', border: `2px solid ${initColorValue.point1}`, backgroundColor: initColorValue.point1 }}>
+                <input id="sortV" type="checkbox" onChange={(e) => onChangeSort(e)} checked={systemData.sortState.type === 'me'} style={{ display: "none" }} />
+                <label htmlFor="sortV" style={{ display: "flex", fontSize: '0.7rem' }}>{systemData.sortState.type}</label>
             </div>
             <div className={ctlToggle ? 'ctl-wrap' : 'ctl-wrap hide'} >
 
@@ -329,11 +338,12 @@ export default function Calendar({ modeColor }: any) {
                                     <label>상태</label>
                                 </InputForm.InputFormWrap>
                             </li>
-                            <li>
-                                {/* <InputForm.InputFormWrap check={'1'} cMode={modeColor}>
+                            <li style={{ display: "flex" }}>
+                                <input style={{ display: "none" }} type="checkbox" id="setting1" checked={insertMode} onChange={(e) => setInsertMode(e.target.checked)} /><label htmlFor="setting1"><img src="multi.png" width={36} />{insertMode ? "다수" : "단일"}</label>
+                                <InputForm.InputFormWrap check={'1'} cMode={modeColor}>
                                     <input type="text" placeholder="날짜" inputMode="none" className="toasted" readOnly disabled={nameValue ? false : true} value={`${inputDate.getFullYear()}년 ${inputDate.getMonth() + 1}월 ${inputDate.getDate()}일 `} onFocus={() => setToastState({ state: true, id: 1 })} />
                                     <label>날짜</label>
-                                </InputForm.InputFormWrap> */}
+                                </InputForm.InputFormWrap>
                             </li>
                             <li>
                                 <InputForm.InputFormWrap check={workState} cMode={modeColor}>
@@ -344,7 +354,8 @@ export default function Calendar({ modeColor }: any) {
                                 </InputForm.InputFormWrap>
                             </li>
                             <li>
-                                <ButtonForm.SubmitBtn className="submit" style={{ width: '100%', height: '100%', margin: 0 }} onClick={() => onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
+                                {/* () => insertMode ? onSubmitMany() : onSubmit() */}
+                                <ButtonForm.SubmitBtn className="submit" style={{ width: '100%', height: '100%', margin: 0 }} onClick={() => insertMode ? onSubmitMany() : onSubmit()} disabled={nameValue ? false : true}>등록</ButtonForm.SubmitBtn>
                             </li>
                         </ul>
                         {/* 각 input에 맞는 팝업 그룹 */}
@@ -392,19 +403,21 @@ export default function Calendar({ modeColor }: any) {
                                 <div className="form__wrap" >
                                     <ul>
                                         <li>
-                                            <input type="radio" id="11" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="1" data-th={8} data-tm={0} defaultChecked /><label htmlFor="11">8:00</label>
+                                            {/* <input type="radio" id="11" name="aa" onChange={(e: any) => setDateTime({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="1" data-th={8} data-tm={0} defaultChecked /><label htmlFor="11">8:00</label> */}
+                                            <input type="radio" id="11" name="aa" onChange={(e: any) => setDateTime(new Date(0, 0, 0, e.target.dataset.th, e.target.dataset.tm))} defaultValue="1" data-th={8} data-tm={0} defaultChecked /><label htmlFor="11">8:00</label>
+
                                         </li>
                                         <li>
-                                            <input type="radio" id="22" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="2" data-th={8} data-tm={30} /><label htmlFor="22">8:30</label>
+                                            <input type="radio" id="22" name="aa" onChange={(e: any) => setDateTime(new Date(0, 0, 0, e.target.dataset.th, e.target.dataset.tm))} defaultValue="2" data-th={8} data-tm={30} /><label htmlFor="22">8:30</label>
                                         </li>
                                         <li>
-                                            <input type="radio" id="33" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="3" data-th={9} data-tm={0} /><label htmlFor="33">9:00</label>
+                                            <input type="radio" id="33" name="aa" onChange={(e: any) => setDateTime(new Date(0, 0, 0, e.target.dataset.th, e.target.dataset.tm))} defaultValue="3" data-th={9} data-tm={0} /><label htmlFor="33">9:00</label>
                                         </li>
                                         <li>
-                                            <input type="radio" id="44" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="4" data-th={9} data-tm={30} /><label htmlFor="44">9:30</label>
+                                            <input type="radio" id="44" name="aa" onChange={(e: any) => setDateTime(new Date(0, 0, 0, e.target.dataset.th, e.target.dataset.tm))} defaultValue="4" data-th={9} data-tm={30} /><label htmlFor="44">9:30</label>
                                         </li>
                                         <li>
-                                            <input type="radio" id="55" name="aa" onChange={(e: any) => setTimeState({ th: e.target.dataset.th, tm: e.target.dataset.tm })} defaultValue="5" data-th={10} data-tm={0} /><label htmlFor="55">10:00</label>
+                                            <input type="radio" id="55" name="aa" onChange={(e: any) => setDateTime(new Date(0, 0, 0, e.target.dataset.th, e.target.dataset.tm))} defaultValue="5" data-th={10} data-tm={0} /><label htmlFor="55">10:00</label>
                                         </li>
                                     </ul>
                                 </div>
@@ -429,8 +442,8 @@ export default function Calendar({ modeColor }: any) {
                                 </select>
                             </InputForm.InputFormWrapSelect>
                             <div style={{ display: "flex" }}>
-                                <input type="checkbox" id="setting1" checked={insertMode} onChange={(e) => setInsertMode(e.target.checked)} /><label htmlFor="setting1">{insertMode ? "다수" : "단일"} 모드</label>
-                                <div style={{ display: !insertMode ? "block" : "none" }}>
+                                <input style={{ display: "none" }} type="checkbox" id="setting1" checked={insertMode} onChange={(e) => setInsertMode(e.target.checked)} /><label htmlFor="setting1"><img src="multi.png" width={36} /> {insertMode ? "다수" : "단일"}</label>
+                                <div className="form--wrap__content" style={{ display: !insertMode ? "block" : "none" }}>
                                     <DatePicker
                                         selected={inputDate}
                                         onChange={(date: any) => setInputDate(date)}
@@ -443,7 +456,7 @@ export default function Calendar({ modeColor }: any) {
                                         popperPlacement="top-start"
                                     />
                                 </div>
-                                <div style={{ display: insertMode ? "block" : "none" }}>
+                                <div className="form--wrap__content" style={{ display: insertMode ? "flex" : "none" }}>
                                     <DatePicker
                                         selectsRange={true}
                                         onChange={(date: any) => setDateRange(date)}
@@ -484,7 +497,7 @@ export default function Calendar({ modeColor }: any) {
                         dateProps={{ y: stdDate.y, m: stdDate.m }}
                         memberProps={member}
                         deleteSchedule={deleteSchedule}
-                        loading={!calendarData.loading}
+                        loading={!calendarData.loading && !systemData.loading}
                         mySelf={mySelf}
                         modeColor={modeColor}
                     />
@@ -500,7 +513,7 @@ const SettingWrap = styled.div<{ cMode: string }>`
     background-color: ${props => props.cMode === 'light' ? initColorValue.light.bg : initColorValue.dark.bg1};
     width: calc(100% - 24px);
 
-    .add-calendar {
+    .add-calendar, .change-sort {
         z-index: 100;
         position: fixed;
         right: 40px;
@@ -514,14 +527,14 @@ const SettingWrap = styled.div<{ cMode: string }>`
         }
         
         label {
-        padding: 12px;
-
+            padding: 12px;
+            color: #fff;
+            text-transform: uppercase;
         }
         img {
             width: 20px;
             filter : invert(100)
         }
-
     }
 
     .setting {
@@ -562,7 +575,8 @@ const SettingWrap = styled.div<{ cMode: string }>`
         justify-content: space-between;
         padding: 16px 24px;
         width : calc(100% - 48px);
-        min-width: 758px;
+        /* min-width: 758px; */
+        min-width: 1200px;
         transition: bottom .4s .1s cubic-bezier(0.16, 1, 0.3, 1);
         backdrop-filter: saturate(180%) blur(5px);
         -webkit-backdrop-filter: saturate(180%) blur(5px);
@@ -631,6 +645,24 @@ const SettingWrap = styled.div<{ cMode: string }>`
     }
     .form__wrap {
         display: flex;
+    }
+    .form__wrap {
+      
+    }
+    .form--wrap__content {
+        .react-datepicker-wrapper ~ .react-datepicker-wrapper  {
+            margin-left: 12px;
+        }
+    }
+    .form__wrap input#setting1 + label {
+        font-size : 0.8rem;
+        text-align: center;
+        color : ${props => props.cMode === 'light' ? initColorValue.dark.textBlack : initColorValue.light.white};
+
+
+        img {
+            filter: invert( ${props => props.cMode === 'light' ? "30%" : "70%"} );
+        }
     }
 
     .form__wrap[data-device='pc'] .form--wrap{
