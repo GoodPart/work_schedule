@@ -7,6 +7,7 @@ import SignUp from '../page/sign_up/container_component/Signup';
 import MyPage from '../page/mypage/container_component/MyPage';
 import Poll from '../page/poll/container_component/Poll';
 import Setting from '../page/Setting';
+import SurveyDashBoard from '../page/SurveyDashBoard';
 
 import Calendar from '../page/Calendar';
 import Auth from '../hoc/Auth';
@@ -31,6 +32,7 @@ export default function RouterArea(modeColor: any) {
             <Route path='/my-page' element={<UserPage />} />
             <Route path='/poll' element={<PollPage />} />
             <Route path='/setting' element={<SettingPage />} />
+            <Route path='/admin' element={<SurveyDashBoard />} />
         </Routes>
     );
 };

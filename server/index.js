@@ -32,7 +32,10 @@ const { Calendar } = require('./models/Calendar');
 const { Collection } = require('./models/Collection');
 // company_auth 스키마
 const { CompanyAuth } = require('./models/Company_auth');
-
+// coupon 스키마
+const { Coupon } = require('./models/Coupon');
+// survey 스키마
+const { Survey } = require('./models/Survey');
 
 
 //몽고 DB 에러
@@ -456,6 +459,118 @@ app.post('/api/collection/create', (req, res) => {
 
 // 콜렉션 제거
 
+
+
+
+
+//쿠폰 추가 
+app.post('/api/coupon/create', auth, (req, res) => {
+    const getData = req.body;
+
+    const coupon = new Coupon(getData);
+
+    coupon.save().then(ele => {
+        return res.status(200).json({
+            success: true
+        })
+    })
+})
+//쿠폰 조회
+app.get('/api/coupon/read', auth, (req, res) => {
+
+    const _user = req.user;
+    console.log(_user.user_id)
+    Coupon.find({
+        user_id: _user.user_id
+    }).then((finds, err) => {
+        if (err) return req.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            length: finds.length,
+            finds
+        })
+    })
+})
+//쿠폰 사용 업데이트
+app.post('/api/coupon/update', auth, (req, res) => {
+    const getData = req.body;
+
+    Coupon.findOneAndUpdate({
+        _id: getData._id
+    }, {
+        used: true,
+        user_id: getData.user_id
+    }).then((update, err) => {
+        if (err) return req.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            update
+        })
+    })
+})
+// 쿠폰 타입별 조회
+app.get('/api/coupon/read/:type', (req, res) => {
+
+    Coupon.find({
+        used: req.params.type
+    }).then((finds, err) => {
+        if (err) return req.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            length: finds.length,
+            finds
+        })
+    })
+})
+
+
+//설문 추가
+app.post('/api/survey/create', auth, (req, res) => {
+    const getData = req.body;
+
+    const survey = new Survey(getData);
+
+    survey.save().then(ele => {
+        return res.status(200).json({
+            success: true,
+            ele
+        })
+    })
+})
+//설문 조회
+app.get('/api/survey/read', (req, res) => {
+
+
+    Survey.find({}).then((ele, err) => {
+        if (err) return req.json({
+            success: false,
+            err
+        })
+        return res.status(200).json({
+            success: true,
+            length: ele.length,
+            ele
+        })
+    })
+})
+
+app.post('/api/survey/deleteall', auth, (req, res) => {
+    const getData = req.body;
+
+
+    Survey.deleteMany({}).then((ele) => {
+        console.log(ele)
+    })
+})
 
 
 app.listen(port, () => {

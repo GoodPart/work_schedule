@@ -1,9 +1,156 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { initColorValue } from "../components/styledComponents/CommonValue";
 import styled from "styled-components";
+import * as ButtonForm from '../components/styledComponents/ButtonStyled';
+import * as InputForm from '../components/styledComponents/InputStyled';
+import Toast from "../components/Toast";
+
+
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../modules";
+
+
 export default function Main({ modeColor }: any) {
+
+    const authStore = useSelector((state: RootState) => state.authCheckReducer.auth);
+    const [eventState, setEventState] = useState(false);
+
+    let [toastState, setToastState] = useState({
+        state: false,
+        id: 0
+    });
+    const [usedForm, setUsedForm] = useState({
+        desc: '',
+        user_id: ''
+    })
+    const [usedForm2, setUsedForm2] = useState('');
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>): any => {
+        const { value } = e.target;
+        setUsedForm({
+            ...usedForm,
+            desc: value,
+            user_id: ''
+        })
+    };
+    const onChangeUsed = (e: React.ChangeEvent<HTMLInputElement>): any => {
+        const { value } = e.target;
+        setUsedForm2(value)
+    };
+
+    const onSubmitUsed = () => {
+        // console.log(`필요성 : ${usedForm2}, 의견 : ${usedForm.desc}, 유저 : ${authStore.user_id}`)
+        createSurveyDocs(usedForm2, usedForm.desc, authStore.user_id);
+        setEventState(false)
+        setToastState({ state: false, id: 0 })
+
+    }
+    //쿠폰 유무 확인
+    const getCouponData = async () => {
+        let _getData = await axios.get("http://localhost:9999/api/coupon/read/false", { withCredentials: true });
+
+        if (_getData.data.length === 0) {
+            alert("기프티콘은 모두 소진 되었어요. 죄송해요...")
+        } else {
+            alert("기프티콘이 아직 남아있습니다!")
+        }
+    }
+    // 설문 DB에 저장
+    const createSurveyDocs = async (usedState: any, desc: string, user_id: string) => {
+        let _postData = await axios.post("http://localhost:9999/api/survey/create", { used_state: usedState, desc: desc, user_id: user_id }, { withCredentials: true });
+
+        if (_postData.data.success) {
+
+            //사용가능 쿠폰들 조회
+            let _getCouponData = await axios.get("http://localhost:9999/api/coupon/read/false", { withCredentials: true })
+
+            if (_getCouponData.data.success) {
+                // console.log(`이 쿠폰을 발급 합니다. ${_getCouponData.data.finds[0]}`)
+
+                if (_getCouponData.data.finds[0] == undefined) {
+                    alert("쿠폰을 못드려서 죄송합니다. 돈 많이 벌면 고기 사드릴게요!")
+                } else {
+                    let _exportCoupon = await axios.post("http://localhost:9999/api/coupon/update", { _id: _getCouponData.data.finds[0]._id, user_id: user_id }, { withCredentials: true })
+                    if (_exportCoupon.data.success) {
+                        // console.log(`쿠폰을 사용 처리로 변경했습니다.`, _exportCoupon.data.update.coupon_code)
+                        alert(`쿠폰 코드입니다. ${_exportCoupon.data.update.coupon_code}`)
+                    } else {
+                        console.log('error')
+                    }
+                }
+
+
+            } else {
+                console.log("없어유 ㅠㅠ")
+            }
+
+
+        }
+
+
+
+    }
+
+
+    useEffect(() => {
+
+        axios.get("http://localhost:9999/api/coupon/read", { withCredentials: true }).then((ele) => {
+            if (ele.data.success) {
+                console.log(ele.data, authStore)
+                setEventState(ele.data.length == 0)
+            }
+        })
+
+    }, [authStore])
     return (
         <InnerWrap cMode={modeColor}>
+            <Toast
+                options={{
+                    className: toastState.state && toastState.id === 1 ? 'toasting' : '',
+                    width: 'calc(100% - 24px)',
+                    height: '440px',
+                    gap: '10%',
+                    theme: 'glass'
+                }}
+                cMode={modeColor}
+            >
+                <div className="used__wrap" >
+                    <ButtonForm.SubmitBtn style={{ width: '64px', display: "block", position: 'absolute', top: 12, right: 12 }} onClick={(e: any) => setToastState({ state: false, id: 0 })}>X</ButtonForm.SubmitBtn>
+                    <div style={{ color: modeColor === 'light' ? '#333' : '#fff' }}>
+                        <div className="content">
+                            <p className="title">필요성</p>
+                            <div className="desc">
+                                <input type="radio" id="true" name="used" value={'true'} onChange={(e) => onChangeUsed(e)} checked={usedForm2 === 'true'} /><label htmlFor="true"><span>O</span></label>
+                                <input type="radio" id="false" name="used" value={'false'} onChange={(e) => onChangeUsed(e)} checked={usedForm2 === 'false'} /><label htmlFor="false"><span>X</span></label>
+                            </div>
+                        </div>
+                        <div className="content">
+                            <p className="title">기타 의견</p>
+                            <div className="desc">
+                                <InputForm.InputFormWrap cMode={modeColor} check={usedForm.desc}>
+                                    <input type="text" id="true" name="desc" onChange={(e) => onChange(e)} /><label htmlFor="true">의견</label>
+                                </InputForm.InputFormWrap>
+                            </div>
+                        </div>
+                        <br />
+                        <div className="content">
+                            <ButtonForm.SubmitBtn style={{ width: '100%', display: "block", margin: "0 auto" }} disabled={usedForm2 && authStore ? false : true} onClick={(e: any) => onSubmitUsed()}>제출</ButtonForm.SubmitBtn>
+                        </div>
+                    </div>
+
+                </div>
+            </Toast>
+
+            <h3>의견을 부탁드려요</h3>
+            <p><em className="accent">my work day</em>가 필요한지 의견이 필요해요.</p>
+            <p>의견 등록하시고, 아메리카노(스타벅스) 쿠폰 받아가세요. (임시)</p>
+            <p>방법 : 로그인 -&#62; 일정표/일정등록 -&#62; 의견전달 -&#62; 쿠폰 주소 접속</p>
+
+            <ButtonForm.SubmitBtn style={{ width: '45%', margin: '0 auto', display: "block" }} disabled={authStore !== '' && eventState ? false : true} onClick={(e: any) => { getCouponData(); setToastState({ state: true, id: 1 }) }}>의견을 주세요</ButtonForm.SubmitBtn>
+            <br />
+            <hr />
+
             <h1 style={{ margin: 0 }}>개요</h1>
             <em className="footnote--accent">(설정 : 테마를 다크모드로 설정하면 눈이 안아파요)</em>
             <p>출근 및 퇴근 캘린더입니다.</p>
@@ -173,6 +320,55 @@ const InnerWrap = styled.div<{ cMode: string }>`
         font-style : italic;
         font-weight : bold;
         font-size : 14px;
+    }
+
+    .used__wrap {
+        display: flex;
+        flex-direction: column;
+        width:  100%;
+
+        >button + div {
+            width: calc(100% - 64px);
+            padding: 32px;
+        }
+
+        .content {
+            margin-top: 8px;
+            //필요성
+            .title {
+                margin: 0;
+            }
+            .desc {
+                margin-top: 8px;
+            }
+           
+            &:first-child {
+                height: 100px;
+                input {
+                    display: none;
+                }    
+                input + label {
+                    position: relative;
+                    display: inline-block;
+                    width: 50%;
+                    height: 64px;
+                    text-align: center;
+                };
+                input:checked + label {
+                    border-radius: 8px;
+                    outline: 2px solid ${initColorValue.point1};
+                }
+                input + label span {
+                    position: absolute;
+                    top: 50%;
+                    left : 50%;
+                    transform: translate(-50%, -50%);
+                    font-size : 3rem;
+                    font-weight: bold;
+                }
+              
+            }
+        }
     }
     
 `

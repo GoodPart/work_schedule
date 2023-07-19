@@ -38,5 +38,8 @@ const ToastWrap = styled.div<{ options: any, cMode: string }>`
         bottom: ${props => props.options.gap ? props.options.gap : '8px'};
     }
     
+     @media (min-width: 561px) {
+        width : 40%
+     }
 `
 
