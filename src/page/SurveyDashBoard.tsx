@@ -18,7 +18,7 @@ export default function SurveyDashBoard({ modeColor }: any) {
     let count = useRef(0);
 
     useEffect(() => {
-        axios.get("http://localhost:9999/api/survey/read", { withCredentials: true })
+        axios.get("https://myworkday.pe.kr:8888/api/survey/read", { withCredentials: true })
             .then((result) => {
                 setDatas(result.data.ele)
             })

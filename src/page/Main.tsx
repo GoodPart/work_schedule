@@ -49,7 +49,7 @@ export default function Main({ modeColor }: any) {
     }
     //쿠폰 유무 확인
     const getCouponData = async () => {
-        let _getData = await axios.get("http://localhost:9999/api/coupon/read/false", { withCredentials: true });
+        let _getData = await axios.get("https://myworkday.pe.kr:8888/api/coupon/read/false", { withCredentials: true });
 
         if (_getData.data.length === 0) {
             alert("기프티콘은 모두 소진 되었어요. 죄송해요...")
@@ -60,12 +60,12 @@ export default function Main({ modeColor }: any) {
 
     // 설문 DB에 저장
     const createSurveyDocs = async (usedState: any, desc: string, user_id: string) => {
-        let _postData = await axios.post("http://localhost:9999/api/survey/create", { used_state: usedState, desc: desc, user_id: user_id }, { withCredentials: true });
+        let _postData = await axios.post("https://myworkday.pe.kr:8888/api/survey/create", { used_state: usedState, desc: desc, user_id: user_id }, { withCredentials: true });
 
         if (_postData.data.success) {
 
             //사용가능 쿠폰들 조회
-            let _getCouponData = await axios.get("http://localhost:9999/api/coupon/read/false", { withCredentials: true })
+            let _getCouponData = await axios.get("https://myworkday.pe.kr:8888/api/coupon/read/false", { withCredentials: true })
 
             if (_getCouponData.data.success) {
                 // console.log(`이 쿠폰을 발급 합니다. ${_getCouponData.data.finds[0]}`)
@@ -73,7 +73,7 @@ export default function Main({ modeColor }: any) {
                 if (_getCouponData.data.finds[0] == undefined) {
                     alert("쿠폰을 못드려서 죄송합니다. 돈 많이 벌면 고기 사드릴게요!")
                 } else {
-                    let _exportCoupon = await axios.post("http://localhost:9999/api/coupon/update", { _id: _getCouponData.data.finds[0]._id, user_id: user_id }, { withCredentials: true })
+                    let _exportCoupon = await axios.post("https://myworkday.pe.kr:8888/api/coupon/update", { _id: _getCouponData.data.finds[0]._id, user_id: user_id }, { withCredentials: true })
                     if (_exportCoupon.data.success) {
                         // console.log(`쿠폰을 사용 처리로 변경했습니다.`, _exportCoupon.data.update.coupon_code)
                         alert(`쿠폰 코드입니다. ${_exportCoupon.data.update.coupon_code}`)
@@ -97,14 +97,14 @@ export default function Main({ modeColor }: any) {
 
     useEffect(() => {
 
-        axios.get("http://localhost:9999/api/coupon/read", { withCredentials: true }).then((ele) => {
+        axios.get("https://myworkday.pe.kr:8888/api/coupon/read", { withCredentials: true }).then((ele) => {
             if (ele.data.success) {
                 console.log(ele.data)
                 setEventState(ele.data.length == 0)
             }
         })
 
-        axios.get("http://localhost:9999/api/coupon/read/false", { withCredentials: true }).then((ele) => {
+        axios.get("https://myworkday.pe.kr:8888/api/coupon/read/false", { withCredentials: true }).then((ele) => {
             if (ele.data.success) {
                 setCouponLength(ele.data.length)
             }
