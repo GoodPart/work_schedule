@@ -483,7 +483,6 @@ app.post('/api/coupon/create', auth, (req, res) => {
 app.get('/api/coupon/read', auth, (req, res) => {
 
     const _user = req.user;
-    console.log(_user.user_id)
     Coupon.find({
         user_id: _user.user_id
     }).then((finds, err) => {
