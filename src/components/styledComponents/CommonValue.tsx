@@ -1,6 +1,7 @@
 export const initColorValue = {
     light: {
         bg: "#F9F9F9",
+        bgHover: "#b8b5b5",
         glass: "hsla(0,0%,180%,.4)",
         text: "#666",
         textBlack: '#000',
@@ -16,6 +17,7 @@ export const initColorValue = {
     dark: {
         bg: "#252525",
         bg1: "#333237",
+        bgHover: "#29292c",
         glass: "hsla(0,0%,0%,.4)",
         text: "#fff",
         textWhite: "#fff",
