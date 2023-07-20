@@ -15,6 +15,7 @@ export default function Main({ modeColor }: any) {
 
     const authStore = useSelector((state: RootState) => state.authCheckReducer.auth);
     const [eventState, setEventState] = useState(false);
+    const [couponLength, setCouponLength] = useState(0);
 
     let [toastState, setToastState] = useState({
         state: false,
@@ -56,6 +57,7 @@ export default function Main({ modeColor }: any) {
             alert("기프티콘이 아직 남아있습니다!")
         }
     }
+
     // 설문 DB에 저장
     const createSurveyDocs = async (usedState: any, desc: string, user_id: string) => {
         let _postData = await axios.post("http://localhost:9999/api/survey/create", { used_state: usedState, desc: desc, user_id: user_id }, { withCredentials: true });
@@ -97,12 +99,20 @@ export default function Main({ modeColor }: any) {
 
         axios.get("http://localhost:9999/api/coupon/read", { withCredentials: true }).then((ele) => {
             if (ele.data.success) {
-                console.log(ele.data, authStore)
+                console.log(ele.data)
                 setEventState(ele.data.length == 0)
             }
         })
 
-    }, [authStore])
+        axios.get("http://localhost:9999/api/coupon/read/false", { withCredentials: true }).then((ele) => {
+            if (ele.data.success) {
+                setCouponLength(ele.data.length)
+            }
+        })
+
+
+
+    }, [authStore, couponLength])
     return (
         <InnerWrap cMode={modeColor}>
             <Toast
@@ -141,13 +151,26 @@ export default function Main({ modeColor }: any) {
 
                 </div>
             </Toast>
+            <br />
 
-            <h3>의견을 부탁드려요</h3>
-            <p><em className="accent">my work day</em>가 필요한지 의견이 필요해요.</p>
-            <p>의견 등록하시고, 아메리카노(스타벅스) 쿠폰 받아가세요. (임시)</p>
-            <p>방법 : 로그인 -&#62; 일정표/일정등록 -&#62; 의견전달 -&#62; 쿠폰 주소 접속</p>
+            <SettingWrap theme={modeColor}>
+                <div className="content content--1">
+                    <em className="accent" style={{ fontSize: 12, padding: "8px 16px" }}>의견이 필요해요</em>
+                    <i className="ico ico__simpley"></i>
+                </div>
+                <div className="content content--column" style={{ marginTop: 12, fontSize: 14 }}>
+                    <p>이 앱(APP)의 필요성을 알려주세요.</p>
+                    <br />
+                    <p style={{ fontSize: 12, color: "#aaa" }}>의견 등록하시고, 아메리카노(스타벅스) 쿠폰 받아가세요. <em className="accent">({couponLength != 0 ? `${couponLength}개 남음` : '제고 소진'})</em> </p>
+                    <p style={{ fontSize: 12, color: "#aaa" }}>방법 : 로그인 -&#62; 일정표/일정등록 -&#62; 의견전달 -&#62; 쿠폰 주소 접속</p>
+                </div>
+            </SettingWrap>
 
-            <ButtonForm.SubmitBtn style={{ width: '45%', margin: '0 auto', display: "block" }} disabled={authStore !== '' && eventState ? false : true} onClick={(e: any) => { getCouponData(); setToastState({ state: true, id: 1 }) }}>의견을 주세요</ButtonForm.SubmitBtn>
+
+            <br />
+
+
+            <ButtonForm.SubmitBtn className="survey_button" style={{ margin: '0 auto', display: "block" }} disabled={authStore !== '' && eventState ? false : true} onClick={(e: any) => { getCouponData(); setToastState({ state: true, id: 1 }) }}>의견을 주세요</ButtonForm.SubmitBtn>
             <br />
             <hr />
 
@@ -256,6 +279,7 @@ export default function Main({ modeColor }: any) {
                             # 수정 사항 및 개선 사항은 추후 업데이트 예정입니다.<br />
                         </h4>
                         <div className="desc">
+                            - 설명 페이지 작성 - <em>23.07.18</em> : 메인 최상단 상품 이벤트 추가,  <br />
                             - 설명 페이지 작성 - <em>23.07.18</em> : 일정표에 일정 다수 및 단일 추가 기능 및 보기 옵션 추가 업데이트<br />
                             - 설명 페이지 작성 - <em>23.07.17</em> : 일정표 UI 개선 및 버그 및 기타/추가 기능 작업 예정 업데이트<br />
                             - 설명 페이지 작성 - <em>23.07.10</em> : 일정 엑셀파일로 내보내기 기능 개발 완료.
@@ -370,5 +394,84 @@ const InnerWrap = styled.div<{ cMode: string }>`
             }
         }
     }
+
+    .survey_button {
+        width: 54%;
+    }
+    @media (max-width : 561px) {
+        .survey_button {
+            width: 100%;
+        }
+    }
     
+`
+
+const SettingWrap = styled.div<{ theme: string }>`
+    position: relative;
+    margin:  0 auto;
+    padding : 24px;
+    width: 50%;
+    height: auto;
+    background-color:${props => props.theme === 'light' ? initColorValue.light.calcDesc : initColorValue.dark.bg1};
+    border-radius: 4px;
+
+    h3 {
+        padding: 0;
+    }
+
+    p {
+        padding: 0 !important;
+        margin : 0;
+    }
+    .content {
+        display: flex;
+        justify-content: space-between;
+
+        &.content--column {
+            flex-direction: column;
+        }
+
+        .title {
+            margin : 20px 0 4px;
+            color : ${props => props.theme === 'light' ? initColorValue.light.setting.title : initColorValue.dark.setting.title};
+            font-size : 12px
+        }
+        .status {
+            font-weight: bold;
+
+        }
+
+    }
+    .ico {
+        display: block;
+        width: 144px;
+        height: 144px;
+        border-radius: 4px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        filter :invert( ${props => props.theme === 'light' ? "30%" : "70%"} );
+        
+    }
+    .ico__simpley {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background-image: url('question.png');
+    }
+    
+
+    @media (max-width : 561px) {
+        padding: 12px;
+        width: calc(100% - 24px);
+
+        
+
+        .ico {
+            top: 4px;
+            right : 4px;
+            width: 20%;
+        }
+    }
+    
+
 `
