@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const dotEnv = require('dotenv');
+dotEnv.config({
+    path : '.env'
+})
 
 const app = express();
 const port = 9999;
@@ -8,6 +11,7 @@ const port = 9999;
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const config = require('./config/key');
+const apiKey = process.env.REACT_APP_MONGOURI;
 
 const { auth } = require('./middleware/auth');
 
@@ -41,7 +45,7 @@ const { Survey } = require('./models/Survey');
 //몽고 DB 에러
 mongoose.set('strictQuery', true);
 
-mongoose.connect(config.mongoURI, {
+mongoose.connect(apiKey, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("MongoDB Conntected"))
